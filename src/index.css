@@ -43,6 +43,8 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    --college-primary: 59 130 246;
   }
 
   .dark {
@@ -119,6 +121,10 @@
     background: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 50%, #dc2626 100%);
   }
 
+  .college-primary {
+    color: rgb(var(--college-primary));
+  }
+
   .floating-blob {
     position: absolute;
     border-radius: 50%;
@@ -142,4 +148,19 @@
 @keyframes blink {
   0%, 50% { border-color: transparent; }
   51%, 100% { border-color: currentColor; }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out forwards;
 }
