@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Plus, X, Users, DollarSign, TrendingUp, MapPin } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -26,7 +27,7 @@ const CompareSchools = () => {
 
   const { data: colleges } = useQuery({
     queryKey: ['colleges', searchTerm],
-    queryFn: () => collegeService.searchColleges({ 'school.name': searchTerm }),
+    queryFn: () => collegeService.searchColleges({ query: searchTerm }),
     enabled: searchTerm.length >= 2,
   });
 
