@@ -6,9 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
+import { professorService } from '@/services/professorService';
+import { useToast } from '@/components/ui/use-toast';
 
 interface Professor {
-  id: string;
   name: string;
   title: string;
   department: string;
@@ -26,6 +27,7 @@ const FindProfessors = () => {
   const [locationFilter, setLocationFilter] = useState('');
   const [professors, setProfessors] = useState<Professor[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
   const researchFields = [
     'Computer Science',
@@ -48,74 +50,45 @@ const FindProfessors = () => {
     'Materials Science'
   ];
 
-  const mockProfessors: Professor[] = [
-    {
-      id: '1',
-      name: 'Dr. Sarah Chen',
-      title: 'Professor',
-      department: 'Computer Science',
-      university: 'Stanford University',
-      location: 'Stanford, CA',
-      researchAreas: ['Machine Learning', 'Computer Vision', 'AI Ethics'],
-      email: 's.chen@stanford.edu',
-      profileUrl: 'https://cs.stanford.edu/people/schen',
-      labName: 'AI Safety Lab'
-    },
-    {
-      id: '2',
-      name: 'Dr. Michael Rodriguez',
-      title: 'Associate Professor',
-      department: 'Artificial Intelligence',
-      university: 'MIT',
-      location: 'Cambridge, MA',
-      researchAreas: ['Natural Language Processing', 'Deep Learning', 'Robotics'],
-      email: 'm.rodriguez@mit.edu',
-      profileUrl: 'https://csail.mit.edu/person/michael-rodriguez',
-      labName: 'Computational Intelligence Lab'
-    },
-    {
-      id: '3',
-      name: 'Dr. Emily Johnson',
-      title: 'Professor',
-      department: 'Data Science',
-      university: 'UC Berkeley',
-      location: 'Berkeley, CA',
-      researchAreas: ['Big Data Analytics', 'Statistical Learning', 'Bioinformatics'],
-      email: 'e.johnson@berkeley.edu',
-      profileUrl: 'https://statistics.berkeley.edu/people/emily-johnson',
-      labName: 'Data Science Research Group'
-    }
-  ];
-
   const handleSearch = async () => {
-    if (!selectedField) return;
+    if (!selectedField) {
+      toast({
+        title: "Please select a research field",
+        description: "A research field is required to search for professors.",
+        variant: "destructive",
+      });
+      return;
+    }
     
     setIsLoading(true);
+    setProfessors([]);
     
-    // Simulate API call - in real implementation, this would call an AI service
-    // and web scraping service to find professors
-    setTimeout(() => {
-      let filteredProfessors = mockProfessors.filter(prof =>
-        prof.researchAreas.some(area => 
-          area.toLowerCase().includes(selectedField.toLowerCase())
-        )
-      );
-
-      if (schoolFilter) {
-        filteredProfessors = filteredProfessors.filter(prof =>
-          prof.university.toLowerCase().includes(schoolFilter.toLowerCase())
-        );
-      }
-
-      if (locationFilter) {
-        filteredProfessors = filteredProfessors.filter(prof =>
-          prof.location.toLowerCase().includes(locationFilter.toLowerCase())
-        );
-      }
-
-      setProfessors(filteredProfessors);
+    try {
+      console.log('Starting professor search...');
+      const searchCriteria = {
+        field: selectedField,
+        school: schoolFilter || undefined,
+        location: locationFilter || undefined,
+      };
+      
+      const results = await professorService.searchProfessors(searchCriteria);
+      setProfessors(results);
+      
+      toast({
+        title: "Search completed",
+        description: `Found ${results.length} professors matching your criteria.`,
+      });
+      
+    } catch (error) {
+      console.error('Search failed:', error);
+      toast({
+        title: "Search failed",
+        description: "Unable to search for professors. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -124,7 +97,7 @@ const FindProfessors = () => {
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold gradient-text mb-4">Find Professors</h1>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Discover leading researchers and professors in your field of interest using AI-powered search
+            Discover leading researchers and professors in your field of interest using AI-powered web scraping
           </p>
         </div>
 
@@ -178,18 +151,32 @@ const FindProfessors = () => {
               disabled={!selectedField || isLoading}
               className="w-full college-gradient text-white"
             >
-              {isLoading ? 'Searching...' : 'Find Professors'}
+              {isLoading ? 'Searching with AI...' : 'Find Professors'}
             </Button>
           </CardContent>
         </Card>
 
+        {/* Loading State */}
+        {isLoading && (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600 mb-2">Scraping Google for professors...</p>
+            <p className="text-sm text-gray-500">Using AI to find the most relevant matches</p>
+          </div>
+        )}
+
         {/* Results */}
-        {professors.length > 0 && (
+        {professors.length > 0 && !isLoading && (
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-2xl font-bold mb-6">Found {professors.length} Professor{professors.length !== 1 ? 's' : ''}</h2>
+            <h2 className="text-2xl font-bold mb-6">
+              Found {professors.length} Professor{professors.length !== 1 ? 's' : ''} 
+              <span className="text-sm font-normal text-gray-600 ml-2">
+                (Ranked by AI relevance)
+              </span>
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {professors.map((professor, index) => (
-                <Card key={professor.id} className="glass-card hover:scale-105 transition-all duration-300" style={{ animationDelay: `${index * 0.1}s` }}>
+                <Card key={`${professor.name}-${index}`} className="glass-card hover:scale-105 transition-all duration-300" style={{ animationDelay: `${index * 0.1}s` }}>
                   <CardHeader>
                     <CardTitle className="text-lg">{professor.name}</CardTitle>
                     <div className="text-sm text-gray-600">
@@ -219,8 +206,8 @@ const FindProfessors = () => {
                     <div>
                       <p className="text-sm font-medium mb-2">Research Areas:</p>
                       <div className="flex flex-wrap gap-1">
-                        {professor.researchAreas.map((area) => (
-                          <Badge key={area} variant="secondary" className="text-xs">
+                        {professor.researchAreas.map((area, areaIndex) => (
+                          <Badge key={areaIndex} variant="secondary" className="text-xs">
                             {area}
                           </Badge>
                         ))}
@@ -256,10 +243,11 @@ const FindProfessors = () => {
           </div>
         )}
 
-        {isLoading && (
+        {/* No Results */}
+        {professors.length === 0 && !isLoading && selectedField && (
           <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Searching for professors using AI...</p>
+            <p className="text-gray-600 mb-4">No professors found matching your criteria.</p>
+            <p className="text-sm text-gray-500">Try adjusting your search parameters or removing some filters.</p>
           </div>
         )}
       </div>
