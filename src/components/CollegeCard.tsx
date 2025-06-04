@@ -1,9 +1,11 @@
 
-import React from 'react';
-import { MapPin, Users, DollarSign, TrendingUp, ExternalLink, Star } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { MapPin, Users, DollarSign, TrendingUp, ExternalLink, Star, Bookmark } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { savedSchoolsUtils } from '@/utils/savedSchools';
+import { useToast } from '@/hooks/use-toast';
 
 interface College {
   id: number;
@@ -24,6 +26,13 @@ interface CollegeCardProps {
 }
 
 export const CollegeCard: React.FC<CollegeCardProps> = ({ college, index, onClick }) => {
+  const [isSaved, setIsSaved] = useState(false);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    setIsSaved(savedSchoolsUtils.isSchoolSaved(college.id));
+  }, [college.id]);
+
   const formatCurrency = (amount: number) => {
     if (!amount) return 'N/A';
     return new Intl.NumberFormat('en-US', {
@@ -52,6 +61,40 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({ college, index, onClic
     return 'bg-green-500';
   };
 
+  const handleSaveToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    if (isSaved) {
+      savedSchoolsUtils.removeSavedSchool(college.id);
+      setIsSaved(false);
+      toast({
+        title: "School removed",
+        description: `${schoolName} has been removed from your saved schools.`,
+      });
+    } else {
+      const success = savedSchoolsUtils.saveSchool({
+        id: college.id,
+        name: schoolName,
+        city: city,
+        state: state
+      });
+      
+      if (success) {
+        setIsSaved(true);
+        toast({
+          title: "School saved!",
+          description: `${schoolName} has been added to your saved schools.`,
+        });
+      } else {
+        toast({
+          title: "Already saved",
+          description: `${schoolName} is already in your saved schools.`,
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
   const schoolName = college['school.name'];
   const city = college['school.city'];
   const state = college['school.state'];
@@ -69,20 +112,32 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({ college, index, onClic
     >
       <CardHeader className="pb-3">
         <div className="flex justify-between items-start mb-2">
-          <CardTitle className="text-lg font-bold text-gray-800 line-clamp-2 group-hover:text-college-primary transition-colors">
+          <CardTitle className="text-lg font-bold text-gray-800 line-clamp-2 group-hover:text-college-primary transition-colors flex-1 mr-2">
             {schoolName}
           </CardTitle>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="opacity-0 group-hover:opacity-100 transition-opacity"
-            onClick={(e) => {
-              e.stopPropagation();
-              // Add to favorites functionality
-            }}
-          >
-            <Star className="h-4 w-4" />
-          </Button>
+          <div className="flex gap-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              className={`opacity-0 group-hover:opacity-100 transition-opacity ${
+                isSaved ? 'text-yellow-500 hover:text-yellow-600' : 'text-gray-400 hover:text-yellow-500'
+              }`}
+              onClick={handleSaveToggle}
+            >
+              <Bookmark className={`h-4 w-4 ${isSaved ? 'fill-current' : ''}`} />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="opacity-0 group-hover:opacity-100 transition-opacity"
+              onClick={(e) => {
+                e.stopPropagation();
+                // Add to favorites functionality
+              }}
+            >
+              <Star className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
         <div className="flex items-center text-gray-600 text-sm">
           <MapPin className="h-4 w-4 mr-1" />
