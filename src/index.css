@@ -151,6 +151,104 @@
       0 10px 10px -5px rgba(0, 0, 0, 0.02),
       inset 0 1px 0 rgba(255, 255, 255, 0.9);
   }
+
+  /* Advanced Button Animations */
+  .btn-futuristic {
+    @apply relative overflow-hidden;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    transition: all 0.3s ease;
+  }
+
+  .btn-futuristic::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .btn-futuristic:hover::before {
+    left: 100%;
+  }
+
+  .btn-futuristic:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+  }
+
+  /* Animated Underlines */
+  .animated-underline {
+    position: relative;
+    display: inline-block;
+  }
+
+  .animated-underline::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -4px;
+    left: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+  }
+
+  .animated-underline:hover::after {
+    width: 100%;
+  }
+
+  /* Glowing Effects */
+  .glow-effect {
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .glow-effect:hover {
+    box-shadow: 0 0 30px rgba(102, 126, 234, 0.6);
+  }
+
+  /* Particle Background */
+  .particles-bg {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .particles-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      radial-gradient(2px 2px at 20px 30px, rgba(102, 126, 234, 0.3), transparent),
+      radial-gradient(2px 2px at 40px 70px, rgba(118, 75, 162, 0.3), transparent),
+      radial-gradient(1px 1px at 90px 40px, rgba(99, 102, 241, 0.3), transparent);
+    background-repeat: repeat;
+    background-size: 100px 80px;
+    animation: particles-move 20s linear infinite;
+    z-index: -1;
+  }
+
+  /* Loading Shimmer */
+  .shimmer {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+  }
+
+  /* Morphing Border */
+  .morphing-border {
+    position: relative;
+    border: 2px solid transparent;
+    background: linear-gradient(white, white) padding-box,
+                linear-gradient(45deg, #667eea, #764ba2, #6366f1) border-box;
+    animation: border-morph 3s ease-in-out infinite;
+  }
 }
 
 @keyframes float {
@@ -198,6 +296,52 @@
   }
 }
 
+@keyframes particles-move {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(100px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes border-morph {
+  0%, 100% {
+    border-radius: 20px;
+  }
+  50% {
+    border-radius: 40px;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(102, 126, 234, 0.8);
+  }
+}
+
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink {
+  0%, 50% { border-color: transparent; }
+  51%, 100% { border-color: #667eea; }
+}
+
 .animate-fade-in-up {
   animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
@@ -212,6 +356,14 @@
 
 .animate-bounce-subtle {
   animation: bounce 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s infinite;
+}
+
+.animate-typewriter {
+  animation: typewriter 3s steps(40, end), blink 0.75s step-end infinite;
 }
 
 @keyframes bounce {

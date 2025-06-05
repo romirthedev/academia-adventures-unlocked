@@ -25,40 +25,32 @@ class ProfessorService {
     
     try {
       const prompt = `
-You are an AI assistant that generates realistic professor data based on search criteria.
+Generate 10-12 realistic ${criteria.field} professors for university research. Create diverse, believable academic profiles.
 
-Generate 8-12 realistic computer science professors based on these criteria:
-- Field: ${criteria.field}
-- School: ${criteria.school || 'Various top universities'}
-- Location: ${criteria.location || 'United States'}
+Requirements:
+- Real university names and locations
+- Realistic email formats
+- Use actual university website patterns for profile URLs
+- Diverse names representing various backgrounds
+- Specific research areas related to ${criteria.field}
+- Academic titles: Professor, Associate Professor, Assistant Professor
 
-For each professor, create realistic data including:
-- name: Full name (diverse backgrounds)
-- title: Academic title (Professor, Associate Professor, Assistant Professor)
-- department: Academic department
-- university: Real university name (prefer well-known institutions)
-- location: University location (city, state)
-- researchAreas: Array of 2-4 specific research areas related to ${criteria.field}
-- email: Realistic email format
-- profileUrl: Realistic university profile URL format
-- labName: Creative but realistic lab name
-
-Make the data diverse and realistic. Use real university names and locations.
-
-Return ONLY a valid JSON array format:
+Return ONLY a valid JSON array:
 [
   {
     "name": "Dr. Sarah Chen",
     "title": "Professor",
     "department": "Computer Science",
-    "university": "Stanford University",
+    "university": "Stanford University", 
     "location": "Stanford, CA",
     "researchAreas": ["machine learning", "computer vision", "AI ethics"],
     "email": "schen@cs.stanford.edu",
-    "profileUrl": "https://cs.stanford.edu/people/schen",
+    "profileUrl": "https://profiles.stanford.edu/sarah-chen",
     "labName": "Intelligent Systems Lab"
   }
 ]
+
+Focus on ${criteria.school || 'top research universities'} in ${criteria.location || 'the United States'}.
 `;
 
       const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
@@ -93,7 +85,6 @@ Return ONLY a valid JSON array format:
         throw new Error('No response from AI');
       }
 
-      // Try to parse JSON from AI response
       try {
         const jsonMatch = aiResponse.match(/\[[\s\S]*\]/);
         if (jsonMatch) {
@@ -114,14 +105,54 @@ Return ONLY a valid JSON array format:
 
   private getFallbackProfessors(criteria: SearchCriteria): ScrapedProfessor[] {
     const universities = [
-      { name: 'Stanford University', location: 'Stanford, CA' },
-      { name: 'Massachusetts Institute of Technology', location: 'Cambridge, MA' },
-      { name: 'Carnegie Mellon University', location: 'Pittsburgh, PA' },
-      { name: 'University of California, Berkeley', location: 'Berkeley, CA' },
-      { name: 'Georgia Institute of Technology', location: 'Atlanta, GA' },
-      { name: 'University of Washington', location: 'Seattle, WA' },
-      { name: 'University of Illinois Urbana-Champaign', location: 'Urbana, IL' },
-      { name: 'Cornell University', location: 'Ithaca, NY' }
+      { 
+        name: 'Stanford University', 
+        location: 'Stanford, CA',
+        domain: 'stanford.edu',
+        profileBase: 'https://profiles.stanford.edu'
+      },
+      { 
+        name: 'Massachusetts Institute of Technology', 
+        location: 'Cambridge, MA',
+        domain: 'mit.edu',
+        profileBase: 'https://www.csail.mit.edu/person'
+      },
+      { 
+        name: 'Carnegie Mellon University', 
+        location: 'Pittsburgh, PA',
+        domain: 'cmu.edu',
+        profileBase: 'https://www.cs.cmu.edu/~'
+      },
+      { 
+        name: 'University of California, Berkeley', 
+        location: 'Berkeley, CA',
+        domain: 'berkeley.edu',
+        profileBase: 'https://people.eecs.berkeley.edu'
+      },
+      { 
+        name: 'Georgia Institute of Technology', 
+        location: 'Atlanta, GA',
+        domain: 'gatech.edu',
+        profileBase: 'https://www.cc.gatech.edu/people'
+      },
+      { 
+        name: 'University of Washington', 
+        location: 'Seattle, WA',
+        domain: 'washington.edu',
+        profileBase: 'https://www.cs.washington.edu/people/faculty'
+      },
+      { 
+        name: 'University of Illinois Urbana-Champaign', 
+        location: 'Urbana, IL',
+        domain: 'illinois.edu',
+        profileBase: 'https://cs.illinois.edu/about/people/faculty'
+      },
+      { 
+        name: 'Cornell University', 
+        location: 'Ithaca, NY',
+        domain: 'cornell.edu',
+        profileBase: 'https://www.cs.cornell.edu/people'
+      }
     ];
 
     const researchAreas = {
@@ -156,27 +187,35 @@ Return ONLY a valid JSON array format:
     const fieldAreas = researchAreas[criteria.field] || researchAreas['Computer Science'];
     
     const professors: ScrapedProfessor[] = [];
-    const names = [
-      'Dr. Sarah Chen', 'Dr. Michael Rodriguez', 'Dr. Priya Patel', 'Dr. James Wilson',
-      'Dr. Lisa Zhang', 'Dr. Ahmed Hassan', 'Dr. Emily Johnson', 'Dr. David Kim',
-      'Dr. Maria Garcia', 'Dr. Robert Thompson', 'Dr. Aisha Okonkwo', 'Dr. Thomas Anderson'
+    const professorData = [
+      { name: 'Dr. Sarah Chen', lastName: 'chen' },
+      { name: 'Dr. Michael Rodriguez', lastName: 'rodriguez' },
+      { name: 'Dr. Priya Patel', lastName: 'patel' },
+      { name: 'Dr. James Wilson', lastName: 'wilson' },
+      { name: 'Dr. Lisa Zhang', lastName: 'zhang' },
+      { name: 'Dr. Ahmed Hassan', lastName: 'hassan' },
+      { name: 'Dr. Emily Johnson', lastName: 'johnson' },
+      { name: 'Dr. David Kim', lastName: 'kim' },
+      { name: 'Dr. Maria Garcia', lastName: 'garcia' },
+      { name: 'Dr. Robert Thompson', lastName: 'thompson' },
+      { name: 'Dr. Aisha Okonkwo', lastName: 'okonkwo' },
+      { name: 'Dr. Thomas Anderson', lastName: 'anderson' }
     ];
 
-    for (let i = 0; i < Math.min(10, names.length); i++) {
+    for (let i = 0; i < Math.min(10, professorData.length); i++) {
       const university = universities[i % universities.length];
       const areas = fieldAreas[i % fieldAreas.length];
-      const name = names[i];
-      const lastName = name.split(' ').pop()?.toLowerCase() || 'professor';
+      const prof = professorData[i];
       
       professors.push({
-        name: name,
+        name: prof.name,
         title: i < 3 ? 'Professor' : i < 6 ? 'Associate Professor' : 'Assistant Professor',
         department: 'Computer Science',
         university: university.name,
         location: university.location,
         researchAreas: areas,
-        email: `${lastName}@cs.${university.name.toLowerCase().replace(/[^a-z]/g, '')}.edu`,
-        profileUrl: `https://cs.${university.name.toLowerCase().replace(/[^a-z]/g, '')}.edu/people/${lastName}`,
+        email: `${prof.lastName}@cs.${university.domain}`,
+        profileUrl: `${university.profileBase}/${prof.lastName}`,
         labName: `${areas[0].charAt(0).toUpperCase() + areas[0].slice(1)} Research Lab`
       });
     }
@@ -188,7 +227,6 @@ Return ONLY a valid JSON array format:
     try {
       console.log(`Starting professor search with criteria:`, criteria);
       
-      // Use AI to generate realistic professor data
       const professors = await this.generateProfessorsWithAI(criteria);
       
       console.log(`Generated ${professors.length} professors using AI`);
@@ -196,7 +234,6 @@ Return ONLY a valid JSON array format:
       
     } catch (error) {
       console.error('Error searching for professors:', error);
-      // Return fallback data instead of throwing error
       return this.getFallbackProfessors(criteria);
     }
   }
