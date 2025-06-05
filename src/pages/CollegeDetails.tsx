@@ -1,12 +1,15 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, MapPin, Users, DollarSign, TrendingUp, ExternalLink, GraduationCap } from 'lucide-react';
+import { ArrowLeft, MapPin, Users, DollarSign, TrendingUp, ExternalLink, GraduationCap, Bookmark, BookmarkCheck, Sparkles, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { collegeService } from '@/services/collegeService';
+import { aiCollegeService } from '@/services/aiCollegeService';
+import { savedSchoolsUtils } from '@/utils/savedSchools';
+import { useToast } from '@/components/ui/use-toast';
 
 interface CollegeData {
   id: number;
@@ -30,9 +33,13 @@ interface CollegeData {
 const CollegeDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [college, setCollege] = useState<CollegeData | null>(null);
   const [loading, setLoading] = useState(true);
   const [animationStarted, setAnimationStarted] = useState(false);
+  const [aiAnalysis, setAiAnalysis] = useState<any>(null);
+  const [loadingAnalysis, setLoadingAnalysis] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
     fetchCollegeDetails();
@@ -47,6 +54,12 @@ const CollegeDetails = () => {
     }
   }, [college, animationStarted]);
 
+  useEffect(() => {
+    if (college) {
+      setIsSaved(savedSchoolsUtils.isSchoolSaved(college.id));
+    }
+  }, [college]);
+
   const fetchCollegeDetails = async () => {
     if (!id) return;
     
@@ -58,6 +71,65 @@ const CollegeDetails = () => {
       console.error('Error fetching college details:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchAIAnalysis = async () => {
+    if (!college) return;
+    
+    setLoadingAnalysis(true);
+    try {
+      const analysis = await aiCollegeService.analyzeCollegeForApplicants(college);
+      setAiAnalysis(analysis);
+      
+      toast({
+        title: "AI Analysis Complete",
+        description: "Generated insights about what this college looks for in applicants.",
+      });
+    } catch (error) {
+      console.error('Error fetching AI analysis:', error);
+      toast({
+        title: "Analysis Failed",
+        description: "Unable to generate AI insights. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoadingAnalysis(false);
+    }
+  };
+
+  const handleSaveCollege = () => {
+    if (!college) return;
+
+    const schoolData = {
+      id: college.id,
+      name: college['school.name'],
+      city: college['school.city'],
+      state: college['school.state']
+    };
+
+    if (isSaved) {
+      savedSchoolsUtils.removeSavedSchool(college.id);
+      setIsSaved(false);
+      toast({
+        title: "Removed from saved",
+        description: "College removed from your saved list.",
+      });
+    } else {
+      const success = savedSchoolsUtils.saveSchool(schoolData);
+      if (success) {
+        setIsSaved(true);
+        toast({
+          title: "Saved successfully",
+          description: "College added to your saved list.",
+        });
+      } else {
+        toast({
+          title: "Already saved",
+          description: "This college is already in your saved list.",
+          variant: "destructive",
+        });
+      }
     }
   };
 
@@ -226,6 +298,15 @@ const CollegeDetails = () => {
             </div>
             
             <div className="flex flex-col gap-3">
+              <Button
+                onClick={handleSaveCollege}
+                variant={isSaved ? "default" : "outline"}
+                className={isSaved ? "bg-yellow-500 hover:bg-yellow-600 text-white" : "border-yellow-500 text-yellow-600 hover:bg-yellow-50"}
+              >
+                {isSaved ? <BookmarkCheck className="mr-2 h-4 w-4" /> : <Bookmark className="mr-2 h-4 w-4" />}
+                {isSaved ? 'Saved' : 'Save College'}
+              </Button>
+              
               {college['school.school_url'] && (
                 <Button
                   onClick={() => window.open(`https://${college['school.school_url']}`, '_blank')}
@@ -239,102 +320,251 @@ const CollegeDetails = () => {
           </div>
         </div>
 
-        {/* What This College Values */}
-        <Card className="glass-card border-0 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-          <CardHeader>
-            <CardTitle className="text-2xl gradient-text">What This College Values</CardTitle>
-            <p className="text-gray-600">Based on institutional data and performance metrics</p>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {collegeValues.map((value, index) => (
-              <div key={value.name} className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h3 className="font-semibold text-gray-800">{value.name}</h3>
-                    <p className="text-sm text-gray-600">{value.description}</p>
+        {/* Tabbed Content */}
+        <Tabs defaultValue="overview" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="overview">College Overview</TabsTrigger>
+            <TabsTrigger value="admissions">AI Admissions Insights</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="overview" className="space-y-6">
+            {/* What This College Values */}
+            <Card className="glass-card border-0 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              <CardHeader>
+                <CardTitle className="text-2xl gradient-text">What This College Values</CardTitle>
+                <p className="text-gray-600">Based on institutional data and performance metrics</p>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {collegeValues.map((value, index) => (
+                  <div key={value.name} className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <h3 className="font-semibold text-gray-800">{value.name}</h3>
+                        <p className="text-sm text-gray-600">{value.description}</p>
+                      </div>
+                      <Badge variant="secondary" className="text-lg px-3 py-1">
+                        {value.value}%
+                      </Badge>
+                    </div>
+                    
+                    <div className="relative">
+                      <Progress
+                        value={animationStarted ? value.value : 0}
+                        className="h-4 bg-gray-200"
+                      />
+                      <div
+                        className={`absolute top-0 left-0 h-4 rounded-full transition-all duration-1000 ease-out ${value.color}`}
+                        style={{
+                          width: animationStarted ? `${value.value}%` : '0%',
+                          transitionDelay: `${index * 200}ms`
+                        }}
+                      />
+                    </div>
                   </div>
-                  <Badge variant="secondary" className="text-lg px-3 py-1">
-                    {value.value}%
-                  </Badge>
-                </div>
-                
-                <div className="relative">
-                  <Progress
-                    value={animationStarted ? value.value : 0}
-                    className="h-4 bg-gray-200"
-                  />
-                  <div
-                    className={`absolute top-0 left-0 h-4 rounded-full transition-all duration-1000 ease-out ${value.color}`}
-                    style={{
-                      width: animationStarted ? `${value.value}%` : '0%',
-                      transitionDelay: `${index * 200}ms`
-                    }}
-                  />
-                </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
+                ))}
+              </CardContent>
+            </Card>
 
-        {/* Additional Details */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
-          <Card className="glass-card border-0 animate-fade-in" style={{ animationDelay: '0.4s' }}>
-            <CardHeader>
-              <CardTitle className="gradient-text">Financial Information</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex justify-between">
-                <span className="text-gray-600">In-State Tuition</span>
-                <span className="font-semibold">{formatCurrency(college['latest.cost.tuition.in_state'])}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Out-of-State Tuition</span>
-                <span className="font-semibold">{formatCurrency(college['latest.cost.tuition.out_of_state'])}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Average Net Price</span>
-                <span className="font-semibold">{formatCurrency(college['latest.cost.avg_net_price.overall'])}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Median Earnings (10 years)</span>
-                <span className="font-semibold">{formatCurrency(college['latest.earnings.10_yrs_after_entry.median'])}</span>
-              </div>
-            </CardContent>
-          </Card>
+            {/* Additional Details */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+              <Card className="glass-card border-0 animate-fade-in" style={{ animationDelay: '0.4s' }}>
+                <CardHeader>
+                  <CardTitle className="gradient-text">Financial Information</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">In-State Tuition</span>
+                    <span className="font-semibold">{formatCurrency(college['latest.cost.tuition.in_state'])}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Out-of-State Tuition</span>
+                    <span className="font-semibold">{formatCurrency(college['latest.cost.tuition.out_of_state'])}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Average Net Price</span>
+                    <span className="font-semibold">{formatCurrency(college['latest.cost.avg_net_price.overall'])}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Median Earnings (10 years)</span>
+                    <span className="font-semibold">{formatCurrency(college['latest.earnings.10_yrs_after_entry.median'])}</span>
+                  </div>
+                </CardContent>
+              </Card>
 
-          <Card className="glass-card border-0 animate-fade-in" style={{ animationDelay: '0.6s' }}>
-            <CardHeader>
-              <CardTitle className="gradient-text">Academic Programs</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Bachelor's Degrees</span>
-                <Badge variant={college['latest.academics.program_available.bachelors'] ? 'default' : 'secondary'}>
-                  {college['latest.academics.program_available.bachelors'] ? 'Available' : 'Not Available'}
-                </Badge>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Master's Degrees</span>
-                <Badge variant={college['latest.academics.program_available.masters'] ? 'default' : 'secondary'}>
-                  {college['latest.academics.program_available.masters'] ? 'Available' : 'Not Available'}
-                </Badge>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Doctoral Degrees</span>
-                <Badge variant={college['latest.academics.program_available.doctoral'] ? 'default' : 'secondary'}>
-                  {college['latest.academics.program_available.doctoral'] ? 'Available' : 'Not Available'}
-                </Badge>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Institution Type</span>
-                <span className="font-semibold">
-                  {college['school.ownership'] === 1 ? 'Public' : 
-                   college['school.ownership'] === 2 ? 'Private Non-Profit' : 'Private For-Profit'}
-                </span>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+              <Card className="glass-card border-0 animate-fade-in" style={{ animationDelay: '0.6s' }}>
+                <CardHeader>
+                  <CardTitle className="gradient-text">Academic Programs</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600">Bachelor's Degrees</span>
+                    <Badge variant={college['latest.academics.program_available.bachelors'] ? 'default' : 'secondary'}>
+                      {college['latest.academics.program_available.bachelors'] ? 'Available' : 'Not Available'}
+                    </Badge>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600">Master's Degrees</span>
+                    <Badge variant={college['latest.academics.program_available.masters'] ? 'default' : 'secondary'}>
+                      {college['latest.academics.program_available.masters'] ? 'Available' : 'Not Available'}
+                    </Badge>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600">Doctoral Degrees</span>
+                    <Badge variant={college['latest.academics.program_available.doctoral'] ? 'default' : 'secondary'}>
+                      {college['latest.academics.program_available.doctoral'] ? 'Available' : 'Not Available'}
+                    </Badge>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Institution Type</span>
+                    <span className="font-semibold">
+                      {college['school.ownership'] === 1 ? 'Public' : 
+                       college['school.ownership'] === 2 ? 'Private Non-Profit' : 'Private For-Profit'}
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="admissions" className="space-y-6">
+            <Card className="glass-card border-0">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="text-2xl gradient-text flex items-center gap-2">
+                      <Sparkles className="h-6 w-6" />
+                      AI Admissions Insights
+                    </CardTitle>
+                    <p className="text-gray-600 mt-2">AI-powered analysis of what this college looks for in applicants</p>
+                  </div>
+                  
+                  <Button
+                    onClick={fetchAIAnalysis}
+                    disabled={loadingAnalysis}
+                    className="college-gradient text-white"
+                  >
+                    {loadingAnalysis ? 'Analyzing...' : 'Generate Insights'}
+                  </Button>
+                </div>
+              </CardHeader>
+
+              {!aiAnalysis && !loadingAnalysis && (
+                <CardContent>
+                  <div className="text-center py-12">
+                    <Sparkles className="h-16 w-16 mx-auto text-gray-400 mb-4" />
+                    <p className="text-gray-600 mb-4">Click "Generate Insights" to get AI-powered analysis</p>
+                    <p className="text-sm text-gray-500">Our AI will analyze this college's characteristics to provide personalized admissions advice</p>
+                  </div>
+                </CardContent>
+              )}
+
+              {loadingAnalysis && (
+                <CardContent>
+                  <div className="text-center py-12">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                    <p className="text-gray-600 mb-2">AI is analyzing college data...</p>
+                    <p className="text-sm text-gray-500">Generating personalized admissions insights</p>
+                  </div>
+                </CardContent>
+              )}
+
+              {aiAnalysis && (
+                <CardContent className="space-y-6">
+                  {/* Program Verification Alert */}
+                  {aiAnalysis.verifiedPrograms?.confidence?.includes('low') && (
+                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                      <div className="flex items-start gap-3">
+                        <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5" />
+                        <div>
+                          <h4 className="font-medium text-yellow-800">Program Information Verification</h4>
+                          <p className="text-sm text-yellow-700 mt-1">
+                            AI verification: {aiAnalysis.verifiedPrograms.confidence}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Admission Criteria */}
+                  <div>
+                    <h3 className="text-lg font-semibold mb-3">What This College Values</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {aiAnalysis.admissionCriteria?.map((criterion: string, index: number) => (
+                        <div key={index} className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg">
+                          <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                          <span className="text-sm">{criterion}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Student Profile */}
+                  <div>
+                    <h3 className="text-lg font-semibold mb-3">Ideal Student Profile</h3>
+                    <div className="p-4 bg-green-50 rounded-lg">
+                      <p className="text-gray-700">{aiAnalysis.studentProfile}</p>
+                    </div>
+                  </div>
+
+                  {/* Competitive Factors */}
+                  <div>
+                    <h3 className="text-lg font-semibold mb-3">Competitive Factors</h3>
+                    <div className="space-y-2">
+                      {aiAnalysis.competitiveFactors?.map((factor: string, index: number) => (
+                        <div key={index} className="flex items-center gap-2 p-2 bg-purple-50 rounded-lg">
+                          <Badge variant="secondary" className="text-xs">#{index + 1}</Badge>
+                          <span className="text-sm">{factor}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Recommendations */}
+                  <div>
+                    <h3 className="text-lg font-semibold mb-3">Application Recommendations</h3>
+                    <div className="space-y-3">
+                      {aiAnalysis.recommendations?.map((rec: string, index: number) => (
+                        <div key={index} className="flex items-start gap-3 p-3 bg-orange-50 rounded-lg">
+                          <div className="w-6 h-6 bg-orange-500 text-white rounded-full flex items-center justify-center text-xs font-medium">
+                            {index + 1}
+                          </div>
+                          <span className="text-sm text-gray-700">{rec}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Verified Programs */}
+                  {aiAnalysis.verifiedPrograms && (
+                    <div>
+                      <h3 className="text-lg font-semibold mb-3">AI-Verified Programs</h3>
+                      <div className="grid grid-cols-3 gap-4">
+                        <div className="text-center p-3 bg-gray-50 rounded-lg">
+                          <p className="text-sm text-gray-600">Bachelor's</p>
+                          <Badge variant={aiAnalysis.verifiedPrograms.bachelors ? 'default' : 'secondary'}>
+                            {aiAnalysis.verifiedPrograms.bachelors ? 'Verified' : 'Not Available'}
+                          </Badge>
+                        </div>
+                        <div className="text-center p-3 bg-gray-50 rounded-lg">
+                          <p className="text-sm text-gray-600">Master's</p>
+                          <Badge variant={aiAnalysis.verifiedPrograms.masters ? 'default' : 'secondary'}>
+                            {aiAnalysis.verifiedPrograms.masters ? 'Verified' : 'Not Available'}
+                          </Badge>
+                        </div>
+                        <div className="text-center p-3 bg-gray-50 rounded-lg">
+                          <p className="text-sm text-gray-600">Doctoral</p>
+                          <Badge variant={aiAnalysis.verifiedPrograms.doctoral ? 'default' : 'secondary'}>
+                            {aiAnalysis.verifiedPrograms.doctoral ? 'Verified' : 'Not Available'}
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              )}
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

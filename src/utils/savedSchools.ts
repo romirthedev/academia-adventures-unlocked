@@ -43,8 +43,8 @@ export const savedSchoolsUtils = {
 
       const updatedSaved = [...currentSaved, newSavedSchool];
       
-      // Limit to 20 saved schools
-      if (updatedSaved.length > 20) {
+      // Limit to 50 saved schools
+      if (updatedSaved.length > 50) {
         updatedSaved.shift();
       }
 

@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { Search, MapPin, School, ExternalLink, Users } from 'lucide-react';
+import { Search, MapPin, School, ExternalLink, Users, AlertCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -27,6 +26,7 @@ const FindProfessors = () => {
   const [locationFilter, setLocationFilter] = useState('');
   const [professors, setProfessors] = useState<Professor[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
   const researchFields = [
@@ -62,6 +62,7 @@ const FindProfessors = () => {
     
     setIsLoading(true);
     setProfessors([]);
+    setError(null);
     
     try {
       console.log('Starting professor search...');
@@ -74,16 +75,23 @@ const FindProfessors = () => {
       const results = await professorService.searchProfessors(searchCriteria);
       setProfessors(results);
       
-      toast({
-        title: "Search completed",
-        description: `Found ${results.length} professors matching your criteria.`,
-      });
+      if (results.length > 0) {
+        toast({
+          title: "Search completed",
+          description: `Found ${results.length} professors matching your criteria.`,
+        });
+      } else {
+        setError('No professors found with the current search criteria. Please try different parameters.');
+      }
       
     } catch (error) {
       console.error('Search failed:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unable to search for professors. Please try again.';
+      setError(errorMessage);
+      
       toast({
         title: "Search failed",
-        description: "Unable to search for professors. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -160,8 +168,25 @@ const FindProfessors = () => {
         {isLoading && (
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600 mb-2">Scraping Google for professors...</p>
+            <p className="text-gray-600 mb-2">Searching the web for professors...</p>
             <p className="text-sm text-gray-500">Using AI to find the most relevant matches</p>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && !isLoading && (
+          <div className="max-w-2xl mx-auto">
+            <Card className="border-red-200 bg-red-50">
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-3 text-red-700">
+                  <AlertCircle className="h-5 w-5" />
+                  <div>
+                    <h3 className="font-medium">Search Unavailable</h3>
+                    <p className="text-sm mt-1">{error}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         )}
 
@@ -243,8 +268,8 @@ const FindProfessors = () => {
           </div>
         )}
 
-        {/* No Results */}
-        {professors.length === 0 && !isLoading && selectedField && (
+        {/* No Results (different from error) */}
+        {professors.length === 0 && !isLoading && !error && selectedField && (
           <div className="text-center py-12">
             <p className="text-gray-600 mb-4">No professors found matching your criteria.</p>
             <p className="text-sm text-gray-500">Try adjusting your search parameters or removing some filters.</p>
