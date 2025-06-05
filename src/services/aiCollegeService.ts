@@ -4,12 +4,24 @@ interface CollegeAnalysis {
   studentProfile: string;
   competitiveFactors: string[];
   recommendations: string[];
+  idealStudent: {
+    academicProfile: string;
+    extracurriculars: string[];
+    personalityTraits: string[];
+    background: string;
+  };
   verifiedPrograms: {
     bachelors: boolean;
     masters: boolean;
     doctoral: boolean;
     confidence: string;
   };
+}
+
+interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: number;
 }
 
 class AICollegeService {
@@ -31,17 +43,18 @@ College Information:
 - Median Earnings (10 years): $${collegeData['latest.earnings.10_yrs_after_entry.median']?.toLocaleString() || 'N/A'}
 - Institution Type: ${collegeData['school.ownership'] === 1 ? 'Public' : collegeData['school.ownership'] === 2 ? 'Private Non-Profit' : 'Private For-Profit'}
 
-Current Program Data:
-- Bachelor's Available: ${collegeData['latest.academics.program_available.bachelors'] ? 'Yes' : 'No'}
-- Master's Available: ${collegeData['latest.academics.program_available.masters'] ? 'Yes' : 'No'}
-- Doctoral Available: ${collegeData['latest.academics.program_available.doctoral'] ? 'Yes' : 'No'}
-
 Based on this data, provide analysis in the following JSON format:
 {
   "admissionCriteria": ["criterion1", "criterion2", "criterion3"],
   "studentProfile": "description of ideal student profile",
   "competitiveFactors": ["factor1", "factor2", "factor3"],
   "recommendations": ["recommendation1", "recommendation2", "recommendation3"],
+  "idealStudent": {
+    "academicProfile": "detailed academic background expected",
+    "extracurriculars": ["activity1", "activity2", "activity3", "activity4"],
+    "personalityTraits": ["trait1", "trait2", "trait3"],
+    "background": "socioeconomic and cultural background that would be valued"
+  },
   "verifiedPrograms": {
     "bachelors": true/false,
     "masters": true/false,
@@ -50,14 +63,7 @@ Based on this data, provide analysis in the following JSON format:
   }
 }
 
-For verifiedPrograms, cross-reference the college's characteristics:
-- Large universities (>15,000 students) typically offer all degree levels
-- Research universities often have doctoral programs
-- Community colleges typically only offer associate degrees
-- Liberal arts colleges may only offer bachelor's degrees
-- Professional schools may focus on specific graduate programs
-
-Provide specific, actionable insights based on the college's admission rate, size, type, and academic profile.
+Create a comprehensive ideal student profile that includes specific academic achievements, meaningful extracurricular activities, personality traits that would thrive at this institution, and background factors that align with the college's values and mission.
 `;
 
       const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
@@ -77,7 +83,7 @@ Provide specific, actionable insights based on the college's admission rate, siz
             }
           ],
           temperature: 0.3,
-          max_tokens: 1500
+          max_tokens: 2000
         })
       });
 
@@ -112,6 +118,66 @@ Provide specific, actionable insights based on the college's admission rate, siz
     }
   }
 
+  async chatWithAdmissionsAI(
+    messages: ChatMessage[], 
+    collegeData: any,
+    userExtracurriculars?: string
+  ): Promise<string> {
+    try {
+      const systemPrompt = `
+You are an expert college admissions counselor providing personalized advice about ${collegeData['school.name']}.
+
+College Context:
+- Name: ${collegeData['school.name']}
+- Location: ${collegeData['school.city']}, ${collegeData['school.state']}
+- Admission Rate: ${collegeData['latest.admissions.admission_rate.overall'] ? (collegeData['latest.admissions.admission_rate.overall'] * 100).toFixed(1) + '%' : 'N/A'}
+- Institution Type: ${collegeData['school.ownership'] === 1 ? 'Public' : collegeData['school.ownership'] === 2 ? 'Private Non-Profit' : 'Private For-Profit'}
+
+Your role is to:
+1. Provide specific, actionable advice about applying to this college
+2. Help evaluate the user's extracurricular activities and how they align with this college
+3. Suggest improvements to their application profile
+4. Answer questions about what this college values in applicants
+5. Provide honest assessment of their chances and areas for improvement
+
+Be encouraging but realistic. Provide specific, actionable advice.
+${userExtracurriculars ? `\n\nUser's Current Extracurriculars: ${userExtracurriculars}` : ''}
+`;
+
+      const chatMessages = [
+        { role: 'system', content: systemPrompt },
+        ...messages.map(msg => ({ role: msg.role, content: msg.content }))
+      ];
+
+      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.OPENROUTER_API_KEY}`,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': window.location.origin,
+          'X-Title': 'College Research Tool'
+        },
+        body: JSON.stringify({
+          model: 'nvidia/llama-3.3-nemotron-super-49b-v1:free',
+          messages: chatMessages,
+          temperature: 0.7,
+          max_tokens: 1000
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`OpenRouter API request failed: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.choices[0]?.message?.content || 'Sorry, I encountered an error. Please try again.';
+
+    } catch (error) {
+      console.error('Error with AI chat:', error);
+      return 'I apologize, but I\'m having trouble connecting right now. Please try asking your question again in a moment.';
+    }
+  }
+
   private generateFallbackAnalysis(collegeData: any): CollegeAnalysis {
     const admissionRate = collegeData['latest.admissions.admission_rate.overall'] || 1;
     const studentSize = collegeData['latest.student.size'] || 0;
@@ -137,11 +203,22 @@ Provide specific, actionable insights based on the college's admission rate, siz
       'Highlight experiences that align with the college\'s values and mission'
     ];
 
+    const idealStudent = {
+      academicProfile: admissionRate < 0.2 ? 
+        'Top 5% of class with 4.0+ GPA, multiple AP courses with 4-5 scores, strong SAT/ACT scores' :
+        'Top 25% of class with strong GPA, challenging coursework, solid test scores',
+      extracurriculars: admissionRate < 0.2 ? 
+        ['Student government leadership', 'National competition winner', 'Research internship', 'Community service 200+ hours'] :
+        ['Club leadership roles', 'Sports or arts participation', 'Volunteer work', 'Part-time job or internship'],
+      personalityTraits: ['Intellectually curious', 'Collaborative', 'Resilient'],
+      background: 'Diverse backgrounds welcomed, with emphasis on overcoming challenges and contributing to campus diversity'
+    };
+
     // Estimate program availability based on size and type
     const verifiedPrograms = {
-      bachelors: true, // Most colleges offer bachelor's degrees
-      masters: studentSize > 5000 || !isPublic, // Larger schools and private schools more likely
-      doctoral: studentSize > 15000, // Large research universities
+      bachelors: true,
+      masters: studentSize > 5000 || !isPublic,
+      doctoral: studentSize > 15000,
       confidence: studentSize > 10000 ? 'high' : studentSize > 3000 ? 'medium' : 'low - verification recommended'
     };
 
@@ -150,6 +227,7 @@ Provide specific, actionable insights based on the college's admission rate, siz
       studentProfile,
       competitiveFactors,
       recommendations,
+      idealStudent,
       verifiedPrograms
     };
   }
