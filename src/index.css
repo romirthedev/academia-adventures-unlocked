@@ -127,7 +127,7 @@
 
   .btn-secondary {
     @apply relative inline-flex items-center justify-center px-6 py-3
-           bg-white text-foreground font-medium rounded-lg border border-border
+           bg-secondary text-secondary-foreground font-medium rounded-lg border border-border
            transition-all duration-300 ease-out
            hover:bg-muted hover:shadow-md hover:-translate-y-0.5
            active:translate-y-0;
@@ -162,7 +162,7 @@
     background-size: 40px 40px;
   }
 
-  /* Clean Typography */
+  /* Clean Typography - Ensure proper contrast */
   .heading-xl {
     @apply text-5xl md:text-6xl font-bold tracking-tight text-foreground;
   }
@@ -175,6 +175,16 @@
     @apply text-muted-foreground leading-relaxed;
   }
 
+  /* Override any potential white text issues */
+  .text-white {
+    @apply text-foreground !important;
+  }
+
+  /* Ensure all text elements use proper semantic colors */
+  p, span, div, h1, h2, h3, h4, h5, h6 {
+    color: inherit;
+  }
+
   /* Professional Gradients */
   .gradient-primary {
     background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(217 91% 60%) 100%);
@@ -185,6 +195,25 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+  }
+
+  /* Ensure proper contrast for all interactive elements */
+  button {
+    @apply text-foreground;
+  }
+
+  input, textarea, select {
+    @apply text-foreground bg-background;
+  }
+
+  /* Card content should always have proper contrast */
+  .card {
+    @apply text-foreground;
+  }
+
+  /* Badge styling with proper contrast */
+  .badge {
+    @apply text-foreground;
   }
 }
 

@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Search, MapPin, School, ExternalLink, Users, AlertCircle, BookOpen } from 'lucide-react';
+import { Search, MapPin, School, ExternalLink, Users, AlertCircle, BookOpen, Copy, Check } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -28,6 +28,7 @@ const FindProfessors = () => {
   const [professors, setProfessors] = useState<Professor[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [copiedEmails, setCopiedEmails] = useState<Set<string>>(new Set());
   const { toast } = useToast();
 
   const researchFields = [
@@ -50,6 +51,33 @@ const FindProfessors = () => {
     'Environmental Science',
     'Materials Science'
   ];
+
+  const handleEmailCopy = async (email: string) => {
+    try {
+      await navigator.clipboard.writeText(email);
+      setCopiedEmails(prev => new Set(prev).add(email));
+      
+      toast({
+        title: "Email copied!",
+        description: `${email} has been copied to your clipboard.`,
+      });
+
+      // Reset the copied state after 2 seconds
+      setTimeout(() => {
+        setCopiedEmails(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(email);
+          return newSet;
+        });
+      }, 2000);
+    } catch (error) {
+      toast({
+        title: "Failed to copy email",
+        description: "Please copy the email manually.",
+        variant: "destructive",
+      });
+    }
+  };
 
   const handleSearch = async () => {
     if (!selectedField) {
@@ -101,7 +129,7 @@ const FindProfessors = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-background">
       <div className="absolute inset-0 grid-pattern opacity-30" />
       
       <div className="container mx-auto px-6 py-12 relative">
@@ -109,8 +137,8 @@ const FindProfessors = () => {
           <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-xl mb-6">
             <BookOpen className="h-8 w-8 text-primary" />
           </div>
-          <h1 className="heading-lg mb-4">Find Leading Professors</h1>
-          <p className="text-lg text-muted max-w-2xl mx-auto">
+          <h1 className="heading-lg mb-4 text-foreground">Find Leading Professors</h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Connect with world-class researchers and academics in your field of interest
           </p>
         </div>
@@ -177,7 +205,7 @@ const FindProfessors = () => {
           <div className="text-center py-16 animate-fade-in">
             <div className="animate-spin rounded-full h-12 w-12 border-2 border-primary border-t-transparent mx-auto mb-6"></div>
             <p className="text-lg text-foreground mb-2">Searching for professors...</p>
-            <p className="text-muted">Finding the best matches for your criteria</p>
+            <p className="text-muted-foreground">Finding the best matches for your criteria</p>
           </div>
         )}
 
@@ -205,7 +233,7 @@ const FindProfessors = () => {
               <h2 className="text-2xl font-bold text-foreground">
                 Found {professors.length} Professor{professors.length !== 1 ? 's' : ''}
               </h2>
-              <p className="text-muted mt-1">AI-generated profiles based on your search criteria</p>
+              <p className="text-muted-foreground mt-1">AI-generated profiles based on your search criteria</p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -217,16 +245,16 @@ const FindProfessors = () => {
                 >
                   <CardHeader className="pb-4">
                     <CardTitle className="text-lg text-foreground">{professor.name}</CardTitle>
-                    <div className="space-y-2 text-sm text-muted">
+                    <div className="space-y-2 text-sm text-muted-foreground">
                       <p className="font-medium text-foreground">{professor.title}</p>
                       <p className="flex items-center gap-2">
                         <School className="h-4 w-4 text-primary" />
-                        {professor.department}
+                        <span className="text-foreground">{professor.department}</span>
                       </p>
-                      <p className="font-medium">{professor.university}</p>
+                      <p className="font-medium text-foreground">{professor.university}</p>
                       <p className="flex items-center gap-2">
                         <MapPin className="h-4 w-4 text-primary" />
-                        {professor.location}
+                        <span className="text-foreground">{professor.location}</span>
                       </p>
                     </div>
                   </CardHeader>
@@ -248,7 +276,7 @@ const FindProfessors = () => {
                           <Badge 
                             key={areaIndex} 
                             variant="secondary" 
-                            className="text-xs bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200"
+                            className="text-xs bg-secondary text-secondary-foreground border-border hover:bg-secondary/80"
                           >
                             {area}
                           </Badge>
@@ -261,10 +289,20 @@ const FindProfessors = () => {
                         <Button
                           size="sm"
                           variant="outline"
-                          onClick={() => window.open(`mailto:${professor.email}`, '_blank')}
-                          className="flex-1 border-border hover:bg-muted"
+                          onClick={() => handleEmailCopy(professor.email!)}
+                          className="flex-1 border-border hover:bg-muted text-foreground"
                         >
-                          Email
+                          {copiedEmails.has(professor.email) ? (
+                            <>
+                              <Check className="h-4 w-4 mr-1" />
+                              Copied
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="h-4 w-4 mr-1" />
+                              Copy Email
+                            </>
+                          )}
                         </Button>
                       )}
                       {professor.profileUrl && (
@@ -289,7 +327,7 @@ const FindProfessors = () => {
         {professors.length === 0 && !isLoading && !error && selectedField && (
           <div className="text-center py-16 animate-fade-in">
             <p className="text-lg text-foreground mb-2">No professors found matching your criteria.</p>
-            <p className="text-muted">Try adjusting your search parameters or removing some filters.</p>
+            <p className="text-muted-foreground">Try adjusting your search parameters or removing some filters.</p>
           </div>
         )}
       </div>
