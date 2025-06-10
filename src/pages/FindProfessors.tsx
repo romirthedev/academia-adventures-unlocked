@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Search, MapPin, School, ExternalLink, Users, AlertCircle } from 'lucide-react';
+import { Search, MapPin, School, ExternalLink, Users, AlertCircle, BookOpen } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -101,29 +101,34 @@ const FindProfessors = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50">
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center mb-8 animate-fade-in-up">
-          <h1 className="text-4xl font-bold gradient-text mb-4">Find Professors</h1>
-          <p className="text-slate-600 max-w-2xl mx-auto">
-            Discover leading researchers and professors in your field of interest using AI-powered insights
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+      <div className="absolute inset-0 grid-pattern opacity-30" />
+      
+      <div className="container mx-auto px-6 py-12 relative">
+        <div className="text-center mb-12 animate-fade-in">
+          <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-xl mb-6">
+            <BookOpen className="h-8 w-8 text-primary" />
+          </div>
+          <h1 className="heading-lg mb-4">Find Leading Professors</h1>
+          <p className="text-lg text-muted max-w-2xl mx-auto">
+            Connect with world-class researchers and academics in your field of interest
           </p>
         </div>
 
         {/* Search Form */}
-        <Card className="modern-card max-w-4xl mx-auto mb-8 animate-fade-in-up stagger-1">
+        <Card className="glass-card max-w-4xl mx-auto mb-12 border-0 animate-slide-up delay-200">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-slate-800">
-              <Search className="h-5 w-5 text-indigo-600" />
+            <CardTitle className="flex items-center gap-3 text-foreground">
+              <Search className="h-5 w-5 text-primary" />
               Search Criteria
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-2 text-slate-700">Research Field *</label>
+          <CardContent className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground">Research Field *</label>
                 <Select value={selectedField} onValueChange={setSelectedField}>
-                  <SelectTrigger className="border-slate-200 focus:border-indigo-300 focus:ring-indigo-200">
+                  <SelectTrigger className="border-border focus:border-primary focus:ring-primary/20">
                     <SelectValue placeholder="Select field of interest" />
                   </SelectTrigger>
                   <SelectContent>
@@ -136,23 +141,23 @@ const FindProfessors = () => {
                 </Select>
               </div>
               
-              <div>
-                <label className="block text-sm font-medium mb-2 text-slate-700">School (Optional)</label>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground">School (Optional)</label>
                 <Input
                   placeholder="e.g., Stanford, MIT"
                   value={schoolFilter}
                   onChange={(e) => setSchoolFilter(e.target.value)}
-                  className="border-slate-200 focus:border-indigo-300 focus:ring-indigo-200"
+                  className="border-border focus:border-primary focus:ring-primary/20"
                 />
               </div>
               
-              <div>
-                <label className="block text-sm font-medium mb-2 text-slate-700">Location (Optional)</label>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground">Location (Optional)</label>
                 <Input
                   placeholder="e.g., California, Boston"
                   value={locationFilter}
                   onChange={(e) => setLocationFilter(e.target.value)}
-                  className="border-slate-200 focus:border-indigo-300 focus:ring-indigo-200"
+                  className="border-border focus:border-primary focus:ring-primary/20"
                 />
               </div>
             </div>
@@ -160,28 +165,28 @@ const FindProfessors = () => {
             <Button 
               onClick={handleSearch}
               disabled={!selectedField || isLoading}
-              className="w-full modern-gradient text-white hover:scale-105 transition-all duration-200"
+              className="btn-primary w-full py-6 text-lg"
             >
-              {isLoading ? 'Generating with AI...' : 'Find Professors'}
+              {isLoading ? 'Searching...' : 'Find Professors'}
             </Button>
           </CardContent>
         </Card>
 
         {/* Loading State */}
         {isLoading && (
-          <div className="text-center py-12 animate-fade-in-up stagger-2">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-            <p className="text-slate-600 mb-2">AI is generating professor profiles...</p>
-            <p className="text-sm text-slate-500">Creating realistic professor data based on your criteria</p>
+          <div className="text-center py-16 animate-fade-in">
+            <div className="animate-spin rounded-full h-12 w-12 border-2 border-primary border-t-transparent mx-auto mb-6"></div>
+            <p className="text-lg text-foreground mb-2">Searching for professors...</p>
+            <p className="text-muted">Finding the best matches for your criteria</p>
           </div>
         )}
 
         {/* Error State */}
         {error && !isLoading && (
-          <div className="max-w-2xl mx-auto animate-fade-in-up stagger-2">
-            <Card className="border-red-200 bg-red-50">
+          <div className="max-w-2xl mx-auto animate-fade-in">
+            <Card className="border-destructive/20 bg-destructive/5">
               <CardContent className="pt-6">
-                <div className="flex items-center gap-3 text-red-700">
+                <div className="flex items-center gap-3 text-destructive">
                   <AlertCircle className="h-5 w-5" />
                   <div>
                     <h3 className="font-medium">Search Unavailable</h3>
@@ -195,31 +200,32 @@ const FindProfessors = () => {
 
         {/* Results */}
         {professors.length > 0 && !isLoading && (
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-2xl font-bold mb-6 text-slate-800 animate-fade-in-up stagger-2">
-              Found {professors.length} Professor{professors.length !== 1 ? 's' : ''} 
-              <span className="text-sm font-normal text-slate-600 ml-2">
-                (AI-generated based on your criteria)
-              </span>
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="max-w-7xl mx-auto">
+            <div className="mb-8 animate-fade-in">
+              <h2 className="text-2xl font-bold text-foreground">
+                Found {professors.length} Professor{professors.length !== 1 ? 's' : ''}
+              </h2>
+              <p className="text-muted mt-1">AI-generated profiles based on your search criteria</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {professors.map((professor, index) => (
                 <Card 
                   key={`${professor.name}-${index}`} 
-                  className="modern-card hover-lift animate-fade-in-up border-0" 
+                  className="glass-card border-0 hover-lift animate-fade-in" 
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <CardHeader>
-                    <CardTitle className="text-lg text-slate-800">{professor.name}</CardTitle>
-                    <div className="text-sm text-slate-600 space-y-1">
-                      <p className="font-medium">{professor.title}</p>
-                      <p className="flex items-center gap-1">
-                        <School className="h-4 w-4 text-indigo-600" />
+                  <CardHeader className="pb-4">
+                    <CardTitle className="text-lg text-foreground">{professor.name}</CardTitle>
+                    <div className="space-y-2 text-sm text-muted">
+                      <p className="font-medium text-foreground">{professor.title}</p>
+                      <p className="flex items-center gap-2">
+                        <School className="h-4 w-4 text-primary" />
                         {professor.department}
                       </p>
-                      <p className="font-medium text-slate-700">{professor.university}</p>
-                      <p className="flex items-center gap-1 text-slate-500">
-                        <MapPin className="h-4 w-4" />
+                      <p className="font-medium">{professor.university}</p>
+                      <p className="flex items-center gap-2">
+                        <MapPin className="h-4 w-4 text-primary" />
                         {professor.location}
                       </p>
                     </div>
@@ -227,8 +233,8 @@ const FindProfessors = () => {
                   
                   <CardContent className="space-y-4">
                     {professor.labName && (
-                      <div className="p-3 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-lg border border-indigo-100">
-                        <p className="text-sm font-medium text-indigo-800 flex items-center gap-1">
+                      <div className="p-3 bg-primary/5 rounded-lg border border-primary/10">
+                        <p className="text-sm font-medium text-primary flex items-center gap-2">
                           <Users className="h-4 w-4" />
                           {professor.labName}
                         </p>
@@ -236,13 +242,13 @@ const FindProfessors = () => {
                     )}
                     
                     <div>
-                      <p className="text-sm font-medium mb-2 text-slate-700">Research Areas:</p>
-                      <div className="flex flex-wrap gap-1">
+                      <p className="text-sm font-medium mb-3 text-foreground">Research Areas:</p>
+                      <div className="flex flex-wrap gap-2">
                         {professor.researchAreas.map((area, areaIndex) => (
                           <Badge 
                             key={areaIndex} 
                             variant="secondary" 
-                            className="text-xs bg-slate-100 text-slate-700 border-slate-200"
+                            className="text-xs bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200"
                           >
                             {area}
                           </Badge>
@@ -250,13 +256,13 @@ const FindProfessors = () => {
                       </div>
                     </div>
                     
-                    <div className="flex gap-2">
+                    <div className="flex gap-3 pt-2">
                       {professor.email && (
                         <Button
                           size="sm"
                           variant="outline"
                           onClick={() => window.open(`mailto:${professor.email}`, '_blank')}
-                          className="flex-1 border-slate-300 text-slate-600 hover:bg-slate-50"
+                          className="flex-1 border-border hover:bg-muted"
                         >
                           Email
                         </Button>
@@ -265,7 +271,7 @@ const FindProfessors = () => {
                         <Button
                           size="sm"
                           onClick={() => window.open(professor.profileUrl, '_blank')}
-                          className="flex-1 modern-gradient text-white hover:scale-105 transition-all duration-200"
+                          className="flex-1 btn-primary text-sm px-4 py-2"
                         >
                           <ExternalLink className="h-4 w-4 mr-1" />
                           Profile
@@ -281,9 +287,9 @@ const FindProfessors = () => {
 
         {/* No Results */}
         {professors.length === 0 && !isLoading && !error && selectedField && (
-          <div className="text-center py-12 animate-fade-in-up stagger-2">
-            <p className="text-slate-600 mb-4">No professors found matching your criteria.</p>
-            <p className="text-sm text-slate-500">Try adjusting your search parameters or removing some filters.</p>
+          <div className="text-center py-16 animate-fade-in">
+            <p className="text-lg text-foreground mb-2">No professors found matching your criteria.</p>
+            <p className="text-muted">Try adjusting your search parameters or removing some filters.</p>
           </div>
         )}
       </div>
