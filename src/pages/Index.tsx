@@ -73,7 +73,6 @@ const Index = () => {
         <div className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-gradient-to-r from-red-400/20 to-orange-600/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '4s' }}></div>
       </div>
 
-      {/* Enhanced Grid Pattern with Animation */}
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDAsIDAsIDAsIDAuMDUpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-20 animate-pulse-soft"></div>
       
       {/* Hero Section */}
@@ -95,9 +94,15 @@ const Index = () => {
                 Discover Your
               </span>
               <br />
-              <span className="bg-gradient-to-r from-orange-600 via-orange-500 to-amber-600 bg-clip-text text-transparent hover:scale-105 transition-transform duration-500 inline-block animate-pulse-glow">
-                Academic Future
-              </span>
+              <div className="relative inline-block">
+                <span className="bg-gradient-to-r from-orange-600 via-orange-500 to-amber-600 bg-clip-text text-transparent hover:scale-105 transition-transform duration-500 inline-block">
+                  Academic Future
+                </span>
+                {/* Traveling Border Beam */}
+                <div className="absolute inset-0 rounded-lg">
+                  <div className="absolute inset-0 rounded-lg border-4 border-transparent bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 bg-clip-border animate-border-beam opacity-75"></div>
+                </div>
+              </div>
             </h1>
             
             <p className={`text-xl md:text-2xl text-gray-700 max-w-4xl mx-auto mb-12 transition-all duration-1000 transform ${isVisible ? 'animate-fade-in opacity-100 translate-y-0' : 'opacity-0 translate-y-15'} delay-400 leading-relaxed hover:text-gray-600 transition-colors duration-300`}>
@@ -130,7 +135,7 @@ const Index = () => {
                     </div>
                     <Button
                       onClick={handleSearch}
-                      className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white px-10 py-7 text-lg rounded-2xl shadow-lg shadow-orange-500/25 transition-all duration-300 hover:shadow-orange-500/40 hover:scale-105 hover:-translate-y-1 active:scale-95"
+                      className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white px-10 py-7 text-lg rounded-2xl shadow-lg shadow-orange-500/25 transition-all duration-300 hover:shadow-orange-500/40 hover:scale-105 hover:-translate-y-1 active:scale-95 btn-magic-sparkle"
                     >
                       <Sparkles className="mr-3 h-6 w-6 animate-pulse-soft" />
                       Explore
@@ -140,11 +145,11 @@ const Index = () => {
               </div>
             </div>
 
-            {/* Enhanced CTA Buttons */}
+            {/* Enhanced CTA Buttons with Unique Animations */}
             <div className={`flex flex-wrap justify-center gap-6 mb-24 transition-all duration-1000 transform ${isVisible ? 'animate-fade-in opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} delay-800`}>
               <Button
                 onClick={() => navigate('/explore')}
-                className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white text-lg px-10 py-5 rounded-2xl shadow-lg shadow-orange-500/25 transition-all duration-300 hover:shadow-orange-500/40 hover:scale-105 hover:-translate-y-2 active:scale-95 group"
+                className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white text-lg px-10 py-5 rounded-2xl shadow-lg shadow-orange-500/25 transition-all duration-300 hover:shadow-orange-500/40 btn-morphing group"
               >
                 <GraduationCap className="mr-3 h-6 w-6 group-hover:animate-bounce-soft" />
                 Browse Colleges
@@ -152,14 +157,14 @@ const Index = () => {
               </Button>
               <Button
                 onClick={() => navigate('/professors')}
-                className="bg-white border-2 border-orange-300 text-gray-900 text-lg px-10 py-5 rounded-2xl hover:bg-orange-50 transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:border-orange-400 hover:shadow-lg group active:scale-95"
+                className="bg-white border-2 border-orange-300 text-gray-900 text-lg px-10 py-5 rounded-2xl hover:bg-orange-50 transition-all duration-300 btn-liquid-hover group"
               >
                 <Users className="mr-3 h-6 w-6 group-hover:animate-pulse" />
                 Find Professors
               </Button>
               <Button
                 onClick={() => navigate('/compare')}
-                className="bg-white border-2 border-orange-300 text-gray-900 text-lg px-10 py-5 rounded-2xl hover:bg-orange-50 transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:border-orange-400 hover:shadow-lg group active:scale-95"
+                className="bg-white border-2 border-orange-300 text-gray-900 text-lg px-10 py-5 rounded-2xl hover:bg-orange-50 transition-all duration-300 btn-elastic-bounce group"
               >
                 <TrendingUp className="mr-3 h-6 w-6 group-hover:animate-pulse" />
                 Compare Schools
@@ -206,7 +211,6 @@ const Index = () => {
             </div>
           </div>
 
-          {/* Enhanced Stats Section */}
           <div className="max-w-6xl mx-auto text-center mb-24">
             <h2 className={`text-4xl md:text-5xl font-bold mb-6 transition-all duration-1000 transform ${isVisible ? 'animate-fade-in-up opacity-100 translate-y-0' : 'opacity-0 translate-y-20'} delay-1800`}>
               <span className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent hover:scale-105 transition-transform duration-500 inline-block">
@@ -244,7 +248,6 @@ const Index = () => {
             </div>
           </div>
 
-          {/* Enhanced CTA Section */}
           <div className="max-w-4xl mx-auto text-center">
             <div className={`relative transition-all duration-1200 transform ${isVisible ? 'animate-scale-in opacity-100' : 'opacity-0 scale-95'} delay-2400`}>
               <div className="absolute inset-0 bg-gradient-to-r from-orange-600/10 to-red-600/10 rounded-3xl blur-xl animate-pulse-soft"></div>
@@ -270,7 +273,7 @@ const Index = () => {
                 </p>
                 <Button
                   onClick={() => navigate('/explore')}
-                  className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white text-xl px-12 py-6 rounded-2xl shadow-2xl shadow-orange-500/25 transition-all duration-300 hover:shadow-orange-500/40 hover:scale-110 hover:-translate-y-2 active:scale-95 group/btn"
+                  className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white text-xl px-12 py-6 rounded-2xl shadow-2xl shadow-orange-500/25 transition-all duration-300 hover:shadow-orange-500/40 btn-quantum-ripple group/btn"
                 >
                   <Zap className="mr-3 h-6 w-6 group-hover/btn:animate-bounce-soft" />
                   Get Started Today
@@ -282,7 +285,6 @@ const Index = () => {
         </div>
       </main>
 
-      {/* Enhanced Footer */}
       <footer className="relative z-10 border-t border-orange-200 bg-white/80 backdrop-blur-sm">
         <div className="container mx-auto px-6 py-16 text-center">
           <div className="flex items-center justify-center space-x-4 mb-8 group">

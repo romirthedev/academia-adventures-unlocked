@@ -133,6 +133,130 @@
            active:translate-y-0 active:scale-95;
   }
 
+  /* Unique Button Animations */
+  .btn-magic-sparkle {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-magic-sparkle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+  }
+
+  .btn-magic-sparkle:hover::before {
+    left: 100%;
+  }
+
+  .btn-magic-sparkle::after {
+    content: '✨';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.3s;
+    pointer-events: none;
+  }
+
+  .btn-magic-sparkle:hover::after {
+    transform: translate(-50%, -50%) scale(1);
+    animation: sparkle 0.6s ease-out;
+  }
+
+  .btn-morphing {
+    @apply transition-all duration-500 ease-out;
+    transform-style: preserve-3d;
+  }
+
+  .btn-morphing:hover {
+    transform: perspective(1000px) rotateX(10deg) rotateY(-10deg) scale(1.05) translateY(-5px);
+    box-shadow: 
+      0 20px 40px rgba(234, 88, 12, 0.3),
+      0 0 50px rgba(234, 88, 12, 0.2);
+  }
+
+  .btn-liquid-hover {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-liquid-hover::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: radial-gradient(circle, rgba(234, 88, 12, 0.2) 0%, transparent 70%);
+    transition: all 0.6s ease;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .btn-liquid-hover:hover::before {
+    width: 300px;
+    height: 300px;
+  }
+
+  .btn-liquid-hover:hover {
+    transform: scale(1.1) translateY(-5px);
+    border-color: rgba(234, 88, 12, 0.8);
+    box-shadow: 0 15px 35px rgba(234, 88, 12, 0.2);
+  }
+
+  .btn-elastic-bounce {
+    @apply transition-all duration-300;
+  }
+
+  .btn-elastic-bounce:hover {
+    animation: elasticBounce 0.8s ease-out;
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(234, 88, 12, 0.2);
+  }
+
+  .btn-quantum-ripple {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-quantum-ripple::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.6s ease;
+  }
+
+  .btn-quantum-ripple:hover::before {
+    width: 400px;
+    height: 400px;
+  }
+
+  .btn-quantum-ripple:hover {
+    transform: scale(1.1) translateY(-8px) rotateZ(2deg);
+    box-shadow: 
+      0 25px 50px rgba(234, 88, 12, 0.4),
+      0 0 100px rgba(234, 88, 12, 0.3);
+  }
+
+  /* Border Beam Animation */
+  .animate-border-beam {
+    background: linear-gradient(90deg, transparent, #ea580c, #f59e0b, #ea580c, transparent);
+    background-size: 200% 100%;
+    animation: borderBeam 3s linear infinite;
+  }
+
   /* Enhanced Hover Effects */
   .hover-lift {
     @apply transition-all duration-500 ease-out hover:-translate-y-2 hover:scale-105;
@@ -452,6 +576,49 @@
   }
 }
 
+/* New Button Animation Keyframes */
+@keyframes sparkle {
+  0% {
+    transform: translate(-50%, -50%) scale(0) rotate(0deg);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2) rotate(180deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0) rotate(360deg);
+  }
+}
+
+@keyframes elasticBounce {
+  0% {
+    transform: scale(1) translateY(0);
+  }
+  20% {
+    transform: scale(1.1, 0.9) translateY(-5px);
+  }
+  40% {
+    transform: scale(0.95, 1.05) translateY(-8px);
+  }
+  60% {
+    transform: scale(1.05, 0.95) translateY(-5px);
+  }
+  80% {
+    transform: scale(1.02, 0.98) translateY(-2px);
+  }
+  100% {
+    transform: scale(1) translateY(-5px);
+  }
+}
+
+@keyframes borderBeam {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
 /* Enhanced Animation Classes */
 .animate-fade-in {
   animation: fadeIn 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
@@ -495,6 +662,10 @@
 
 .animate-heartbeat {
   animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+.animate-border-beam {
+  animation: borderBeam 3s linear infinite;
 }
 
 /* Enhanced Stagger Delays */
