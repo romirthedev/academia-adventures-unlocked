@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { Search, GraduationCap, Users, TrendingUp, ArrowRight, Sparkles, BookOpen, Target, Zap, Star, Globe } from 'lucide-react';
+import { Search, GraduationCap, Users, TrendingUp, ArrowRight, Sparkles, BookOpen, Target, Zap, Star, Globe, Crown, Award } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
@@ -81,12 +80,27 @@ const Index = () => {
           {/* Header with Enhanced Animations */}
           <div className="text-center max-w-5xl mx-auto mb-20">
             <div className={`flex items-center justify-center mb-8 transition-all duration-1000 transform ${isVisible ? 'animate-scale-in opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-              <div className="p-4 bg-gradient-to-r from-orange-600 to-red-600 rounded-2xl mr-4 shadow-2xl shadow-orange-500/25 hover:shadow-orange-500/40 transition-all duration-500 hover:scale-110 hover:rotate-3">
-                <GraduationCap className="h-10 w-10 text-white animate-bounce-soft" />
+              <div className="relative p-2 mr-4 group">
+                {/* Elegant logo with crown and academic elements */}
+                <div className="absolute inset-0 bg-gradient-to-br from-orange-600 via-amber-500 to-orange-700 rounded-2xl blur-sm opacity-70 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative bg-gradient-to-br from-orange-600 via-amber-500 to-orange-700 rounded-2xl p-4 shadow-2xl group-hover:scale-110 transition-transform duration-500">
+                  <div className="relative">
+                    <Crown className="h-8 w-8 text-white absolute -top-1 left-1/2 transform -translate-x-1/2 z-10" />
+                    <GraduationCap className="h-10 w-10 text-white mt-2" />
+                    <div className="absolute -bottom-1 -right-1">
+                      <Award className="h-4 w-4 text-amber-200" />
+                    </div>
+                  </div>
+                </div>
               </div>
-              <span className="text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent hover:scale-105 transition-transform duration-300">
-                CollegeAI
-              </span>
+              <div className="text-left">
+                <span className="block text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent hover:scale-105 transition-transform duration-300">
+                  CollegeAI
+                </span>
+                <span className="block text-sm font-medium text-orange-600 tracking-wider uppercase">
+                  Excellence in Education
+                </span>
+              </div>
             </div>
 
             <h1 className={`text-6xl md:text-7xl font-bold mb-8 transition-all duration-1200 transform ${isVisible ? 'animate-fade-in-up opacity-100 translate-y-0' : 'opacity-0 translate-y-20'} delay-200`}>
@@ -94,13 +108,33 @@ const Index = () => {
                 Discover Your
               </span>
               <br />
-              <div className="relative inline-block">
-                <span className="bg-gradient-to-r from-orange-600 via-orange-500 to-amber-600 bg-clip-text text-transparent hover:scale-105 transition-transform duration-500 inline-block">
-                  Academic Future
-                </span>
-                {/* Traveling Border Beam */}
-                <div className="absolute inset-0 rounded-lg">
-                  <div className="absolute inset-0 rounded-lg border-4 border-transparent bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 bg-clip-border animate-border-beam opacity-75"></div>
+              {/* Completely redesigned "Academic Future" section */}
+              <div className="relative inline-block mt-4">
+                <div className="relative">
+                  {/* Elegant background with subtle gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-orange-100 via-amber-50 to-orange-100 rounded-3xl transform -skew-y-1 shadow-2xl"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-orange-200/30 via-amber-100/30 to-orange-200/30 rounded-3xl transform skew-y-1 shadow-xl"></div>
+                  
+                  {/* Floating decorative elements */}
+                  <div className="absolute -top-4 -left-4 w-8 h-8 bg-gradient-to-br from-orange-400 to-amber-500 rounded-full shadow-lg animate-float"></div>
+                  <div className="absolute -top-2 -right-6 w-6 h-6 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full shadow-lg animate-float" style={{ animationDelay: '1s' }}></div>
+                  <div className="absolute -bottom-3 left-8 w-5 h-5 bg-gradient-to-br from-orange-500 to-red-500 rounded-full shadow-lg animate-float" style={{ animationDelay: '2s' }}></div>
+                  
+                  {/* Main text with sophisticated styling */}
+                  <div className="relative px-12 py-6">
+                    <span className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 bg-clip-text text-transparent hover:scale-105 transition-transform duration-500 inline-block">
+                      Academic Excellence
+                    </span>
+                    
+                    {/* Subtle accent line */}
+                    <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-orange-400 to-transparent rounded-full"></div>
+                  </div>
+                  
+                  {/* Elegant corner ornaments */}
+                  <div className="absolute top-2 left-2 w-6 h-6 border-l-2 border-t-2 border-orange-300 rounded-tl-lg"></div>
+                  <div className="absolute top-2 right-2 w-6 h-6 border-r-2 border-t-2 border-orange-300 rounded-tr-lg"></div>
+                  <div className="absolute bottom-2 left-2 w-6 h-6 border-l-2 border-b-2 border-orange-300 rounded-bl-lg"></div>
+                  <div className="absolute bottom-2 right-2 w-6 h-6 border-r-2 border-b-2 border-orange-300 rounded-br-lg"></div>
                 </div>
               </div>
             </h1>
@@ -288,12 +322,27 @@ const Index = () => {
       <footer className="relative z-10 border-t border-orange-200 bg-white/80 backdrop-blur-sm">
         <div className="container mx-auto px-6 py-16 text-center">
           <div className="flex items-center justify-center space-x-4 mb-8 group">
-            <div className="p-3 bg-gradient-to-r from-orange-600 to-red-600 rounded-xl shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-              <GraduationCap className="h-6 w-6 text-white group-hover:animate-bounce-soft" />
+            <div className="relative p-2 group">
+              {/* Updated footer logo */}
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-600 via-amber-500 to-orange-700 rounded-xl blur-sm opacity-70 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="relative bg-gradient-to-br from-orange-600 via-amber-500 to-orange-700 rounded-xl p-3 shadow-lg group-hover:scale-110 transition-transform duration-500">
+                <div className="relative">
+                  <Crown className="h-5 w-5 text-white absolute -top-0.5 left-1/2 transform -translate-x-1/2 z-10" />
+                  <GraduationCap className="h-6 w-6 text-white mt-1" />
+                  <div className="absolute -bottom-0.5 -right-0.5">
+                    <Award className="h-3 w-3 text-amber-200" />
+                  </div>
+                </div>
+              </div>
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300">
-              CollegeAI
-            </span>
+            <div className="text-left">
+              <span className="block text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300">
+                CollegeAI
+              </span>
+              <span className="block text-xs font-medium text-orange-600 tracking-wider uppercase">
+                Excellence in Education
+              </span>
+            </div>
           </div>
           <p className="text-gray-600 mb-8 text-lg hover:text-gray-700 transition-colors duration-300">
             Empowering educational decisions through advanced AI technology

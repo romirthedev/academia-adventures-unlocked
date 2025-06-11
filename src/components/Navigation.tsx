@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { GraduationCap, Search, Users, BarChart3, BookmarkCheck, Menu, X } from 'lucide-react';
+import { GraduationCap, Search, Users, BarChart3, BookmarkCheck, Menu, X, Crown, Award } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Navigation = () => {
@@ -25,14 +25,29 @@ const Navigation = () => {
     <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-orange-200/50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2 group">
-            <div className="p-2 bg-gradient-to-br from-orange-600 to-red-600 rounded-xl group-hover:scale-105 transition-transform duration-200">
-              <GraduationCap className="h-6 w-6 text-white" />
+          {/* Updated Logo */}
+          <Link to="/" className="flex items-center space-x-3 group">
+            <div className="relative p-1 group">
+              {/* Elegant logo with crown and academic elements */}
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-600 via-amber-500 to-orange-700 rounded-xl blur-sm opacity-70 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="relative bg-gradient-to-br from-orange-600 via-amber-500 to-orange-700 rounded-xl p-2 shadow-lg group-hover:scale-110 transition-transform duration-500">
+                <div className="relative">
+                  <Crown className="h-4 w-4 text-white absolute -top-0.5 left-1/2 transform -translate-x-1/2 z-10" />
+                  <GraduationCap className="h-6 w-6 text-white mt-1" />
+                  <div className="absolute -bottom-0.5 -right-0.5">
+                    <Award className="h-3 w-3 text-amber-200" />
+                  </div>
+                </div>
+              </div>
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-              CollegeAI
-            </span>
+            <div className="text-left">
+              <span className="block text-xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300">
+                CollegeAI
+              </span>
+              <span className="block text-xs font-medium text-orange-600/80 tracking-wide uppercase">
+                Excellence
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
