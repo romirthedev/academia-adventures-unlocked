@@ -67,13 +67,13 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				college: {
-					primary: '#1e3a8a', // Deep blue
+					primary: '#ea580c', // Orange
 					secondary: '#dc2626', // Red
 					gold: '#f59e0b', // Gold
 					burgundy: '#7c2d12', // Burgundy
 					teal: '#0d9488', // Teal
-					purple: '#7c3aed', // Purple
-					orange: '#ea580c' // Orange
+					orange: '#ea580c', // Orange
+					accent: '#fb923c' // Light orange
 				}
 			},
 			borderRadius: {
@@ -140,10 +140,10 @@ export default {
 				},
 				'pulse-glow': {
 					'0%, 100%': {
-						boxShadow: '0 0 20px rgba(59, 130, 246, 0.4)'
+						boxShadow: '0 0 20px rgba(234, 88, 12, 0.4)'
 					},
 					'50%': {
-						boxShadow: '0 0 30px rgba(59, 130, 246, 0.8)'
+						boxShadow: '0 0 30px rgba(234, 88, 12, 0.8)'
 					}
 				},
 				'float': {

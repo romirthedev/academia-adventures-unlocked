@@ -129,34 +129,34 @@ const FindProfessors = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-background">
+    <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
       <div className="absolute inset-0 grid-pattern opacity-30" />
       
       <div className="container mx-auto px-6 py-12 relative">
         <div className="text-center mb-12 animate-fade-in">
-          <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-xl mb-6">
-            <BookOpen className="h-8 w-8 text-primary" />
+          <div className="inline-flex items-center justify-center p-3 bg-orange-100 rounded-xl mb-6">
+            <BookOpen className="h-8 w-8 text-orange-600" />
           </div>
-          <h1 className="heading-lg mb-4 text-foreground">Find Leading Professors</h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <h1 className="heading-lg mb-4 text-gray-900">Find Leading Professors</h1>
+          <p className="text-lg text-gray-700 max-w-2xl mx-auto">
             Connect with world-class researchers and academics in your field of interest
           </p>
         </div>
 
         {/* Search Form */}
-        <Card className="glass-card max-w-4xl mx-auto mb-12 border-0 animate-slide-up delay-200">
+        <Card className="glass-card max-w-4xl mx-auto mb-12 border-0 animate-slide-up delay-200 shadow-lg">
           <CardHeader>
-            <CardTitle className="flex items-center gap-3 text-foreground">
-              <Search className="h-5 w-5 text-primary" />
+            <CardTitle className="flex items-center gap-3 text-gray-900">
+              <Search className="h-5 w-5 text-orange-600" />
               Search Criteria
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">Research Field *</label>
+                <label className="text-sm font-medium text-gray-900">Research Field *</label>
                 <Select value={selectedField} onValueChange={setSelectedField}>
-                  <SelectTrigger className="border-border focus:border-primary focus:ring-primary/20">
+                  <SelectTrigger className="border-orange-200 focus:border-orange-500 focus:ring-orange-200">
                     <SelectValue placeholder="Select field of interest" />
                   </SelectTrigger>
                   <SelectContent>
@@ -170,22 +170,22 @@ const FindProfessors = () => {
               </div>
               
               <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">School (Optional)</label>
+                <label className="text-sm font-medium text-gray-900">School (Optional)</label>
                 <Input
                   placeholder="e.g., Stanford, MIT"
                   value={schoolFilter}
                   onChange={(e) => setSchoolFilter(e.target.value)}
-                  className="border-border focus:border-primary focus:ring-primary/20"
+                  className="border-orange-200 focus:border-orange-500 focus:ring-orange-200"
                 />
               </div>
               
               <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">Location (Optional)</label>
+                <label className="text-sm font-medium text-gray-900">Location (Optional)</label>
                 <Input
                   placeholder="e.g., California, Boston"
                   value={locationFilter}
                   onChange={(e) => setLocationFilter(e.target.value)}
-                  className="border-border focus:border-primary focus:ring-primary/20"
+                  className="border-orange-200 focus:border-orange-500 focus:ring-orange-200"
                 />
               </div>
             </div>
@@ -203,18 +203,18 @@ const FindProfessors = () => {
         {/* Loading State */}
         {isLoading && (
           <div className="text-center py-16 animate-fade-in">
-            <div className="animate-spin rounded-full h-12 w-12 border-2 border-primary border-t-transparent mx-auto mb-6"></div>
-            <p className="text-lg text-foreground mb-2">Searching for professors...</p>
-            <p className="text-muted-foreground">Finding the best matches for your criteria</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-2 border-orange-600 border-t-transparent mx-auto mb-6"></div>
+            <p className="text-lg text-gray-900 mb-2">Searching for professors...</p>
+            <p className="text-gray-600">Finding the best matches for your criteria</p>
           </div>
         )}
 
         {/* Error State */}
         {error && !isLoading && (
           <div className="max-w-2xl mx-auto animate-fade-in">
-            <Card className="border-destructive/20 bg-destructive/5">
+            <Card className="border-red-200 bg-red-50">
               <CardContent className="pt-6">
-                <div className="flex items-center gap-3 text-destructive">
+                <div className="flex items-center gap-3 text-red-700">
                   <AlertCircle className="h-5 w-5" />
                   <div>
                     <h3 className="font-medium">Search Unavailable</h3>
@@ -230,39 +230,39 @@ const FindProfessors = () => {
         {professors.length > 0 && !isLoading && (
           <div className="max-w-7xl mx-auto">
             <div className="mb-8 animate-fade-in">
-              <h2 className="text-2xl font-bold text-foreground">
+              <h2 className="text-2xl font-bold text-gray-900">
                 Found {professors.length} Professor{professors.length !== 1 ? 's' : ''}
               </h2>
-              <p className="text-muted-foreground mt-1">AI-generated profiles based on your search criteria</p>
+              <p className="text-gray-600 mt-1">AI-generated profiles based on your search criteria</p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {professors.map((professor, index) => (
                 <Card 
                   key={`${professor.name}-${index}`} 
-                  className="glass-card border-0 hover-lift animate-fade-in" 
+                  className="glass-card border-0 hover-lift animate-fade-in shadow-lg" 
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <CardHeader className="pb-4">
-                    <CardTitle className="text-lg text-foreground">{professor.name}</CardTitle>
-                    <div className="space-y-2 text-sm text-muted-foreground">
-                      <p className="font-medium text-foreground">{professor.title}</p>
+                    <CardTitle className="text-lg text-gray-900">{professor.name}</CardTitle>
+                    <div className="space-y-2 text-sm text-gray-600">
+                      <p className="font-medium text-gray-900">{professor.title}</p>
                       <p className="flex items-center gap-2">
-                        <School className="h-4 w-4 text-primary" />
-                        <span className="text-foreground">{professor.department}</span>
+                        <School className="h-4 w-4 text-orange-600" />
+                        <span className="text-gray-900">{professor.department}</span>
                       </p>
-                      <p className="font-medium text-foreground">{professor.university}</p>
+                      <p className="font-medium text-gray-900">{professor.university}</p>
                       <p className="flex items-center gap-2">
-                        <MapPin className="h-4 w-4 text-primary" />
-                        <span className="text-foreground">{professor.location}</span>
+                        <MapPin className="h-4 w-4 text-orange-600" />
+                        <span className="text-gray-900">{professor.location}</span>
                       </p>
                     </div>
                   </CardHeader>
                   
                   <CardContent className="space-y-4">
                     {professor.labName && (
-                      <div className="p-3 bg-primary/5 rounded-lg border border-primary/10">
-                        <p className="text-sm font-medium text-primary flex items-center gap-2">
+                      <div className="p-3 bg-orange-50 rounded-lg border border-orange-200">
+                        <p className="text-sm font-medium text-orange-700 flex items-center gap-2">
                           <Users className="h-4 w-4" />
                           {professor.labName}
                         </p>
@@ -270,13 +270,13 @@ const FindProfessors = () => {
                     )}
                     
                     <div>
-                      <p className="text-sm font-medium mb-3 text-foreground">Research Areas:</p>
+                      <p className="text-sm font-medium mb-3 text-gray-900">Research Areas:</p>
                       <div className="flex flex-wrap gap-2">
                         {professor.researchAreas.map((area, areaIndex) => (
                           <Badge 
                             key={areaIndex} 
                             variant="secondary" 
-                            className="text-xs bg-secondary text-secondary-foreground border-border hover:bg-secondary/80"
+                            className="text-xs bg-orange-100 text-orange-800 border-orange-200 hover:bg-orange-200"
                           >
                             {area}
                           </Badge>
@@ -290,7 +290,7 @@ const FindProfessors = () => {
                           size="sm"
                           variant="outline"
                           onClick={() => handleEmailCopy(professor.email!)}
-                          className="flex-1 border-border hover:bg-muted text-foreground"
+                          className="flex-1 border-orange-200 hover:bg-orange-50 text-gray-900"
                         >
                           {copiedEmails.has(professor.email) ? (
                             <>
@@ -326,8 +326,8 @@ const FindProfessors = () => {
         {/* No Results */}
         {professors.length === 0 && !isLoading && !error && selectedField && (
           <div className="text-center py-16 animate-fade-in">
-            <p className="text-lg text-foreground mb-2">No professors found matching your criteria.</p>
-            <p className="text-muted-foreground">Try adjusting your search parameters or removing some filters.</p>
+            <p className="text-lg text-gray-900 mb-2">No professors found matching your criteria.</p>
+            <p className="text-gray-600">Try adjusting your search parameters or removing some filters.</p>
           </div>
         )}
       </div>
