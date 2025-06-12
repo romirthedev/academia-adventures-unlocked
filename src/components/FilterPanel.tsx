@@ -45,21 +45,21 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onChange }) =
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 animate-fade-in">
       {/* State Filter */}
       <div className="space-y-2">
         <Label htmlFor="state" className="text-sm font-medium text-gray-700">
           State
         </Label>
         <Select
-          value={filters.state}
-          onValueChange={(value) => handleFilterChange('state', value)}
+          value={filters.state || "all"}
+          onValueChange={(value) => handleFilterChange('state', value === "all" ? "" : value)}
         >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Any state" />
           </SelectTrigger>
-          <SelectContent className="bg-white border border-gray-200 shadow-lg max-h-60 overflow-y-auto">
-            <SelectItem value="">Any state</SelectItem>
+          <SelectContent className="bg-white border border-gray-200 shadow-lg max-h-60 overflow-y-auto z-50">
+            <SelectItem value="all">Any state</SelectItem>
             {US_STATES.map((state) => (
               <SelectItem key={state} value={state}>
                 {state}
@@ -79,7 +79,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onChange }) =
           placeholder="1,000"
           value={filters.minSize}
           onChange={(e) => handleFilterChange('minSize', e.target.value)}
-          className="w-full"
+          className="w-full transition-all duration-200 focus:ring-2 focus:ring-orange-500"
         />
       </div>
 
@@ -92,7 +92,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onChange }) =
           placeholder="50,000"
           value={filters.maxSize}
           onChange={(e) => handleFilterChange('maxSize', e.target.value)}
-          className="w-full"
+          className="w-full transition-all duration-200 focus:ring-2 focus:ring-orange-500"
         />
       </div>
 
@@ -108,7 +108,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onChange }) =
           max="100"
           value={filters.minAdmissionRate}
           onChange={(e) => handleFilterChange('minAdmissionRate', e.target.value)}
-          className="w-full"
+          className="w-full transition-all duration-200 focus:ring-2 focus:ring-orange-500"
         />
       </div>
 
@@ -123,7 +123,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onChange }) =
           max="100"
           value={filters.maxAdmissionRate}
           onChange={(e) => handleFilterChange('maxAdmissionRate', e.target.value)}
-          className="w-full"
+          className="w-full transition-all duration-200 focus:ring-2 focus:ring-orange-500"
         />
       </div>
 
@@ -137,18 +137,18 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({ filters, onChange }) =
           placeholder="50,000"
           value={filters.maxTuition}
           onChange={(e) => handleFilterChange('maxTuition', e.target.value)}
-          className="w-full"
+          className="w-full transition-all duration-200 focus:ring-2 focus:ring-orange-500"
         />
       </div>
 
       {/* Clear Filters Button */}
-      <div className="flex items-end">
+      <div className="flex items-end xl:col-span-6">
         <Button
           variant="outline"
           onClick={clearFilters}
-          className="w-full border-gray-300 hover:bg-gray-50 text-gray-700"
+          className="w-full border-gray-300 hover:bg-gray-50 text-gray-700 hover:scale-105 transition-all duration-200"
         >
-          Clear All
+          Clear All Filters
         </Button>
       </div>
     </div>

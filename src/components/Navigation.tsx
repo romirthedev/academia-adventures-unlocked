@@ -42,7 +42,7 @@ const Navigation = () => {
             </div>
             <div className="text-left">
               <span className="block text-xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300">
-                CollegeAI
+                ScAI
               </span>
               <span className="block text-xs font-medium text-orange-600/80 tracking-wide uppercase">
                 Excellence
