@@ -5,7 +5,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import Navigation from "./components/Navigation";
 import { AppSidebar } from "./components/AppSidebar";
 import Index from "./pages/Index";
 import CollegeExplorer from "./pages/CollegeExplorer";
@@ -24,7 +23,6 @@ const AppContent = () => {
   if (isHomePage) {
     return (
       <div className="min-h-screen w-full bg-background">
-        <Navigation />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/explore" element={<CollegeExplorer />} />
@@ -42,8 +40,7 @@ const AppContent = () => {
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-background">
         <AppSidebar />
-        <div className="flex-1">
-          <Navigation />
+        <div className="flex-1 transition-all duration-300 ease-in-out">
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/explore" element={<CollegeExplorer />} />
