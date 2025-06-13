@@ -14,7 +14,6 @@ import {
   SidebarTrigger,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { Button } from '@/components/ui/button';
 
 const menuItems = [
   {
@@ -74,15 +73,7 @@ export function AppSidebar() {
             </div>
           </Link>
           {!isMobile && (
-            <SidebarTrigger asChild>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="h-8 w-8 p-0 hover:bg-orange-50 transition-all duration-200"
-              >
-                <PanelLeft className="h-4 w-4 text-orange-600" />
-              </Button>
-            </SidebarTrigger>
+            <SidebarTrigger className="h-8 w-8 p-0 hover:bg-orange-50 transition-all duration-200 text-orange-600" />
           )}
         </div>
       </SidebarHeader>
