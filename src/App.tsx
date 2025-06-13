@@ -4,7 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "./components/AppSidebar";
 import Index from "./pages/Index";
 import CollegeExplorer from "./pages/CollegeExplorer";
@@ -41,6 +41,9 @@ const AppContent = () => {
       <div className="min-h-screen flex w-full bg-background">
         <AppSidebar />
         <div className="flex-1 transition-all duration-300 ease-in-out">
+          <div className="p-4 border-b border-orange-200/50 bg-white/50 backdrop-blur-sm">
+            <SidebarTrigger className="h-8 w-8 p-0 hover:bg-orange-50 transition-all duration-200 text-orange-600" />
+          </div>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/explore" element={<CollegeExplorer />} />

@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { GraduationCap, Search, Users, BarChart3, BookmarkCheck, Crown, Award, PanelLeft } from 'lucide-react';
+import { GraduationCap, Search, Users, BarChart3, BookmarkCheck, Crown, Award } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -11,7 +10,6 @@ import {
   SidebarMenuItem,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarTrigger,
   useSidebar,
 } from '@/components/ui/sidebar';
 
@@ -49,7 +47,7 @@ export function AppSidebar() {
   return (
     <Sidebar className="border-r border-orange-200/50 transition-all duration-300 ease-in-out">
       <SidebarHeader className="p-4 transition-all duration-300 ease-in-out">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-center">
           <Link to="/" className="flex items-center space-x-3 group transition-all duration-300 ease-in-out">
             <div className="relative p-1 group">
               <div className="absolute inset-0 bg-gradient-to-br from-orange-600 via-amber-500 to-orange-700 rounded-xl blur-sm opacity-70 group-hover:opacity-100 transition-all duration-500 ease-in-out"></div>
@@ -72,9 +70,6 @@ export function AppSidebar() {
               </span>
             </div>
           </Link>
-          {!isMobile && (
-            <SidebarTrigger className="h-8 w-8 p-0 hover:bg-orange-50 transition-all duration-200 text-orange-600" />
-          )}
         </div>
       </SidebarHeader>
       <SidebarContent className="transition-all duration-300 ease-in-out">
