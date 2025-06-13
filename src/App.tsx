@@ -41,8 +41,8 @@ const AppContent = () => {
       <div className="min-h-screen flex w-full bg-background">
         <AppSidebar />
         <div className="flex-1 transition-all duration-300 ease-in-out">
-          <div className="p-4 border-b border-orange-200/50 bg-white/50 backdrop-blur-sm">
-            <SidebarTrigger className="h-8 w-8 p-0 hover:bg-orange-50 transition-all duration-200 text-orange-600" />
+          <div className="sticky top-0 z-50 p-4 border-b border-orange-200/50 bg-white/80 backdrop-blur-sm">
+            <SidebarTrigger className="h-10 w-10 p-2 hover:bg-orange-50 transition-all duration-200 text-orange-600 border border-orange-200 rounded-md shadow-sm" />
           </div>
           <Routes>
             <Route path="/" element={<Index />} />
