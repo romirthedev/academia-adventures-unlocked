@@ -1,13 +1,11 @@
 
 import React, { useState } from 'react';
-import { Search, MapPin, School, ExternalLink, Users, AlertCircle, BookOpen, Copy, Check, Menu } from 'lucide-react';
+import { Search, MapPin, School, ExternalLink, Users, AlertCircle, BookOpen, Copy, Check } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { SidebarTrigger, useSidebar } from '@/components/ui/sidebar';
 import { professorService } from '@/services/professorService';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -32,7 +30,6 @@ const FindProfessors = () => {
   const [error, setError] = useState<string | null>(null);
   const [copiedEmails, setCopiedEmails] = useState<Set<string>>(new Set());
   const { toast } = useToast();
-  const { isMobile } = useSidebar();
 
   const researchFields = [
     'Computer Science',
@@ -150,20 +147,6 @@ const FindProfessors = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
       <div className="absolute inset-0 grid-pattern opacity-30" />
-      
-      {/* Mobile Header */}
-      {isMobile && (
-        <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-orange-200/50 shadow-sm lg:hidden">
-          <div className="flex items-center justify-between p-4">
-            <h1 className="text-lg font-semibold text-gray-900">Find Professors</h1>
-            <SidebarTrigger asChild>
-              <Button variant="ghost" size="sm" className="p-2">
-                <Menu className="h-5 w-5" />
-              </Button>
-            </SidebarTrigger>
-          </div>
-        </div>
-      )}
       
       <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-12 relative">
         <div className="text-center mb-8 sm:mb-12 animate-fade-in">
@@ -322,18 +305,18 @@ const FindProfessors = () => {
                       </div>
                     </div>
                     
-                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-2">
+                    <div className="flex flex-col gap-2 pt-2">
                       {professor.email && (
                         <Button
                           size="sm"
                           variant="outline"
                           onClick={() => handleEmailCopy(professor.email!)}
-                          className="flex-1 border-orange-200 hover:bg-orange-50 text-gray-900 text-xs sm:text-sm"
+                          className="w-full border-orange-200 hover:bg-orange-50 text-gray-900 text-xs sm:text-sm"
                         >
                           {copiedEmails.has(professor.email) ? (
                             <>
                               <Check className="h-4 w-4 mr-1" />
-                              Copied
+                              Email Copied
                             </>
                           ) : (
                             <>
@@ -341,16 +324,6 @@ const FindProfessors = () => {
                               Copy Email
                             </>
                           )}
-                        </Button>
-                      )}
-                      {professor.profileUrl && (
-                        <Button
-                          size="sm"
-                          onClick={() => window.open(professor.profileUrl, '_blank')}
-                          className="flex-1 btn-primary text-xs sm:text-sm px-4 py-2"
-                        >
-                          <ExternalLink className="h-4 w-4 mr-1" />
-                          Profile
                         </Button>
                       )}
                     </div>

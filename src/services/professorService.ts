@@ -29,7 +29,6 @@ class ProfessorService {
         location: 'Stanford, CA',
         researchAreas: ['machine learning', 'artificial intelligence', 'deep learning'],
         email: 'ang@cs.stanford.edu',
-        profileUrl: 'https://www.andrewng.org/',
         labName: 'Stanford AI Lab'
       },
       {
@@ -40,7 +39,6 @@ class ProfessorService {
         location: 'Stanford, CA',
         researchAreas: ['autonomous vehicles', 'robotics', 'machine learning'],
         email: 'thrun@stanford.edu',
-        profileUrl: 'http://robots.stanford.edu/thrun.html',
         labName: 'Stanford AI Lab'
       },
       {
@@ -51,7 +49,6 @@ class ProfessorService {
         location: 'Berkeley, CA',
         researchAreas: ['robotics', 'deep reinforcement learning', 'imitation learning'],
         email: 'pabbeel@berkeley.edu',
-        profileUrl: 'https://people.eecs.berkeley.edu/~pabbeel/',
         labName: 'Berkeley AI Research'
       }
     ],
@@ -585,7 +582,7 @@ Generate 20 realistic ${criteria.field} professors for university research. Crea
 Requirements:
 - Real university names and locations
 - Realistic email formats
-- Use actual university website patterns for profile URLs
+- DO NOT include profileUrl field - omit it completely
 - Diverse names representing various backgrounds
 - Specific research areas related to ${criteria.field}
 - Academic titles: Professor, Associate Professor, Assistant Professor
@@ -600,7 +597,6 @@ Return ONLY a valid JSON array:
     "location": "Stanford, CA",
     "researchAreas": ["machine learning", "computer vision", "AI ethics"],
     "email": "schen@cs.stanford.edu",
-    "profileUrl": "https://profiles.stanford.edu/sarah-chen",
     "labName": "Intelligent Systems Lab"
   }
 ]
