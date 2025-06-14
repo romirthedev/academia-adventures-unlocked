@@ -14,8 +14,8 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 24 95% 53%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 18 100% 50%;
+    --primary-foreground: 0 0% 100%;
 
     --secondary: 210 40% 96%;
     --secondary-foreground: 222.2 84% 4.9%;
@@ -31,59 +31,63 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 24 95% 53%;
+    --ring: 18 100% 50%;
 
     --radius: 0.5rem;
 
-    /* Custom theme variables */
+    /* McLaren theme variables */
     --surface: 0 0% 98%;
     --surface-hover: 0 0% 95%;
     --text-primary: 222.2 84% 4.9%;
     --text-secondary: 215.4 16.3% 46.9%;
     --glass-bg: rgba(255, 255, 255, 0.95);
-    --glass-border: rgba(255, 255, 255, 0.2);
-    --shadow-color: rgba(0, 0, 0, 0.1);
-    --orange-gradient: linear-gradient(135deg, #ea580c, #f97316, #fb923c);
+    --glass-border: rgba(255, 120, 0, 0.2);
+    --shadow-color: rgba(255, 120, 0, 0.15);
+    --mclaren-gradient: linear-gradient(135deg, #ff7800, #ff8c00, #ffa500);
+    --mclaren-carbon: #1a1a1a;
+    --mclaren-silver: #c0c0c0;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 20 14.3% 4.1%;
+    --foreground: 0 0% 95%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 20 14.3% 4.1%;
+    --card-foreground: 0 0% 95%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 20 14.3% 4.1%;
+    --popover-foreground: 0 0% 95%;
 
-    --primary: 24 95% 53%;
-    --primary-foreground: 222.2 84% 4.9%;
+    --primary: 18 100% 50%;
+    --primary-foreground: 20 14.3% 4.1%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 12 6.5% 15.1%;
+    --secondary-foreground: 0 0% 95%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 12 6.5% 15.1%;
+    --muted-foreground: 24 5.4% 63.9%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 12 6.5% 15.1%;
+    --accent-foreground: 0 0% 95%;
 
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 95%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 24 95% 53%;
+    --border: 12 6.5% 15.1%;
+    --input: 12 6.5% 15.1%;
+    --ring: 18 100% 50%;
 
-    /* Custom dark theme variables */
-    --surface: 222.2 84% 6%;
-    --surface-hover: 217.2 32.6% 12%;
-    --text-primary: 210 40% 98%;
-    --text-secondary: 215 20.2% 65.1%;
-    --glass-bg: rgba(15, 15, 15, 0.85);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --shadow-color: rgba(0, 0, 0, 0.5);
-    --orange-gradient: linear-gradient(135deg, #ea580c, #f97316, #fb923c);
+    /* McLaren dark theme variables */
+    --surface: 20 14.3% 6%;
+    --surface-hover: 12 6.5% 12%;
+    --text-primary: 0 0% 95%;
+    --text-secondary: 24 5.4% 63.9%;
+    --glass-bg: rgba(26, 26, 26, 0.85);
+    --glass-border: rgba(255, 120, 0, 0.3);
+    --shadow-color: rgba(255, 120, 0, 0.25);
+    --mclaren-gradient: linear-gradient(135deg, #ff7800, #ff8c00, #ffa500);
+    --mclaren-carbon: #0d0d0d;
+    --mclaren-silver: #e0e0e0;
   }
 }
 
@@ -105,7 +109,7 @@
 }
 
 @layer components {
-  /* Enhanced Glass Effects */
+  /* Enhanced Glass Effects with McLaren styling */
   .glass-surface {
     background: var(--glass-bg);
     backdrop-filter: blur(20px);
@@ -113,7 +117,7 @@
     border: 1px solid var(--glass-border);
     box-shadow: 
       0 8px 32px var(--shadow-color),
-      0 1px 0 rgba(255, 255, 255, 0.05) inset;
+      0 1px 0 rgba(255, 120, 0, 0.1) inset;
     transition: all 0.3s ease;
   }
 
@@ -125,11 +129,11 @@
     box-shadow: 
       0 20px 40px -12px var(--shadow-color),
       0 8px 16px -8px var(--shadow-color),
-      0 1px 0 rgba(255, 255, 255, 0.05) inset;
+      0 1px 0 rgba(255, 120, 0, 0.1) inset;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* Button Animations */
+  /* McLaren Button Animations */
   .btn-quantum-ripple {
     position: relative;
     overflow: hidden;
@@ -157,8 +161,8 @@
   .btn-quantum-ripple:hover {
     transform: scale(1.05) translateY(-4px);
     box-shadow: 
-      0 25px 50px rgba(234, 88, 12, 0.4),
-      0 0 100px rgba(234, 88, 12, 0.3);
+      0 25px 50px rgba(255, 120, 0, 0.4),
+      0 0 100px rgba(255, 120, 0, 0.3);
   }
 
   /* Enhanced Animations */
@@ -192,7 +196,7 @@
   }
 
   .animate-text-shimmer {
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 120, 0, 0.4), transparent);
     background-size: 200% 100%;
     animation: textShimmer 2s ease-in-out infinite;
     -webkit-background-clip: text;
@@ -211,7 +215,7 @@
     animation: scaleBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
   }
 
-  /* Interactive Elements */
+  /* Interactive Elements with McLaren styling */
   .interactive-card {
     @apply transition-all duration-500 hover:scale-105 hover:-translate-y-3 
            hover:shadow-2xl cursor-pointer
@@ -221,8 +225,8 @@
 
   .interactive-card:hover {
     box-shadow: 
-      0 25px 50px rgba(234, 88, 12, 0.3),
-      0 0 100px rgba(234, 88, 12, 0.2);
+      0 25px 50px rgba(255, 120, 0, 0.3),
+      0 0 100px rgba(255, 120, 0, 0.2);
   }
 
   /* Loading States */
@@ -239,21 +243,38 @@
   /* Background Patterns */
   .animated-grid {
     background-image: 
-      radial-gradient(circle at 1px 1px, rgba(234, 88, 12, 0.15) 1px, transparent 0);
+      radial-gradient(circle at 1px 1px, rgba(255, 120, 0, 0.15) 1px, transparent 0);
     background-size: 40px 40px;
     animation: gridShift 20s linear infinite;
   }
 
-  /* Theme-aware gradients */
+  /* McLaren theme gradients */
   .gradient-bg {
-    background: var(--orange-gradient);
+    background: var(--mclaren-gradient);
   }
 
   .text-gradient {
-    background: var(--orange-gradient);
+    background: var(--mclaren-gradient);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+
+  /* Dark mode text fixes */
+  .dark .text-foreground {
+    color: hsl(var(--foreground)) !important;
+  }
+
+  .dark .text-muted-foreground {
+    color: hsl(var(--muted-foreground)) !important;
+  }
+
+  .dark .glass-card {
+    color: hsl(var(--foreground));
+  }
+
+  .dark .glass-card .text-muted-foreground {
+    color: hsl(var(--muted-foreground)) !important;
   }
 }
 
@@ -402,7 +423,7 @@
   }
 }
 
-/* Dark mode scrollbar */
+/* Dark mode scrollbar with McLaren colors */
 ::-webkit-scrollbar {
   width: 8px;
 }

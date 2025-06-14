@@ -26,7 +26,7 @@ const Navigation = () => {
     <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border shadow-sm transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
+          {/* McLaren Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
             <div className="relative p-1 group">
               <div className="absolute inset-0 gradient-bg rounded-xl blur-sm opacity-70 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -35,7 +35,7 @@ const Navigation = () => {
                   <Crown className="h-4 w-4 text-white absolute -top-0.5 left-1/2 transform -translate-x-1/2 z-10" />
                   <GraduationCap className="h-6 w-6 text-white mt-1" />
                   <div className="absolute -bottom-0.5 -right-0.5">
-                    <Award className="h-3 w-3 text-amber-200" />
+                    <Award className="h-3 w-3 text-white" />
                   </div>
                 </div>
               </div>
@@ -44,7 +44,7 @@ const Navigation = () => {
               <span className="block text-xl font-bold text-gradient group-hover:scale-105 transition-transform duration-300">
                 ScAI
               </span>
-              <span className="block text-xs font-medium text-primary/80 tracking-wide uppercase transition-colors duration-300">
+              <span className="block text-xs font-medium text-mclaren-papaya/80 tracking-wide uppercase transition-colors duration-300">
                 Excellence
               </span>
             </div>
@@ -63,8 +63,8 @@ const Navigation = () => {
                   className={`
                     flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200
                     ${isActive 
-                      ? 'bg-primary/10 text-primary shadow-sm border border-primary/20' 
-                      : 'text-muted-foreground hover:text-primary hover:bg-primary/5'
+                      ? 'bg-mclaren-papaya/10 text-mclaren-papaya shadow-sm border border-mclaren-papaya/20' 
+                      : 'text-muted-foreground hover:text-mclaren-papaya hover:bg-mclaren-papaya/5'
                     }
                   `}
                 >
@@ -87,7 +87,7 @@ const Navigation = () => {
               variant="ghost"
               size="sm"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2"
+              className="p-2 text-foreground hover:text-mclaren-papaya hover:bg-mclaren-papaya/5"
             >
               {isMobileMenuOpen ? (
                 <X className="h-5 w-5" />
@@ -114,8 +114,8 @@ const Navigation = () => {
                     className={`
                       flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200
                       ${isActive 
-                        ? 'bg-primary/10 text-primary shadow-sm border border-primary/20' 
-                        : 'text-muted-foreground hover:text-primary hover:bg-primary/5'
+                        ? 'bg-mclaren-papaya/10 text-mclaren-papaya shadow-sm border border-mclaren-papaya/20' 
+                        : 'text-muted-foreground hover:text-mclaren-papaya hover:bg-mclaren-papaya/5'
                       }
                     `}
                   >

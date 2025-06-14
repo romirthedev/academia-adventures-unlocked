@@ -27,16 +27,16 @@ const PageTransition = ({ children }: { children: React.ReactNode }) => {
   if (isLoading) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-background transition-colors duration-300">
-        {/* Animated Background */}
+        {/* McLaren Animated Background */}
         <div className="absolute inset-0 animated-grid opacity-30">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-float"></div>
-          <div className="absolute top-3/4 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/8 rounded-full blur-3xl animate-pulse-soft"></div>
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-mclaren-papaya/10 rounded-full blur-3xl animate-float"></div>
+          <div className="absolute top-3/4 right-1/4 w-96 h-96 bg-mclaren-papaya/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-mclaren-papaya/8 rounded-full blur-3xl animate-pulse-soft"></div>
         </div>
 
         {/* Loading Content */}
         <div className="relative z-10 text-center">
-          {/* Enhanced Logo Animation */}
+          {/* Enhanced Logo Animation with McLaren styling */}
           <div className="flex items-center justify-center mb-8 animate-scale-bounce">
             <div className="relative p-2 group">
               <div className="absolute inset-0 gradient-bg rounded-2xl blur-sm opacity-70 animate-pulse-scale"></div>
@@ -45,7 +45,7 @@ const PageTransition = ({ children }: { children: React.ReactNode }) => {
                   <Crown className="h-8 w-8 text-white absolute -top-1 left-1/2 transform -translate-x-1/2 z-10 animate-bounce" />
                   <GraduationCap className="h-12 w-12 text-white mt-2 animate-pulse" />
                   <div className="absolute -bottom-1 -right-1">
-                    <Sparkles className="h-4 w-4 text-amber-200 animate-spin" />
+                    <Sparkles className="h-4 w-4 text-white animate-spin" />
                   </div>
                 </div>
               </div>
@@ -62,7 +62,7 @@ const PageTransition = ({ children }: { children: React.ReactNode }) => {
             </p>
           </div>
 
-          {/* Enhanced Loading Animation */}
+          {/* Enhanced Loading Animation with McLaren colors */}
           <div className="flex justify-center items-center space-x-2 mb-8">
             {[0, 0.1, 0.2, 0.3, 0.4].map((delay, index) => (
               <div 

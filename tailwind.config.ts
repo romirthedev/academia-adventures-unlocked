@@ -66,14 +66,14 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				college: {
-					primary: '#ea580c', // Orange
-					secondary: '#dc2626', // Red
-					gold: '#f59e0b', // Gold
-					burgundy: '#7c2d12', // Burgundy
-					teal: '#0d9488', // Teal
-					orange: '#ea580c', // Orange
-					accent: '#fb923c' // Light orange
+				mclaren: {
+					papaya: '#ff7800', // McLaren Papaya Orange
+					carbon: '#1a1a1a', // McLaren Carbon Black
+					silver: '#c0c0c0', // McLaren Silver
+					'papaya-light': '#ff8c00',
+					'papaya-dark': '#e66800',
+					'carbon-light': '#2a2a2a',
+					'carbon-dark': '#0d0d0d'
 				}
 			},
 			borderRadius: {
@@ -140,10 +140,10 @@ export default {
 				},
 				'pulse-glow': {
 					'0%, 100%': {
-						boxShadow: '0 0 20px rgba(234, 88, 12, 0.4)'
+						boxShadow: '0 0 20px rgba(255, 120, 0, 0.4)'
 					},
 					'50%': {
-						boxShadow: '0 0 30px rgba(234, 88, 12, 0.8)'
+						boxShadow: '0 0 30px rgba(255, 120, 0, 0.8)'
 					}
 				},
 				'float': {
