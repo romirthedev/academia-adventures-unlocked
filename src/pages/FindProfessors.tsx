@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { professorService } from '@/services/professorService';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 
 interface Professor {
   name: string;
@@ -91,15 +91,21 @@ const FindProfessors = () => {
       };
       
       const results = await professorService.searchProfessors(searchCriteria);
-      setProfessors(results);
+      console.log('Search results:', results);
       
-      if (results.length > 0) {
+      if (results && results.length > 0) {
+        setProfessors(results);
         toast({
           title: "Search completed",
           description: `Found ${results.length} professors matching your criteria.`,
         });
       } else {
         setError('No professors found with the current search criteria. Please try different parameters.');
+        toast({
+          title: "No results",
+          description: "No professors found with the current search criteria.",
+          variant: "destructive",
+        });
       }
       
     } catch (error) {
@@ -213,7 +219,7 @@ const FindProfessors = () => {
             <Button 
               onClick={handleSearch}
               disabled={!selectedField || isLoading}
-              className="btn-quantum-ripple w-full h-14 text-lg font-semibold bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 shadow-lg"
+              className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 active:translate-y-0 active:scale-95"
             >
               {isLoading ? (
                 <>
