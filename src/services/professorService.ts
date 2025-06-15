@@ -1,3 +1,4 @@
+
 import { Professor } from '@/types/professor';
 
 const professorDatabase: Professor[] = [
@@ -1102,13 +1103,30 @@ const professorDatabase: Professor[] = [
   }
 ];
 
+function matchFieldWithAreas(field: string, researchAreas: string[]): boolean {
+  // Normalize the field and areas
+  const fieldLC = field.trim().toLowerCase();
+  if (!fieldLC) return false;
+  // Break selected field into words for fuzzy match
+  const fieldWords = fieldLC.split(/\s+/);
+  return researchAreas.some(area => {
+    const areaLC = area.toLowerCase();
+    // Direct includes check
+    if (areaLC.includes(fieldLC) || fieldLC.includes(areaLC)) return true;
+    // Also check word overlap
+    const areaWords = areaLC.split(/\s+/);
+    // If any word in field matches any word in area, match
+    return fieldWords.some(word => areaWords.includes(word));
+  });
+}
+
 export const professorService = {
   searchProfessors: async (criteria: { field: string; school?: string; location?: string }): Promise<Professor[]> => {
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 500));
 
     let results = professorDatabase.filter(professor =>
-      professor.researchAreas.some(area => area.toLowerCase().includes(criteria.field.toLowerCase()))
+      matchFieldWithAreas(criteria.field, professor.researchAreas)
     );
 
     if (criteria.school) {
