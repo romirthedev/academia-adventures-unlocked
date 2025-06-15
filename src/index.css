@@ -90,7 +90,7 @@
   }
 
   body {
-    @apply bg-background text-foreground font-montserrat antialiased;
+    @apply bg-background text-foreground font-audiowide antialiased;
   }
 }
 

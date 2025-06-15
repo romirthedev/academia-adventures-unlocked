@@ -19,8 +19,9 @@ export default {
 		},
 		extend: {
 			fontFamily: {
+				audiowide: ['Audiowide', 'Montserrat', 'Inter', 'sans-serif'],
 				montserrat: ['Montserrat', 'Inter', 'sans-serif'],
-				sans: ['Montserrat', 'Inter', 'sans-serif'],
+				sans: ['Audiowide', 'Montserrat', 'Inter', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
