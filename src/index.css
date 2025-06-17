@@ -139,7 +139,7 @@
   .btn-primary {
     @apply relative inline-flex items-center justify-center px-6 py-3 
            bg-primary text-primary-foreground font-medium rounded-lg
-           transition-all duration-500 ease-out overflow-hidden group
+           transition-all duration-500 ease-out overflow-hidden
            hover:shadow-2xl hover:shadow-primary/40 hover:-translate-y-2 hover:scale-110
            active:translate-y-0 active:shadow-md active:scale-95;
   }
@@ -160,7 +160,7 @@
   .btn-secondary {
     @apply relative inline-flex items-center justify-center px-6 py-3
            bg-secondary text-secondary-foreground font-medium rounded-lg border border-border
-           transition-all duration-500 ease-out overflow-hidden group
+           transition-all duration-500 ease-out overflow-hidden
            hover:bg-muted hover:shadow-xl hover:-translate-y-2 hover:scale-110 hover:border-primary/50
            active:translate-y-0 active:scale-95;
   }
@@ -426,6 +426,8 @@
     animation: progressShine 3s ease-in-out infinite;
   }
 }
+
+/* ... keep existing code (Enhanced Keyframes and all animation definitions) */
 
 /* Enhanced Keyframes */
 @keyframes subtleGlow {
