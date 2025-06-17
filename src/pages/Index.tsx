@@ -51,9 +51,9 @@ const Index = () => {
   ];
 
   const stats = [
-    { number: "2,847", label: "Universities", icon: Globe },
-    { number: "15,623", label: "Professors", icon: Users },
-    { number: "850K+", label: "Data Points", icon: TrendingUp },
+    { number: "500+", label: "Universities", icon: Globe },
+    { number: "1,200+", label: "Professors", icon: Users },
+    { number: "50K+", label: "Data Points", icon: TrendingUp },
     { number: "24/7", label: "AI Support", icon: Sparkles }
   ];
 
@@ -261,7 +261,7 @@ const Index = () => {
               </span>
             </h2>
             <p className="text-xl text-gray-700 mb-16 max-w-2xl mx-auto hover:text-gray-600 transition-colors duration-300">
-              Join millions of students who have found their perfect academic match
+              Join thousands of students who have found their perfect academic match
             </p>
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
