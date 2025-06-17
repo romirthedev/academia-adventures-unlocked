@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Search, GraduationCap, Users, TrendingUp, ArrowRight, Sparkles, BookOpen, Target, Zap, Star, Globe, Crown, Award } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -5,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { useNavigate } from 'react-router-dom';
 import AnimatedPlaceholder from '@/components/AnimatedPlaceholder';
+import UniversityLogosCarousel from '@/components/UniversityLogosCarousel';
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -49,9 +51,9 @@ const Index = () => {
   ];
 
   const stats = [
-    { number: "7,000+", label: "Universities", icon: Globe },
-    { number: "50,000+", label: "Professors", icon: Users },
-    { number: "1M+", label: "Data Points", icon: TrendingUp },
+    { number: "2,847", label: "Universities", icon: Globe },
+    { number: "15,623", label: "Professors", icon: Users },
+    { number: "850K+", label: "Data Points", icon: TrendingUp },
     { number: "24/7", label: "AI Support", icon: Sparkles }
   ];
 
@@ -63,12 +65,15 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-orange-50 to-white relative overflow-hidden">
+      {/* University Logos Carousel */}
+      <UniversityLogosCarousel />
+
       {/* Enhanced Animated Background Elements */}
       <div className="absolute inset-0">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-orange-400/20 to-amber-400/20 rounded-full blur-3xl animate-float"></div>
         <div className="absolute top-3/4 right-1/4 w-96 h-96 bg-gradient-to-r from-orange-500/20 to-red-400/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-orange-300/15 to-orange-500/15 rounded-full blur-3xl animate-pulse-soft"></div>
-        <div className="absolute top-1/3 right-1/3 w-64 h-64 bg-gradient-to-r from-amber-400/25 to-orange-400/25 rounded-full blur-2xl animate-bounce-soft"></div>
+        <div className="absolute top-1/3 right-1/3 w-64 h-64 bg-gradient-to-r from-amber-400/25 to-orange-400/25 rounded-full blur-2xl"></div>
         <div className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-gradient-to-r from-red-400/20 to-orange-600/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '4s' }}></div>
       </div>
 
@@ -179,28 +184,28 @@ const Index = () => {
               </div>
             </div>
 
-            {/* Enhanced CTA Buttons with Unique Animations */}
+            {/* Enhanced CTA Buttons */}
             <div className={`flex flex-wrap justify-center gap-6 mb-24 transition-all duration-1000 transform ${isVisible ? 'animate-fade-in opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} delay-800`}>
               <Button
                 onClick={() => navigate('/explore')}
                 className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white text-lg px-10 py-5 rounded-2xl shadow-lg shadow-orange-500/25 transition-all duration-300 hover:shadow-orange-500/40 btn-morphing group"
               >
-                <GraduationCap className="mr-3 h-6 w-6 group-hover:animate-bounce-soft" />
+                <GraduationCap className="mr-3 h-6 w-6 group-hover:scale-110 transition-transform duration-300" />
                 Browse Colleges
                 <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
               </Button>
               <Button
                 onClick={() => navigate('/professors')}
-                className="bg-white border-2 border-orange-300 text-gray-900 text-lg px-10 py-5 rounded-2xl hover:bg-orange-50 transition-all duration-300 btn-liquid-hover group"
+                className="bg-white border-2 border-orange-300 text-gray-900 text-lg px-10 py-5 rounded-2xl hover:bg-orange-50 transition-all duration-300 group"
               >
-                <Users className="mr-3 h-6 w-6 group-hover:animate-pulse" />
+                <Users className="mr-3 h-6 w-6 group-hover:scale-110 transition-transform duration-300" />
                 Find Professors
               </Button>
               <Button
                 onClick={() => navigate('/compare')}
-                className="bg-white border-2 border-orange-300 text-gray-900 text-lg px-10 py-5 rounded-2xl hover:bg-orange-50 transition-all duration-300 btn-elastic-bounce group"
+                className="bg-white border-2 border-orange-300 text-gray-900 text-lg px-10 py-5 rounded-2xl hover:bg-orange-50 transition-all duration-300 group"
               >
-                <TrendingUp className="mr-3 h-6 w-6 group-hover:animate-pulse" />
+                <TrendingUp className="mr-3 h-6 w-6 group-hover:scale-110 transition-transform duration-300" />
                 Compare Schools
               </Button>
             </div>
@@ -267,7 +272,7 @@ const Index = () => {
                   style={{ animationDelay: `${2.0 + index * 0.2}s` }}
                 >
                   <div className="mb-4">
-                    <stat.icon className="h-8 w-8 mx-auto text-orange-600 group-hover:text-amber-600 transition-colors duration-300 group-hover:animate-bounce-soft group-hover:scale-125" />
+                    <stat.icon className="h-8 w-8 mx-auto text-orange-600 group-hover:text-amber-600 transition-colors duration-300 group-hover:scale-125" />
                   </div>
                   <div className="text-5xl md:text-6xl font-bold mb-3 group-hover:scale-110 transition-transform duration-300">
                     <span className="bg-gradient-to-r from-orange-600 via-orange-500 to-amber-600 bg-clip-text text-transparent">
@@ -286,7 +291,7 @@ const Index = () => {
             <div className={`relative transition-all duration-1200 transform ${isVisible ? 'animate-scale-in opacity-100' : 'opacity-0 scale-95'} delay-2400`}>
               <div className="absolute inset-0 bg-gradient-to-r from-orange-600/10 to-red-600/10 rounded-3xl blur-xl animate-pulse-soft"></div>
               <div className="relative bg-white/95 backdrop-blur-xl border border-orange-200 rounded-3xl p-12 shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-500 group">
-                <div className="flex items-center justify-center mb-6 animate-bounce-soft">
+                <div className="flex items-center justify-center mb-6">
                   <Star className="h-6 w-6 text-yellow-500 mr-2 group-hover:scale-125 transition-transform duration-300" />
                   <Star className="h-6 w-6 text-yellow-500 mr-2 group-hover:scale-125 transition-transform duration-300" style={{ animationDelay: '0.1s' }} />
                   <Star className="h-6 w-6 text-yellow-500 mr-2 group-hover:scale-125 transition-transform duration-300" style={{ animationDelay: '0.2s' }} />
@@ -309,7 +314,7 @@ const Index = () => {
                   onClick={() => navigate('/explore')}
                   className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white text-xl px-12 py-6 rounded-2xl shadow-2xl shadow-orange-500/25 transition-all duration-300 hover:shadow-orange-500/40 btn-quantum-ripple group/btn"
                 >
-                  <Zap className="mr-3 h-6 w-6 group-hover/btn:animate-bounce-soft" />
+                  <Zap className="mr-3 h-6 w-6 group-hover/btn:scale-110 transition-transform duration-300" />
                   Get Started Today
                   <ArrowRight className="ml-3 h-5 w-5 group-hover/btn:translate-x-2 transition-transform duration-300" />
                 </Button>

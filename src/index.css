@@ -246,11 +246,6 @@
     animation: rotateIdle 8s ease-in-out infinite;
   }
 
-  .hover-bounce {
-    @apply transition-transform duration-500 hover:animate-bounce-soft;
-    animation: bounceIdle 4s ease-in-out infinite;
-  }
-
   /* Interactive Elements */
   .interactive-card {
     @apply transition-all duration-700 hover:scale-110 hover:-translate-y-4 
@@ -276,10 +271,6 @@
 
   .scale-in {
     animation: scaleInEnhanced 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  }
-
-  .bounce-in {
-    animation: bounceInEnhanced 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
   }
 
   .rotate-in {
@@ -425,9 +416,18 @@
     @apply h-full bg-gradient-to-r from-orange-500 to-red-500 rounded-full transition-all duration-700;
     animation: progressShine 3s ease-in-out infinite;
   }
+
+  /* University Logos Carousel */
+  .logo-carousel {
+    animation: logoScroll 30s linear infinite;
+  }
+
+  .logo-carousel:hover {
+    animation-play-state: paused;
+  }
 }
 
-/* ... keep existing code (Enhanced Keyframes and all animation definitions) */
+/* ... keep existing keyframes ... */
 
 /* Enhanced Keyframes */
 @keyframes subtleGlow {
@@ -489,11 +489,6 @@
   50% { transform: rotate(1deg) scale(1.01); }
 }
 
-@keyframes bounceIdle {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-1px); }
-}
-
 @keyframes cardIdle {
   0%, 100% { transform: translateY(0px) rotateY(0deg); }
   50% { transform: translateY(-1px) rotateY(1deg); }
@@ -534,24 +529,6 @@
   to {
     opacity: 1;
     transform: scale(1) rotateY(0deg);
-  }
-}
-
-@keyframes bounceInEnhanced {
-  0% {
-    opacity: 0;
-    transform: scale(0.2) rotate(-20deg);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.1) rotate(5deg);
-  }
-  70% {
-    transform: scale(0.95) rotate(-2deg);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
   }
 }
 
@@ -688,6 +665,11 @@
   }
 }
 
+@keyframes logoScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
 /* Enhanced Animation Classes */
 .animate-fade-in {
   animation: fadeInEnhanced 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
@@ -699,10 +681,6 @@
 
 .animate-scale-in {
   animation: scaleInEnhanced 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-.animate-bounce-in {
-  animation: bounceInEnhanced 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
 }
 
 /* Enhanced Delay Classes */
@@ -722,7 +700,6 @@
   .animate-fade-in,
   .animate-slide-up,
   .animate-scale-in,
-  .animate-bounce-in,
   .hover-lift,
   .hover-rotate,
   .interactive-card,
