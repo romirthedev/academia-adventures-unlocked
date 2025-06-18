@@ -65,24 +65,22 @@ Based on this data, provide analysis in the following JSON format:
 Create a comprehensive ideal student profile that includes specific academic achievements, meaningful extracurricular activities, personality traits that would thrive at this institution, and background factors that align with the college's values and mission.
 `;
 
-      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-        method: 'POST',
+      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
         headers: {
-          'Authorization': `Bearer ${this.OPENROUTER_API_KEY}`,
-          'Content-Type': 'application/json',
-          'HTTP-Referer': window.location.origin,
-          'X-Title': 'College Research Tool'
+          "Authorization": `Bearer ${this.OPENROUTER_API_KEY}`,
+          "HTTP-Referer": "http://localhost:8081/",
+          "X-Title": "CollegeCompass",
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          model: 'meta-llama/llama-3.1-8b-instruct:free',
-          messages: [
+          "model": "google/gemini-2.0-flash-exp:free",
+          "messages": [
             {
-              role: 'user',
-              content: prompt
+              "role": "user",
+              "content": prompt
             }
-          ],
-          temperature: 0.3,
-          max_tokens: 2000
+          ]
         })
       });
 
@@ -150,19 +148,17 @@ ${userExtracurriculars ? `\n\nUser's Current Extracurriculars: ${userExtracurric
 
       console.log('Attempting API call with messages:', chatMessages.length);
 
-      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-        method: 'POST',
+      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
         headers: {
-          'Authorization': `Bearer ${this.OPENROUTER_API_KEY}`,
-          'Content-Type': 'application/json',
-          'HTTP-Referer': window.location.origin,
-          'X-Title': 'College Research Tool'
+          "Authorization": `Bearer ${this.OPENROUTER_API_KEY}`,
+          "HTTP-Referer": "http://localhost:8081/",
+          "X-Title": "CollegeCompass",
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          model: 'meta-llama/llama-3.1-8b-instruct:free',
-          messages: chatMessages,
-          temperature: 0.7,
-          max_tokens: 1000
+          "model": "google/gemini-2.0-flash-exp:free",
+          "messages": chatMessages
         })
       });
 
