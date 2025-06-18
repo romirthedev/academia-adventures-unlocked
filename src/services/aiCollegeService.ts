@@ -121,7 +121,40 @@ Create a comprehensive ideal student profile that includes specific academic ach
     userExtracurriculars?: string
   ): Promise<string> {
     try {
-      // Ensure collegeData has the required fields
+      // Test the API first with a simple message
+      console.log('Testing API connection...');
+      
+      const testResponse = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": "Bearer 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",
+          "HTTP-Referer": "http://localhost:8080/",
+          "X-Title": "CollegeCompass",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          "model": "deepseek/deepseek-chat-v3-0324:free",
+          "messages": [
+            {
+              "role": "user",
+              "content": "Hello, can you respond to this test message?"
+            }
+          ]
+        })
+      });
+
+      console.log('Test API Response status:', testResponse.status);
+      
+      if (!testResponse.ok) {
+        const errorText = await testResponse.text();
+        console.error('Test API failed:', testResponse.status, errorText);
+        throw new Error(`API test failed: ${testResponse.status} - ${errorText}`);
+      }
+
+      const testData = await testResponse.json();
+      console.log('Test API Response:', testData);
+
+      // If test succeeds, proceed with the actual chat
       const collegeName = collegeData?.['school.name'] || 'this college';
       const collegeLocation = collegeData?.['school.city'] && collegeData?.['school.state'] 
         ? `${collegeData['school.city']}, ${collegeData['school.state']}` 
