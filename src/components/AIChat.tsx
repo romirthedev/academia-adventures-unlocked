@@ -61,17 +61,20 @@ const AIChat: React.FC<AIChatProps> = ({ collegeData }) => {
       timestamp: Date.now()
     };
 
+    console.log('Sending message:', userMessage.content);
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
     setIsLoading(true);
 
     try {
+      console.log('Calling AI service with messages:', [...messages, userMessage].length);
       const response = await aiCollegeService.chatWithAdmissionsAI(
         [...messages, userMessage],
         collegeData,
         userExtracurriculars
       );
 
+      console.log('AI Response:', response);
       const cleanedResponse = cleanText(response);
 
       const assistantMessage: ChatMessage = {
@@ -80,8 +83,10 @@ const AIChat: React.FC<AIChatProps> = ({ collegeData }) => {
         timestamp: Date.now()
       };
 
+      console.log('Adding assistant message:', cleanedResponse);
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
+      console.error('Error in handleSendMessage:', error);
       const errorMessage: ChatMessage = {
         role: 'assistant',
         content: 'I apologize, but I encountered an error. Please try again.',

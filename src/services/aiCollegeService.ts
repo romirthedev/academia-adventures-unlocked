@@ -198,6 +198,13 @@ ${userExtracurriculars ? `\n\nUser's Current Extracurriculars: ${userExtracurric
     collegeData: any,
     userExtracurriculars?: string
   ): string {
+    console.log('generateIntelligentResponse called with:', {
+      messageCount: messages.length,
+      lastMessage: messages[messages.length - 1]?.content,
+      collegeName: collegeData?.['school.name'],
+      userExtracurriculars
+    });
+
     const lastUserMessage = messages[messages.length - 1]?.content?.toLowerCase() || '';
     const collegeName = collegeData?.['school.name'] || 'this college';
     const admissionRate = collegeData?.['latest.admissions.admission_rate.overall'] 
@@ -213,7 +220,10 @@ ${userExtracurriculars ? `\n\nUser's Current Extracurriculars: ${userExtracurric
     // Analyze user's extracurriculars if provided
     const hasExtracurriculars = userExtracurriculars && userExtracurriculars.trim().length > 0;
     
+    console.log('Processing message:', lastUserMessage);
+    
     if (lastUserMessage.includes('admission') || lastUserMessage.includes('acceptance')) {
+      console.log('Matched admission/acceptance pattern');
       if (admissionRate !== 'N/A' && parseFloat(admissionRate) < 20) {
         return `Based on ${collegeName}'s highly competitive admission rate of ${admissionRate}, this is a selective institution. I'd recommend focusing on exceptional academic performance (4.0+ GPA, top 5% class rank), strong standardized test scores, meaningful leadership experiences, and compelling essays that showcase your unique perspective and goals. Demonstrate genuine interest through campus visits, interviews, and connecting with current students.`;
       } else if (admissionRate !== 'N/A' && parseFloat(admissionRate) < 50) {
@@ -222,33 +232,44 @@ ${userExtracurriculars ? `\n\nUser's Current Extracurriculars: ${userExtracurric
         return `For ${collegeName} (admission rate: ${admissionRate}), focus on maintaining a strong GPA, taking challenging courses, and participating in meaningful extracurricular activities. While the admission rate is more accessible, still put your best foot forward with compelling essays and strong recommendation letters.`;
       }
     } else if (lastUserMessage.includes('extracurricular') || lastUserMessage.includes('activity')) {
+      console.log('Matched extracurricular/activity pattern');
       if (hasExtracurriculars) {
         return `Looking at your extracurriculars: "${userExtracurriculars}". For ${collegeName}, I'd suggest focusing on depth over breadth. Consider how you can take on leadership roles in your current activities or start new initiatives. Look for opportunities that align with your intended major or career goals. Quality and impact matter more than quantity.`;
       }
       return `For extracurricular activities at ${collegeName}, quality trumps quantity. Focus on 2-3 activities where you've shown leadership, growth, and genuine passion. Consider activities that align with your intended major or career goals. Look for opportunities to demonstrate initiative, teamwork, and community impact. Remember, depth and commitment matter more than the number of activities.`;
     } else if (lastUserMessage.includes('essay') || lastUserMessage.includes('personal statement')) {
+      console.log('Matched essay/personal statement pattern');
       return `Your essay for ${collegeName} should tell a compelling story that reveals your character, values, and how you'd contribute to their community. Be authentic and specific - avoid generic topics. Show how your experiences have shaped your goals and why this college is the right fit for you. Use concrete examples and vivid details to make your essay memorable.`;
     } else if (lastUserMessage.includes('chance') || lastUserMessage.includes('likely')) {
+      console.log('Matched chance/likely pattern');
       return `While I can't predict admission outcomes, I can help you strengthen your application to ${collegeName}. Focus on presenting your best self through strong academics, meaningful activities, compelling essays, and solid recommendations. Research the college thoroughly and demonstrate genuine interest. Remember, admissions decisions consider many factors beyond just grades and test scores.`;
     } else if (lastUserMessage.includes('gpa') || lastUserMessage.includes('grade')) {
+      console.log('Matched GPA/grade pattern');
       return `For ${collegeName}, aim for a strong GPA (typically 3.5+ for competitive programs). Take challenging courses like AP, IB, or honors classes when available. Show an upward trend in your grades if possible. Remember, course rigor is often as important as the GPA itself. Focus on excelling in subjects related to your intended major.`;
     } else if (lastUserMessage.includes('test') || lastUserMessage.includes('sat') || lastUserMessage.includes('act')) {
+      console.log('Matched test/SAT/ACT pattern');
       return `For standardized tests at ${collegeName}, research their average scores and aim to be at or above the middle 50% range. Many colleges are now test-optional, so if your scores don't reflect your abilities, you might choose not to submit them. Focus on strong grades and extracurricular activities instead.`;
     } else if (lastUserMessage.includes('financial') || lastUserMessage.includes('aid') || lastUserMessage.includes('scholarship')) {
+      console.log('Matched financial/aid/scholarship pattern');
       const tuitionFormatted = tuition ? `$${tuition.toLocaleString()}` : 'N/A';
       return `For financial aid at ${collegeName} (tuition: ${tuitionFormatted}), complete the FAFSA and CSS Profile (if required) by the priority deadline. Research institutional scholarships and external opportunities. Consider merit-based aid, need-based aid, and work-study programs. Don't hesitate to contact the financial aid office with questions.`;
     } else if (lastUserMessage.includes('major') || lastUserMessage.includes('program')) {
+      console.log('Matched major/program pattern');
       return `When choosing a major at ${collegeName}, consider your interests, strengths, and career goals. Research the specific programs and faculty in your area of interest. Many colleges allow you to apply undecided, and you can declare a major later. Focus on showing intellectual curiosity and academic readiness.`;
     } else if (lastUserMessage.includes('campus') || lastUserMessage.includes('life') || lastUserMessage.includes('student')) {
+      console.log('Matched campus/life/student pattern');
       const sizeDescription = studentSize > 20000 ? 'large' : studentSize > 10000 ? 'medium-sized' : 'smaller';
       return `${collegeName} is a ${sizeDescription} institution with ${studentSize.toLocaleString()} students. This creates a ${sizeDescription === 'large' ? 'vibrant, diverse community with many opportunities' : sizeDescription === 'medium-sized' ? 'balanced environment with both resources and personal attention' : 'close-knit community where you can build strong relationships'}. Research their campus culture, student organizations, and housing options to see if it's the right fit for you.`;
     } else if (lastUserMessage.includes('cost') || lastUserMessage.includes('tuition') || lastUserMessage.includes('price')) {
+      console.log('Matched cost/tuition/price pattern');
       const tuitionFormatted = tuition ? `$${tuition.toLocaleString()}` : 'N/A';
       const graduationRateInfo = graduationRate !== 'N/A' ? ` (graduation rate: ${graduationRate})` : '';
       return `The tuition at ${collegeName} is ${tuitionFormatted}${graduationRateInfo}. Remember to factor in additional costs like room and board, books, and personal expenses. Research their financial aid packages, scholarships, and payment plans. Many students receive significant aid, so don't let the sticker price discourage you from applying.`;
     } else if (lastUserMessage.includes('deadline') || lastUserMessage.includes('when') || lastUserMessage.includes('timeline')) {
+      console.log('Matched deadline/when/timeline pattern');
       return `For ${collegeName}, check their specific application deadlines on their website. Common deadlines include Early Decision (November), Early Action (November/December), and Regular Decision (January). Start your application early to avoid stress and ensure you have time for strong essays and recommendation letters.`;
     } else {
+      console.log('No specific pattern matched, using default response');
       return `I'm here to help you with your application to ${collegeName}! I can provide specific advice on admissions requirements, extracurricular activities, essays, test scores, financial aid, campus life, and more. What specific aspect would you like to discuss? I'm ready to give you personalized guidance to strengthen your application.`;
     }
   }
