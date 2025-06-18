@@ -121,14 +121,25 @@ Create a comprehensive ideal student profile that includes specific academic ach
     userExtracurriculars?: string
   ): Promise<string> {
     try {
+      // Ensure collegeData has the required fields
+      const collegeName = collegeData?.['school.name'] || 'this college';
+      const collegeLocation = collegeData?.['school.city'] && collegeData?.['school.state'] 
+        ? `${collegeData['school.city']}, ${collegeData['school.state']}` 
+        : 'Unknown location';
+      const admissionRate = collegeData?.['latest.admissions.admission_rate.overall'] 
+        ? (collegeData['latest.admissions.admission_rate.overall'] * 100).toFixed(1) + '%' 
+        : 'N/A';
+      const institutionType = collegeData?.['school.ownership'] === 1 ? 'Public' : 
+        collegeData?.['school.ownership'] === 2 ? 'Private Non-Profit' : 'Private For-Profit';
+
       const systemPrompt = `
-You are an expert college admissions counselor providing personalized advice about ${collegeData['school.name']}.
+You are an expert college admissions counselor providing personalized advice about ${collegeName}.
 
 College Context:
-- Name: ${collegeData['school.name']}
-- Location: ${collegeData['school.city']}, ${collegeData['school.state']}
-- Admission Rate: ${collegeData['latest.admissions.admission_rate.overall'] ? (collegeData['latest.admissions.admission_rate.overall'] * 100).toFixed(1) + '%' : 'N/A'}
-- Institution Type: ${collegeData['school.ownership'] === 1 ? 'Public' : collegeData['school.ownership'] === 2 ? 'Private Non-Profit' : 'Private For-Profit'}
+- Name: ${collegeName}
+- Location: ${collegeLocation}
+- Admission Rate: ${admissionRate}
+- Institution Type: ${institutionType}
 
 Your role is to:
 1. Provide specific, actionable advice about applying to this college
@@ -185,17 +196,21 @@ ${userExtracurriculars ? `\n\nUser's Current Extracurriculars: ${userExtracurric
       
       // Provide helpful fallback responses based on the last user message
       const lastUserMessage = messages[messages.length - 1]?.content?.toLowerCase() || '';
+      const collegeName = collegeData?.['school.name'] || 'this college';
+      const admissionRate = collegeData?.['latest.admissions.admission_rate.overall'] 
+        ? (collegeData['latest.admissions.admission_rate.overall'] * 100).toFixed(1) + '%' 
+        : 'N/A';
       
       if (lastUserMessage.includes('admission') || lastUserMessage.includes('acceptance')) {
-        return `Based on ${collegeData['school.name']}'s admission rate of ${collegeData['latest.admissions.admission_rate.overall'] ? (collegeData['latest.admissions.admission_rate.overall'] * 100).toFixed(1) + '%' : 'N/A'}, I'd recommend focusing on strong academic performance, meaningful extracurricular activities, and compelling essays that showcase your unique perspective and goals.`;
+        return `Based on ${collegeName}'s admission rate of ${admissionRate}, I'd recommend focusing on strong academic performance, meaningful extracurricular activities, and compelling essays that showcase your unique perspective and goals.`;
       } else if (lastUserMessage.includes('extracurricular') || lastUserMessage.includes('activity')) {
-        return `For extracurricular activities, ${collegeData['school.name']} values depth over breadth. Focus on 2-3 activities where you've shown leadership, growth, and genuine passion. Quality and impact matter more than quantity.`;
+        return `For extracurricular activities, ${collegeName} values depth over breadth. Focus on 2-3 activities where you've shown leadership, growth, and genuine passion. Quality and impact matter more than quantity.`;
       } else if (lastUserMessage.includes('essay') || lastUserMessage.includes('personal statement')) {
-        return `Your essay should tell a compelling story that reveals your character, values, and how you'd contribute to ${collegeData['school.name']}'s community. Be authentic, specific, and show how your experiences have shaped your goals.`;
+        return `Your essay should tell a compelling story that reveals your character, values, and how you'd contribute to ${collegeName}'s community. Be authentic, specific, and show how your experiences have shaped your goals.`;
       } else if (lastUserMessage.includes('chance') || lastUserMessage.includes('likely')) {
-        return `While I can't predict admission outcomes, I can help you strengthen your application. Focus on presenting your best self through academics, activities, essays, and recommendations that align with ${collegeData['school.name']}'s values.`;
+        return `While I can't predict admission outcomes, I can help you strengthen your application. Focus on presenting your best self through academics, activities, essays, and recommendations that align with ${collegeName}'s values.`;
       } else {
-        return `I'm here to help you with your application to ${collegeData['school.name']}! I can provide advice on admissions requirements, extracurricular activities, essays, and more. What specific aspect would you like to discuss?`;
+        return `I'm here to help you with your application to ${collegeName}! I can provide advice on admissions requirements, extracurricular activities, essays, and more. What specific aspect would you like to discuss?`;
       }
     }
   }

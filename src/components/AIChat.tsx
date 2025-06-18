@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -18,10 +17,12 @@ interface AIChatProps {
 }
 
 const AIChat: React.FC<AIChatProps> = ({ collegeData }) => {
+  const collegeName = collegeData?.['school.name'] || 'this college';
+  
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: 'assistant',
-      content: `Hello! I'm your AI admissions counselor for ${collegeData['school.name']}. I can help you understand admissions requirements, evaluate your profile, and provide personalized guidance. How can I assist you today?`,
+      content: `Hello! I'm your AI admissions counselor for ${collegeName}. I can help you understand admissions requirements, evaluate your profile, and provide personalized guidance. How can I assist you today?`,
       timestamp: Date.now()
     }
   ]);
