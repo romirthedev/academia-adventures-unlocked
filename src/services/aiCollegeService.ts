@@ -68,13 +68,13 @@ Create a comprehensive ideal student profile that includes specific academic ach
       const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${this.OPENROUTER_API_KEY}`,
-          "HTTP-Referer": "http://localhost:8081/",
+          "Authorization": "Bearer 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",
+          "HTTP-Referer": "http://localhost:8080/",
           "X-Title": "CollegeCompass",
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          "model": "google/gemini-2.0-flash-exp:free",
+          "model": "deepseek/deepseek-chat-v3-0324:free",
           "messages": [
             {
               "role": "user",
@@ -121,14 +121,18 @@ Create a comprehensive ideal student profile that includes specific academic ach
     userExtracurriculars?: string
   ): Promise<string> {
     try {
-      // For now, use the local intelligent response system
-      // This ensures the chat always works and provides valuable advice
-      return this.generateIntelligentResponse(messages, collegeData, userExtracurriculars);
-      
-      // TODO: Re-enable API when we have a working key
-      /*
-      const systemPrompt = `
-You are an expert college admissions counselor providing personalized advice about ${collegeName}.
+      // Ensure collegeData has the required fields
+      const collegeName = collegeData?.['school.name'] || 'this college';
+      const collegeLocation = collegeData?.['school.city'] && collegeData?.['school.state'] 
+        ? `${collegeData['school.city']}, ${collegeData['school.state']}` 
+        : 'Unknown location';
+      const admissionRate = collegeData?.['latest.admissions.admission_rate.overall'] 
+        ? (collegeData['latest.admissions.admission_rate.overall'] * 100).toFixed(1) + '%' 
+        : 'N/A';
+      const institutionType = collegeData?.['school.ownership'] === 1 ? 'Public' : 
+        collegeData?.['school.ownership'] === 2 ? 'Private Non-Profit' : 'Private For-Profit';
+
+      const systemPrompt = `You are an expert college admissions counselor providing personalized advice about ${collegeName}.
 
 College Context:
 - Name: ${collegeName}
@@ -144,8 +148,7 @@ Your role is to:
 5. Provide honest assessment of their chances and areas for improvement
 
 Be encouraging but realistic. Provide specific, actionable advice.
-${userExtracurriculars ? `\n\nUser's Current Extracurriculars: ${userExtracurriculars}` : ''}
-`;
+${userExtracurriculars ? `\n\nUser's Current Extracurriculars: ${userExtracurriculars}` : ''}`;
 
       const chatMessages = [
         { role: 'system', content: systemPrompt },
@@ -157,13 +160,13 @@ ${userExtracurriculars ? `\n\nUser's Current Extracurriculars: ${userExtracurric
       const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${this.OPENROUTER_API_KEY}`,
-          "HTTP-Referer": "http://localhost:8081/",
+          "Authorization": "Bearer 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",
+          "HTTP-Referer": "http://localhost:8080/",
           "X-Title": "CollegeCompass",
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          "model": "google/gemini-2.0-flash-exp:free",
+          "model": "deepseek/deepseek-chat-v3-0324:free",
           "messages": chatMessages
         })
       });
@@ -185,7 +188,6 @@ ${userExtracurriculars ? `\n\nUser's Current Extracurriculars: ${userExtracurric
       }
       
       return data.choices[0].message.content || 'Sorry, I encountered an error. Please try again.';
-      */
 
     } catch (error) {
       console.error('Error with AI chat:', error);
