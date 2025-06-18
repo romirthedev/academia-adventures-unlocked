@@ -68,7 +68,7 @@ Create a comprehensive ideal student profile that includes specific academic ach
       const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
         headers: {
-          "Authorization": "Bearer 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",
+          "Authorization": "Bearer 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",
           "HTTP-Referer": "http://localhost:8080/",
           "X-Title": "CollegeCompass",
           "Content-Type": "application/json"
@@ -127,7 +127,7 @@ Create a comprehensive ideal student profile that includes specific academic ach
       const testResponse = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
         headers: {
-          "Authorization": "Bearer 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",
+          "Authorization": "Bearer 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",
           "HTTP-Referer": "http://localhost:8080/",
           "X-Title": "CollegeCompass",
           "Content-Type": "application/json"
@@ -193,7 +193,7 @@ ${userExtracurriculars ? `\n\nUser's Current Extracurriculars: ${userExtracurric
       const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
         headers: {
-          "Authorization": "Bearer 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",
+          "Authorization": "Bearer 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",
           "HTTP-Referer": "http://localhost:8080/",
           "X-Title": "CollegeCompass",
           "Content-Type": "application/json"
