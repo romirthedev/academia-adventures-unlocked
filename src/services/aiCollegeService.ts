@@ -74,7 +74,7 @@ Create a comprehensive ideal student profile that includes specific academic ach
           'X-Title': 'College Research Tool'
         },
         body: JSON.stringify({
-          model: 'nvidia/llama-3.3-nemotron-super-49b-v1:free',
+          model: 'meta-llama/llama-3.1-8b-instruct:free',
           messages: [
             {
               role: 'user',
@@ -148,6 +148,8 @@ ${userExtracurriculars ? `\n\nUser's Current Extracurriculars: ${userExtracurric
         ...messages.map(msg => ({ role: msg.role, content: msg.content }))
       ];
 
+      console.log('Attempting API call with messages:', chatMessages.length);
+
       const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -157,21 +159,26 @@ ${userExtracurriculars ? `\n\nUser's Current Extracurriculars: ${userExtracurric
           'X-Title': 'College Research Tool'
         },
         body: JSON.stringify({
-          model: 'nvidia/llama-3.3-nemotron-super-49b-v1:free',
+          model: 'meta-llama/llama-3.1-8b-instruct:free',
           messages: chatMessages,
           temperature: 0.7,
           max_tokens: 1000
         })
       });
 
+      console.log('API Response status:', response.status);
+
       if (!response.ok) {
-        console.error('OpenRouter API error:', response.status, response.statusText);
-        throw new Error(`OpenRouter API request failed: ${response.status}`);
+        const errorText = await response.text();
+        console.error('OpenRouter API error:', response.status, response.statusText, errorText);
+        throw new Error(`OpenRouter API request failed: ${response.status} - ${errorText}`);
       }
 
       const data = await response.json();
+      console.log('API Response data:', data);
       
       if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+        console.error('Invalid response format:', data);
         throw new Error('Invalid response format from AI service');
       }
       
