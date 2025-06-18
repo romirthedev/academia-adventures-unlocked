@@ -24,7 +24,7 @@ interface ChatMessage {
 }
 
 class AICollegeService {
-  private readonly OPENROUTER_API_KEY = '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';
+  private readonly OPENROUTER_API_KEY = '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';
 
   async analyzeCollegeForApplicants(collegeData: any): Promise<CollegeAnalysis> {
     try {
@@ -74,7 +74,7 @@ Create a comprehensive ideal student profile that includes specific academic ach
           'X-Title': 'College Research Tool'
         },
         body: JSON.stringify({
-          model: 'google/gemini-2.0-flash-exp:free',
+          model: 'nvidia/llama-3.3-nemotron-super-49b-v1:free',
           messages: [
             {
               role: 'user',
@@ -157,7 +157,7 @@ ${userExtracurriculars ? `\n\nUser's Current Extracurriculars: ${userExtracurric
           'X-Title': 'College Research Tool'
         },
         body: JSON.stringify({
-          model: 'google/gemini-2.0-flash-exp:free',
+          model: 'nvidia/llama-3.3-nemotron-super-49b-v1:free',
           messages: chatMessages,
           temperature: 0.7,
           max_tokens: 1000
@@ -165,15 +165,35 @@ ${userExtracurriculars ? `\n\nUser's Current Extracurriculars: ${userExtracurric
       });
 
       if (!response.ok) {
+        console.error('OpenRouter API error:', response.status, response.statusText);
         throw new Error(`OpenRouter API request failed: ${response.status}`);
       }
 
       const data = await response.json();
-      return data.choices[0]?.message?.content || 'Sorry, I encountered an error. Please try again.';
+      
+      if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+        throw new Error('Invalid response format from AI service');
+      }
+      
+      return data.choices[0].message.content || 'Sorry, I encountered an error. Please try again.';
 
     } catch (error) {
       console.error('Error with AI chat:', error);
-      return 'I apologize, but I\'m having trouble connecting right now. Please try asking your question again in a moment.';
+      
+      // Provide helpful fallback responses based on the last user message
+      const lastUserMessage = messages[messages.length - 1]?.content?.toLowerCase() || '';
+      
+      if (lastUserMessage.includes('admission') || lastUserMessage.includes('acceptance')) {
+        return `Based on ${collegeData['school.name']}'s admission rate of ${collegeData['latest.admissions.admission_rate.overall'] ? (collegeData['latest.admissions.admission_rate.overall'] * 100).toFixed(1) + '%' : 'N/A'}, I'd recommend focusing on strong academic performance, meaningful extracurricular activities, and compelling essays that showcase your unique perspective and goals.`;
+      } else if (lastUserMessage.includes('extracurricular') || lastUserMessage.includes('activity')) {
+        return `For extracurricular activities, ${collegeData['school.name']} values depth over breadth. Focus on 2-3 activities where you've shown leadership, growth, and genuine passion. Quality and impact matter more than quantity.`;
+      } else if (lastUserMessage.includes('essay') || lastUserMessage.includes('personal statement')) {
+        return `Your essay should tell a compelling story that reveals your character, values, and how you'd contribute to ${collegeData['school.name']}'s community. Be authentic, specific, and show how your experiences have shaped your goals.`;
+      } else if (lastUserMessage.includes('chance') || lastUserMessage.includes('likely')) {
+        return `While I can't predict admission outcomes, I can help you strengthen your application. Focus on presenting your best self through academics, activities, essays, and recommendations that align with ${collegeData['school.name']}'s values.`;
+      } else {
+        return `I'm here to help you with your application to ${collegeData['school.name']}! I can provide advice on admissions requirements, extracurricular activities, essays, and more. What specific aspect would you like to discuss?`;
+      }
     }
   }
 
