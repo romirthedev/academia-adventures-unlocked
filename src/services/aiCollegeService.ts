@@ -1,4 +1,3 @@
-
 interface CollegeAnalysis {
   admissionCriteria: string[];
   studentProfile: string;
@@ -25,7 +24,7 @@ interface ChatMessage {
 }
 
 class AICollegeService {
-  private readonly OPENROUTER_API_KEY = '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';
+  private readonly OPENROUTER_API_KEY = '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';
 
   async analyzeCollegeForApplicants(collegeData: any): Promise<CollegeAnalysis> {
     try {
@@ -75,7 +74,7 @@ Create a comprehensive ideal student profile that includes specific academic ach
           'X-Title': 'College Research Tool'
         },
         body: JSON.stringify({
-          model: 'nvidia/llama-3.3-nemotron-super-49b-v1:free',
+          model: 'google/gemini-2.0-flash-exp:free',
           messages: [
             {
               role: 'user',
@@ -158,7 +157,7 @@ ${userExtracurriculars ? `\n\nUser's Current Extracurriculars: ${userExtracurric
           'X-Title': 'College Research Tool'
         },
         body: JSON.stringify({
-          model: 'nvidia/llama-3.3-nemotron-super-49b-v1:free',
+          model: 'google/gemini-2.0-flash-exp:free',
           messages: chatMessages,
           temperature: 0.7,
           max_tokens: 1000
