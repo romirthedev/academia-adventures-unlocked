@@ -1,7 +1,6 @@
-
 import { Professor } from '@/types/professor';
 
-const professorDatabase: Professor[] = [
+export const professorDatabase: Professor[] = [
   // Biomedical Engineering Professors
   {
     name: "Robert Langer",

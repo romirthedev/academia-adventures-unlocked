@@ -1,9 +1,9 @@
-
+import React, { useEffect, useState } from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import Index from "./pages/Index";
 import CollegeExplorer from "./pages/CollegeExplorer";
@@ -12,8 +12,42 @@ import FindProfessors from "./pages/FindProfessors";
 import CompareSchools from "./pages/CompareSchools";
 import SavedSchools from "./pages/SavedSchools";
 import NotFound from "./pages/NotFound";
+import Loader from "@/components/Loader";
 
 const queryClient = new QueryClient();
+
+function AppWithLoader() {
+  const location = useLocation();
+  const [loading, setLoading] = useState(false);
+  const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    setLoading(true);
+    if (timer) clearTimeout(timer);
+    // Ensure loader is visible for at least 1 second
+    const t = setTimeout(() => setLoading(false), 1000);
+    setTimer(t);
+    return () => clearTimeout(t);
+  }, [location]);
+
+  return (
+    <>
+      {loading && <Loader />}
+      <div className="min-h-screen w-full bg-background">
+        <Navigation />
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/explore" element={<CollegeExplorer />} />
+          <Route path="/college/:id" element={<CollegeDetails />} />
+          <Route path="/professors" element={<FindProfessors />} />
+          <Route path="/compare" element={<CompareSchools />} />
+          <Route path="/saved" element={<SavedSchools />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
+    </>
+  );
+}
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -21,18 +55,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <div className="min-h-screen w-full bg-background">
-          <Navigation />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/explore" element={<CollegeExplorer />} />
-            <Route path="/college/:id" element={<CollegeDetails />} />
-            <Route path="/professors" element={<FindProfessors />} />
-            <Route path="/compare" element={<CompareSchools />} />
-            <Route path="/saved" element={<SavedSchools />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </div>
+        <AppWithLoader />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

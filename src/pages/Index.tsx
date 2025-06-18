@@ -1,17 +1,68 @@
-
 import React, { useState, useEffect } from 'react';
-import { Search, GraduationCap, Users, TrendingUp, ArrowRight, Sparkles, BookOpen, Target, Zap, Star, Globe, Crown, Award } from 'lucide-react';
+import { Search, GraduationCap, Users, TrendingUp, ArrowRight, Sparkles, BookOpen, Target, Zap, Star, Globe, Crown, Award, BarChart, Bookmark } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { useNavigate } from 'react-router-dom';
 import AnimatedPlaceholder from '@/components/AnimatedPlaceholder';
 import UniversityLogosCarousel from '@/components/UniversityLogosCarousel';
+import { ShinyButton } from "@/components/ui/shiny-button";
+import { useTheme } from "next-themes";
+import { LineShadowText } from "@/components/magicui/line-shadow-text";
+
+const benefits = [
+  {
+    title: "Smart Search",
+    price: "Free",
+    note: "AI-powered college matching",
+    features: [
+      "Personalized recommendations",
+      "Advanced filters",
+      "Instant results",
+      "No cost, no ads"
+    ]
+  },
+  {
+    title: "Real Insights",
+    price: "Free",
+    note: "Verified data & reviews",
+    features: [
+      "Acceptance rates",
+      "Tuition & scholarships",
+      "Student life info",
+      "Current student reviews"
+    ]
+  },
+  {
+    title: "Save & Compare",
+    price: "Free",
+    note: "Decision tools",
+    features: [
+      "Save favorite schools",
+      "Side-by-side comparison",
+      "Export options",
+      "Unlimited saves"
+    ]
+  },
+  {
+    title: "Expert Guidance",
+    price: "Free",
+    note: "Application support",
+    features: [
+      "Essay tips",
+      "Application timeline",
+      "Expert Q&A",
+      "Resource library"
+    ]
+  }
+];
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
+  const { resolvedTheme } = useTheme();
+  const shadowColor = resolvedTheme === "dark" ? "white" : "black";
 
   useEffect(() => {
     setIsVisible(true);
@@ -64,20 +115,20 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-orange-50 to-white relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-background to-background/80">
       {/* University Logos Carousel */}
       <UniversityLogosCarousel />
 
       {/* Enhanced Animated Background Elements */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-orange-400/20 to-amber-400/20 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute top-3/4 right-1/4 w-96 h-96 bg-gradient-to-r from-orange-500/20 to-red-400/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-orange-300/15 to-orange-500/15 rounded-full blur-3xl animate-pulse-soft"></div>
-        <div className="absolute top-1/3 right-1/3 w-64 h-64 bg-gradient-to-r from-amber-400/25 to-orange-400/25 rounded-full blur-2xl"></div>
-        <div className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-gradient-to-r from-red-400/20 to-orange-600/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '4s' }}></div>
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-orange-400/10 to-amber-400/10 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute top-3/4 right-1/4 w-96 h-96 bg-gradient-to-r from-orange-500/10 to-red-400/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-orange-300/10 to-orange-500/10 rounded-full blur-3xl animate-pulse-soft"></div>
+        <div className="absolute top-1/3 right-1/3 w-64 h-64 bg-gradient-to-r from-amber-400/10 to-orange-400/10 rounded-full blur-2xl"></div>
+        <div className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-gradient-to-r from-red-400/10 to-orange-600/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '4s' }}></div>
       </div>
 
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDAsIDAsIDAsIDAuMDUpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-20 animate-pulse-soft"></div>
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDAsIDAsIDAsIDAuMDUpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-10 animate-pulse-soft z-0"></div>
       
       {/* Hero Section */}
       <main className="relative z-10">
@@ -109,33 +160,23 @@ const Index = () => {
             </div>
 
             <h1 className={`text-6xl md:text-7xl font-bold mb-8 transition-all duration-1200 transform ${isVisible ? 'animate-fade-in-up opacity-100 translate-y-0' : 'opacity-0 translate-y-20'} delay-200`}>
-              <span className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent leading-tight hover:scale-105 transition-transform duration-500 inline-block">
+              <LineShadowText className="text-balance text-5xl font-semibold leading-none tracking-tighter sm:text-6xl md:text-7xl lg:text-8xl" shadowColor={shadowColor}>
                 Discover Your
-              </span>
+              </LineShadowText>
               <br />
-              {/* Completely redesigned "Academic Future" section */}
               <div className="relative inline-block mt-4">
                 <div className="relative">
-                  {/* Elegant background with subtle gradient */}
                   <div className="absolute inset-0 bg-gradient-to-r from-orange-100 via-amber-50 to-orange-100 rounded-3xl transform -skew-y-1 shadow-2xl"></div>
                   <div className="absolute inset-0 bg-gradient-to-r from-orange-200/30 via-amber-100/30 to-orange-200/30 rounded-3xl transform skew-y-1 shadow-xl"></div>
-                  
-                  {/* Floating decorative elements */}
                   <div className="absolute -top-4 -left-4 w-8 h-8 bg-gradient-to-br from-orange-400 to-amber-500 rounded-full shadow-lg animate-float"></div>
                   <div className="absolute -top-2 -right-6 w-6 h-6 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full shadow-lg animate-float" style={{ animationDelay: '1s' }}></div>
                   <div className="absolute -bottom-3 left-8 w-5 h-5 bg-gradient-to-br from-orange-500 to-red-500 rounded-full shadow-lg animate-float" style={{ animationDelay: '2s' }}></div>
-                  
-                  {/* Main text with sophisticated styling */}
                   <div className="relative px-12 py-6">
                     <span className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 bg-clip-text text-transparent hover:scale-105 transition-transform duration-500 inline-block">
                       Academic Excellence
                     </span>
-                    
-                    {/* Subtle accent line */}
                     <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-orange-400 to-transparent rounded-full"></div>
                   </div>
-                  
-                  {/* Elegant corner ornaments */}
                   <div className="absolute top-2 left-2 w-6 h-6 border-l-2 border-t-2 border-orange-300 rounded-tl-lg"></div>
                   <div className="absolute top-2 right-2 w-6 h-6 border-r-2 border-t-2 border-orange-300 rounded-tr-lg"></div>
                   <div className="absolute bottom-2 left-2 w-6 h-6 border-l-2 border-b-2 border-orange-300 rounded-bl-lg"></div>
@@ -185,22 +226,15 @@ const Index = () => {
             </div>
 
             {/* Enhanced CTA Buttons */}
-            <div className={`flex flex-wrap justify-center gap-6 mb-24 transition-all duration-1000 transform ${isVisible ? 'animate-fade-in opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} delay-800`}>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-12">
               <Button
                 onClick={() => navigate('/explore')}
-                className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white text-lg px-10 py-5 rounded-2xl shadow-lg shadow-orange-500/25 transition-all duration-300 hover:shadow-orange-500/40 btn-morphing group"
-              >
-                <GraduationCap className="mr-3 h-6 w-6 group-hover:scale-110 transition-transform duration-300" />
-                Browse Colleges
-                <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
-              </Button>
-              <Button
-                onClick={() => navigate('/professors')}
                 className="bg-white border-2 border-orange-300 text-gray-900 text-lg px-10 py-5 rounded-2xl hover:bg-orange-50 transition-all duration-300 group"
               >
-                <Users className="mr-3 h-6 w-6 group-hover:scale-110 transition-transform duration-300" />
-                Find Professors
+                <Search className="mr-3 h-6 w-6 group-hover:scale-110 transition-transform duration-300" />
+                Discover Universities
               </Button>
+
               <Button
                 onClick={() => navigate('/compare')}
                 className="bg-white border-2 border-orange-300 text-gray-900 text-lg px-10 py-5 rounded-2xl hover:bg-orange-50 transition-all duration-300 group"
@@ -209,61 +243,8 @@ const Index = () => {
                 Compare Schools
               </Button>
             </div>
-          </div>
 
-          {/* Enhanced Features Grid */}
-          <div className="max-w-7xl mx-auto mb-24">
-            <h2 className={`text-4xl md:text-5xl font-bold text-center mb-6 transition-all duration-1000 transform ${isVisible ? 'animate-fade-in-up opacity-100 translate-y-0' : 'opacity-0 translate-y-20'} delay-1000`}>
-              <span className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent hover:scale-105 transition-transform duration-500 inline-block">
-                Everything You Need for
-              </span>
-              <br />
-              <span className="bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent hover:scale-105 transition-transform duration-500 inline-block">
-                Academic Success
-              </span>
-            </h2>
-            <p className="text-xl text-gray-700 text-center mb-16 max-w-3xl mx-auto hover:text-gray-600 transition-colors duration-300">
-              Discover the tools and insights that will transform your educational journey
-            </p>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {features.map((feature, index) => (
-                <Card
-                  key={index}
-                  className={`relative group bg-white/90 backdrop-blur-xl border border-orange-200 hover:border-orange-300 transition-all duration-500 hover:scale-110 hover:-translate-y-4 shadow-lg hover:shadow-2xl hover:shadow-orange-500/20 cursor-pointer ${isVisible ? 'animate-fade-in-up opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
-                  style={{ animationDelay: `${1.2 + index * 0.2}s` }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-orange-50/50 rounded-lg group-hover:from-orange-50/70 group-hover:to-orange-100/70 transition-all duration-500"></div>
-                  <CardContent className="relative p-8 text-center">
-                    <div className={`inline-flex p-5 bg-gradient-to-br ${feature.gradient} rounded-2xl mb-6 shadow-lg group-hover:scale-125 group-hover:rotate-6 transition-all duration-500`}>
-                      <feature.icon className="h-8 w-8 text-white group-hover:animate-pulse" />
-                    </div>
-                    <h3 className="text-2xl font-bold mb-4 text-gray-900 group-hover:text-orange-700 transition-colors duration-300 group-hover:scale-105">
-                      {feature.title}
-                    </h3>
-                    <p className="text-gray-700 leading-relaxed group-hover:text-gray-600 transition-colors duration-300">
-                      {feature.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-
-          <div className="max-w-6xl mx-auto text-center mb-24">
-            <h2 className={`text-4xl md:text-5xl font-bold mb-6 transition-all duration-1000 transform ${isVisible ? 'animate-fade-in-up opacity-100 translate-y-0' : 'opacity-0 translate-y-20'} delay-1800`}>
-              <span className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent hover:scale-105 transition-transform duration-500 inline-block">
-                Trusted by Students
-              </span>
-              <br />
-              <span className="bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent hover:scale-105 transition-transform duration-500 inline-block">
-                Worldwide
-              </span>
-            </h2>
-            <p className="text-xl text-gray-700 mb-16 max-w-2xl mx-auto hover:text-gray-600 transition-colors duration-300">
-              Join thousands of students who have found their perfect academic match
-            </p>
-            
+            {/* Stats Section */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {stats.map((stat, index) => (
                 <div 
@@ -279,50 +260,112 @@ const Index = () => {
                       {stat.number}
                     </span>
                   </div>
-                  <div className="text-gray-600 text-sm uppercase tracking-wider font-medium group-hover:text-orange-600 transition-colors duration-300">
+                  <ShinyButton className="w-full">
                     {stat.label}
+                  </ShinyButton>
+                </div>
+              ))}
+            </div>
+
+            {/* CTA Section */}
+            <div className="max-w-4xl mx-auto text-center mt-16">
+              <div className={`relative transition-all duration-1200 transform ${isVisible ? 'animate-scale-in opacity-100' : 'opacity-0 scale-95'} delay-2400`}>
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-600/10 to-red-600/10 rounded-3xl blur-xl animate-pulse-soft"></div>
+                <div className="relative bg-white/95 backdrop-blur-xl border border-orange-200 rounded-3xl p-12 shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-500 group">
+                  <div className="flex items-center justify-center mb-6">
+                    <Star className="h-6 w-6 text-yellow-500 mr-2 group-hover:scale-125 transition-transform duration-300" />
+                    <Star className="h-6 w-6 text-yellow-500 mr-2 group-hover:scale-125 transition-transform duration-300" style={{ animationDelay: '0.1s' }} />
+                    <Star className="h-6 w-6 text-yellow-500 mr-2 group-hover:scale-125 transition-transform duration-300" style={{ animationDelay: '0.2s' }} />
+                    <Star className="h-6 w-6 text-yellow-500 mr-2 group-hover:scale-125 transition-transform duration-300" style={{ animationDelay: '0.3s' }} />
+                    <Star className="h-6 w-6 text-yellow-500 group-hover:scale-125 transition-transform duration-300" style={{ animationDelay: '0.4s' }} />
+                  </div>
+                  <h2 className="text-4xl font-bold mb-6 group-hover:scale-105 transition-transform duration-300">
+                    <span className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+                      Ready to Start Your
+                    </span>
+                    <br />
+                    <span className="bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
+                      Academic Journey?
+                    </span>
+                  </h2>
+                  <p className="text-xl text-gray-700 mb-10 max-w-2xl mx-auto leading-relaxed group-hover:text-gray-600 transition-colors duration-300">
+                    Join thousands of students who have transformed their educational path through our AI-powered platform.
+                  </p>
+                  <Button
+                    onClick={() => navigate('/explore')}
+                    className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white text-xl px-12 py-6 rounded-2xl shadow-2xl shadow-orange-500/25 transition-all duration-300 hover:shadow-orange-500/40 btn-quantum-ripple group/btn"
+                  >
+                    <Zap className="mr-3 h-6 w-6 group-hover/btn:scale-110 transition-transform duration-300" />
+                    Get Started Today
+                    <ArrowRight className="ml-3 h-5 w-5 group-hover/btn:translate-x-2 transition-transform duration-300" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Features/Benefits Section (Neo-Brutalism Cards) */}
+          <div className="max-w-7xl mx-auto mb-24">
+            <h2 className="text-4xl md:text-5xl font-bold text-center mb-6">
+              <span className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent inline-block">
+                Everything You Need for
+              </span>
+              <br />
+              <span className="bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent inline-block">
+                Academic Success
+              </span>
+            </h2>
+            <p className="text-xl text-gray-700 text-center mb-16 max-w-3xl mx-auto">
+              Discover the tools and insights that will transform your educational journey
+            </p>
+            <div className="flex flex-wrap justify-center gap-8">
+              {benefits.map((benefit, idx) => (
+                <div
+                  key={idx}
+                  className="card bg-gradient-to-br from-orange-200 via-orange-100 to-white border-2 border-orange-600 rounded-xl shadow-lg text-black w-[260px] min-h-[340px] flex flex-col justify-between"
+                  style={{ boxShadow: '0.4rem 0.4rem #ffb300' }}
+                >
+                  <div className="pricing-block-content">
+                    <p className="pricing-plan text-lg font-bold text-orange-900">{benefit.title}</p>
+                    <div className="price-value text-2xl font-bold text-orange-700">
+                      <span className="price-number">{benefit.price}</span>
+                    </div>
+                    <div className="pricing-note text-sm text-orange-600">{benefit.note}</div>
+                    <ul className="check-list mt-2">
+                      {benefit.features.map((feature, i) => (
+                        <li className="check-list-item flex items-center gap-2" key={i}>
+                          <svg
+                            version="1.0"
+                            preserveAspectRatio="xMidYMid meet"
+                            height="16"
+                            viewBox="0 0 30 30.000001"
+                            width="16"
+                            xmlns="http://www.w3.org/2000/svg"
+                            style={{ color: '#ff9100' }}
+                          >
+                            <g>
+                              <path
+                                fill="#ff9100"
+                                d="M 27.5 7.53125 L 24.464844 4.542969 C 24.15625 4.238281 23.65625 4.238281 23.347656 4.542969 L 11.035156 16.667969 L 6.824219 12.523438 C 6.527344 12.230469 6 12.230469 5.703125 12.523438 L 2.640625 15.539062 C 2.332031 15.84375 2.332031 16.335938 2.640625 16.640625 L 10.445312 24.324219 C 10.59375 24.472656 10.796875 24.554688 11.007812 24.554688 C 11.214844 24.554688 11.417969 24.472656 11.566406 24.324219 L 27.5 8.632812 C 27.648438 8.488281 27.734375 8.289062 27.734375 8.082031 C 27.734375 7.875 27.648438 7.679688 27.5 7.53125 Z M 27.5 7.53125"
+                              ></path>
+                            </g>
+                          </svg>
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-
-          <div className="max-w-4xl mx-auto text-center">
-            <div className={`relative transition-all duration-1200 transform ${isVisible ? 'animate-scale-in opacity-100' : 'opacity-0 scale-95'} delay-2400`}>
-              <div className="absolute inset-0 bg-gradient-to-r from-orange-600/10 to-red-600/10 rounded-3xl blur-xl animate-pulse-soft"></div>
-              <div className="relative bg-white/95 backdrop-blur-xl border border-orange-200 rounded-3xl p-12 shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-500 group">
-                <div className="flex items-center justify-center mb-6">
-                  <Star className="h-6 w-6 text-yellow-500 mr-2 group-hover:scale-125 transition-transform duration-300" />
-                  <Star className="h-6 w-6 text-yellow-500 mr-2 group-hover:scale-125 transition-transform duration-300" style={{ animationDelay: '0.1s' }} />
-                  <Star className="h-6 w-6 text-yellow-500 mr-2 group-hover:scale-125 transition-transform duration-300" style={{ animationDelay: '0.2s' }} />
-                  <Star className="h-6 w-6 text-yellow-500 mr-2 group-hover:scale-125 transition-transform duration-300" style={{ animationDelay: '0.3s' }} />
-                  <Star className="h-6 w-6 text-yellow-500 group-hover:scale-125 transition-transform duration-300" style={{ animationDelay: '0.4s' }} />
-                </div>
-                <h2 className="text-4xl font-bold mb-6 group-hover:scale-105 transition-transform duration-300">
-                  <span className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                    Ready to Start Your
-                  </span>
-                  <br />
-                  <span className="bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
-                    Academic Journey?
-                  </span>
-                </h2>
-                <p className="text-xl text-gray-700 mb-10 max-w-2xl mx-auto leading-relaxed group-hover:text-gray-600 transition-colors duration-300">
-                  Join thousands of students who have transformed their educational path through our AI-powered platform.
-                </p>
-                <Button
-                  onClick={() => navigate('/explore')}
-                  className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white text-xl px-12 py-6 rounded-2xl shadow-2xl shadow-orange-500/25 transition-all duration-300 hover:shadow-orange-500/40 btn-quantum-ripple group/btn"
-                >
-                  <Zap className="mr-3 h-6 w-6 group-hover/btn:scale-110 transition-transform duration-300" />
-                  Get Started Today
-                  <ArrowRight className="ml-3 h-5 w-5 group-hover/btn:translate-x-2 transition-transform duration-300" />
-                </Button>
-              </div>
-            </div>
-          </div>
         </div>
       </main>
+
+      {/* University Icons Section */}
+      <section className="py-20 bg-background/50">
+        {/* ... existing university icons section code ... */}
+      </section>
 
       <footer className="relative z-10 border-t border-orange-200 bg-white/80 backdrop-blur-sm">
         <div className="container mx-auto px-6 py-16 text-center">
