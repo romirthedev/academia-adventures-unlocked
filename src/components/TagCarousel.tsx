@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect } from 'react';
 
 const tags = [
@@ -26,7 +27,7 @@ const TagCarousel: React.FC = () => {
     const container = containerRef.current;
     if (!container) return;
     let animationFrame: number;
-    const speed = 1.2; // px per frame, increased for more visible movement
+    const speed = 1.2;
 
     const scroll = () => {
       if (container.scrollLeft >= container.scrollWidth / 2) {
@@ -40,7 +41,6 @@ const TagCarousel: React.FC = () => {
     return () => cancelAnimationFrame(animationFrame);
   }, []);
 
-  // Duplicate tags for seamless looping
   const tagList = [...tags, ...tags];
 
   return (
@@ -53,7 +53,7 @@ const TagCarousel: React.FC = () => {
         {tagList.map((tag, idx) => (
           <span
             key={idx}
-            className="inline-block bg-orange-100 text-orange-700 font-semibold px-4 py-1 rounded-full shadow-sm border border-orange-200 text-sm hover:bg-orange-200 transition-colors duration-200 cursor-pointer select-none"
+            className="inline-block bg-white/10 text-white font-extralight px-4 py-1 rounded-full shadow-sm border border-white/20 text-sm hover:bg-white/20 transition-colors duration-200 cursor-pointer select-none backdrop-blur-sm"
           >
             {tag}
           </span>

@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -19,8 +20,17 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				sans: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
-				inter: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
+				sans: ['Inter', 'system-ui', 'sans-serif'],
+				inter: ['Inter', 'system-ui', 'sans-serif'],
+			},
+			fontWeight: {
+				thin: '100',
+				extralight: '200',
+				light: '300',
+				normal: '400',
+				medium: '500',
+				semibold: '600',
+				bold: '700',
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -67,13 +77,13 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				college: {
-					primary: '#ea580c', // Orange
-					secondary: '#dc2626', // Red
-					gold: '#f59e0b', // Gold
-					burgundy: '#7c2d12', // Burgundy
-					teal: '#0d9488', // Teal
-					orange: '#ea580c', // Orange
-					accent: '#fb923c' // Light orange
+					primary: '#ffffff',
+					secondary: '#f5f5f5',
+					gold: '#e5e5e5',
+					burgundy: '#d4d4d4',
+					teal: '#c3c3c3',
+					orange: '#b2b2b2',
+					accent: '#a1a1a1'
 				}
 			},
 			borderRadius: {
@@ -140,10 +150,10 @@ export default {
 				},
 				'pulse-glow': {
 					'0%, 100%': {
-						boxShadow: '0 0 20px rgba(234, 88, 12, 0.4)'
+						boxShadow: '0 0 20px rgba(255, 255, 255, 0.4)'
 					},
 					'50%': {
-						boxShadow: '0 0 30px rgba(234, 88, 12, 0.8)'
+						boxShadow: '0 0 30px rgba(255, 255, 255, 0.8)'
 					}
 				},
 				'float': {
