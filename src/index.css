@@ -99,8 +99,8 @@
   }
 
   html {
-    background: #0a0a0a;
-    color: #fafafa;
+    background: #0a0a0a !important;
+    color: #fafafa !important;
   }
 
   body {
@@ -143,6 +143,16 @@
   p {
     @apply font-light leading-relaxed;
     color: #fafafa !important;
+  }
+
+  /* Override all text elements to ensure white text */
+  span, div, label, button {
+    color: #fafafa !important;
+  }
+
+  /* Exception for buttons with explicit background colors */
+  button[class*="bg-white"], button[class*="bg-black"] {
+    color: initial !important;
   }
 
   .font-bold {
@@ -243,12 +253,20 @@
   /* Modern Cards */
   .modern-card {
     @apply bg-black/80 backdrop-blur-md border border-white/10 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-700;
-    background: rgba(15, 15, 15, 0.9);
+    background: rgba(15, 15, 15, 0.9) !important;
+    color: #fafafa !important;
+  }
+
+  .modern-card * {
     color: #fafafa !important;
   }
 
   .premium-card {
     @apply bg-gradient-to-br from-black/90 to-black/70 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-900;
+    color: #fafafa !important;
+  }
+
+  .premium-card * {
     color: #fafafa !important;
   }
 
@@ -328,6 +346,10 @@
     color: #fafafa !important;
   }
 
+  .card * {
+    color: #fafafa !important;
+  }
+
   .pricing-plan {
     color: #fafafa !important;
   }
@@ -342,6 +364,16 @@
 
   .check-list-item {
     color: #fafafa !important;
+  }
+
+  /* Hover effects */
+  .hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   }
 }
 

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { GraduationCap, Search, Users, BarChart3, BookmarkCheck, Menu, X, Crown, Award, FileText, Bell, User, Settings, LogOut, Sparkles, TrendingUp, BookOpen, Target, ChevronDown, Sun, Moon, Monitor, ClipboardList, Camera, MessageCircle } from 'lucide-react';
@@ -6,13 +7,13 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { useTheme } from 'next-themes';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 const Navigation = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { theme, setTheme } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isNavCollapsed, setIsNavCollapsed] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [notifications, setNotifications] = useState([
@@ -63,70 +64,86 @@ const Navigation = () => {
 
   return (
     <TooltipProvider>
-      <nav className="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-orange-200/50 dark:border-orange-800/50 shadow-sm">
+      <nav className="sticky top-0 z-50 bg-black/95 backdrop-blur-md border-b border-white/20 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-3 group">
               <div className="relative p-1 group">
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-600 via-amber-500 to-orange-700 rounded-xl blur-sm opacity-70 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative bg-gradient-to-br from-orange-600 via-amber-500 to-orange-700 rounded-xl p-2 shadow-lg group-hover:scale-110 transition-transform duration-500">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-white/10 to-white/20 rounded-xl blur-sm opacity-70 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative bg-white/10 backdrop-blur-sm rounded-xl p-2 shadow-lg group-hover:scale-110 transition-transform duration-500 border border-white/20">
                   <div className="relative">
                     <Crown className="h-4 w-4 text-white absolute -top-0.5 left-1/2 transform -translate-x-1/2 z-10" />
                     <GraduationCap className="h-6 w-6 text-white mt-1" />
                     <div className="absolute -bottom-0.5 -right-0.5">
-                      <Award className="h-3 w-3 text-amber-200" />
+                      <Award className="h-3 w-3 text-white/80" />
                     </div>
                   </div>
                 </div>
               </div>
               <div className="text-left">
-                <span className="block text-xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300">
+                <span className="block text-xl font-thin bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300">
                   CollegeAI
                 </span>
-                <span className="block text-xs font-medium text-orange-600/80 tracking-wide uppercase">
+                <span className="block text-xs font-light text-white/60 tracking-wide uppercase">
                   Excellence
                 </span>
               </div>
             </Link>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-1">
-              {navItems.map((item) => {
-                const Icon = item.icon;
-                const isActive = isActivePath(item.path);
-                
-                return (
-                  <Tooltip key={item.path}>
-                    <TooltipTrigger asChild>
-                      <Link
-                        to={item.path}
-                        className={`
-                          relative flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 group
-                          ${isActive 
-                            ? 'bg-orange-50 dark:bg-orange-900/20 text-orange-600 shadow-sm' 
-                            : 'text-slate-600 dark:text-slate-300 hover:text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20'
-                          }
-                        `}
-                      >
-                        <Icon className="h-4 w-4" />
-                        <span>{item.label}</span>
-                        
-                        {/* Animated underline */}
-                        <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-orange-500 to-amber-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full"></div>
-                        
-                        {/* Active state underline */}
-                        {isActive && (
-                          <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full"></div>
-                        )}
-                      </Link>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{item.description}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                );
-              })}
+            {/* Desktop Navigation with Collapsible */}
+            <div className="hidden md:flex items-center">
+              <Collapsible open={!isNavCollapsed} onOpenChange={setIsNavCollapsed}>
+                <div className="flex items-center space-x-1">
+                  <CollapsibleTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-white hover:bg-white/10 p-2"
+                    >
+                      <Menu className="h-4 w-4" />
+                    </Button>
+                  </CollapsibleTrigger>
+                  
+                  <CollapsibleContent className="flex items-center space-x-1">
+                    {navItems.map((item) => {
+                      const Icon = item.icon;
+                      const isActive = isActivePath(item.path);
+                      
+                      return (
+                        <Tooltip key={item.path}>
+                          <TooltipTrigger asChild>
+                            <Link
+                              to={item.path}
+                              className={`
+                                relative flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-light transition-all duration-200 group
+                                ${isActive 
+                                  ? 'bg-white/10 text-white shadow-sm' 
+                                  : 'text-white/80 hover:text-white hover:bg-white/5'
+                                }
+                              `}
+                            >
+                              <Icon className="h-4 w-4" />
+                              <span>{item.label}</span>
+                              
+                              {/* Animated underline */}
+                              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-white to-white/80 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full"></div>
+                              
+                              {/* Active state underline */}
+                              {isActive && (
+                                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-white to-white/80 rounded-full"></div>
+                              )}
+                            </Link>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>{item.description}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      );
+                    })}
+                  </CollapsibleContent>
+                </div>
+              </Collapsible>
             </div>
 
             {/* Mobile menu button */}
@@ -135,7 +152,7 @@ const Navigation = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2"
+                className="p-2 text-white hover:bg-white/10"
               >
                 {isMobileMenuOpen ? (
                   <X className="h-5 w-5" />
@@ -148,19 +165,19 @@ const Navigation = () => {
 
           {/* Search Bar */}
           {showSearch && (
-            <div className="py-4 border-t border-orange-200/50 dark:border-orange-800/50">
+            <div className="py-4 border-t border-white/20">
               <div className="flex gap-2">
                 <div className="flex-1 relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/40 h-4 w-4" />
                   <Input
                     placeholder="Search colleges, programs, or professors..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                    className="pl-10 pr-4"
+                    className="pl-10 pr-4 bg-white/10 border-white/20 text-white placeholder-white/40"
                   />
                 </div>
-                <Button onClick={handleSearch} className="bg-orange-600 hover:bg-orange-700">
+                <Button onClick={handleSearch} className="bg-white text-black hover:bg-white/90">
                   <Sparkles className="h-4 w-4 mr-2" />
                   Search
                 </Button>
@@ -168,7 +185,7 @@ const Navigation = () => {
               
               {/* Quick Actions */}
               <div className="mt-3">
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Quick Actions:</p>
+                <p className="text-sm text-white/60 mb-2">Quick Actions:</p>
                 <div className="flex flex-wrap gap-2">
                   {quickActions.map((action, index) => (
                     <Button
@@ -176,7 +193,7 @@ const Navigation = () => {
                       variant="outline"
                       size="sm"
                       onClick={() => handleQuickAction(action.query)}
-                      className="text-xs"
+                      className="text-xs border-white/20 text-white hover:bg-white/10"
                     >
                       <action.icon className="h-3 w-3 mr-1" />
                       {action.label}
@@ -189,7 +206,7 @@ const Navigation = () => {
 
           {/* Mobile Navigation */}
           {isMobileMenuOpen && (
-            <div className="md:hidden absolute top-16 left-0 right-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-orange-200/50 dark:border-orange-800/50 shadow-lg">
+            <div className="md:hidden absolute top-16 left-0 right-0 bg-black/95 backdrop-blur-md border-b border-white/20 shadow-lg">
               <div className="px-4 py-2 space-y-1">
                 {navItems.map((item) => {
                   const Icon = item.icon;
@@ -201,10 +218,10 @@ const Navigation = () => {
                       to={item.path}
                       onClick={() => setIsMobileMenuOpen(false)}
                       className={`
-                        relative flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group
+                        relative flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-light transition-all duration-200 group
                         ${isActive 
-                          ? 'bg-orange-50 dark:bg-orange-900/20 text-orange-600 shadow-sm' 
-                          : 'text-slate-600 dark:text-slate-300 hover:text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20'
+                          ? 'bg-white/10 text-white shadow-sm' 
+                          : 'text-white/80 hover:text-white hover:bg-white/5'
                         }
                       `}
                     >
@@ -212,27 +229,27 @@ const Navigation = () => {
                       <span>{item.label}</span>
                       
                       {/* Animated underline for mobile */}
-                      <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-orange-500 to-amber-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full"></div>
+                      <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-white to-white/80 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full"></div>
                       
                       {/* Active state underline for mobile */}
                       {isActive && (
-                        <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full"></div>
+                        <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-white to-white/80 rounded-full"></div>
                       )}
                     </Link>
                   );
                 })}
                 
                 {/* Mobile Search */}
-                <div className="pt-4 border-t border-orange-200/50 dark:border-orange-800/50">
+                <div className="pt-4 border-t border-white/20">
                   <div className="flex gap-2">
                     <Input
                       placeholder="Search..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                      className="flex-1"
+                      className="flex-1 bg-white/10 border-white/20 text-white placeholder-white/40"
                     />
-                    <Button onClick={handleSearch} size="sm">
+                    <Button onClick={handleSearch} size="sm" className="bg-white text-black hover:bg-white/90">
                       <Search className="h-4 w-4" />
                     </Button>
                   </div>

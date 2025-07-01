@@ -9,7 +9,7 @@ import Index from "./pages/Index";
 import CollegeExplorer from "./pages/CollegeExplorer";
 import CollegeDetails from "./pages/CollegeDetails";
 import FindProfessors from "./pages/FindProfessors";
-import CollegeComparison from "./pages/CollegeComparison";
+import CompareSchools from "./pages/CompareSchools";
 import ApplicationTracker from "./pages/ApplicationTracker";
 import SavedSchools from "./pages/SavedSchools";
 import MockApplication from "./pages/MockApplication";
@@ -43,7 +43,7 @@ function AppWithLoader() {
           <Route path="/explore" element={<CollegeExplorer />} />
           <Route path="/college/:id" element={<CollegeDetails />} />
           <Route path="/professors" element={<FindProfessors />} />
-          <Route path="/compare" element={<CollegeComparison />} />
+          <Route path="/compare" element={<CompareSchools />} />
           <Route path="/applications" element={<ApplicationTracker />} />
           <Route path="/saved" element={<SavedSchools />} />
           <Route path="/mock-application" element={<MockApplication />} />
