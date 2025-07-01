@@ -6,41 +6,41 @@
 
 @layer base {
   :root {
-    --background: 0 0% 8%;
+    --background: 0 0% 4%;
     --foreground: 0 0% 98%;
 
-    --card: 0 0% 12%;
+    --card: 0 0% 8%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 0 0% 10%;
+    --popover: 0 0% 6%;
     --popover-foreground: 0 0% 98%;
 
     --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 8%;
+    --primary-foreground: 0 0% 4%;
 
-    --secondary: 0 0% 15%;
+    --secondary: 0 0% 10%;
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 65%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 70%;
 
-    --accent: 0 0% 20%;
+    --accent: 0 0% 15%;
     --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
     --border: 0 0% 20%;
-    --input: 0 0% 20%;
+    --input: 0 0% 15%;
     --ring: 0 0% 98%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 8%;
+    --sidebar-background: 0 0% 4%;
     --sidebar-foreground: 0 0% 98%;
     --sidebar-primary: 0 0% 98%;
-    --sidebar-primary-foreground: 0 0% 8%;
-    --sidebar-accent: 0 0% 15%;
+    --sidebar-primary-foreground: 0 0% 4%;
+    --sidebar-accent: 0 0% 12%;
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-border: 0 0% 20%;
     --sidebar-ring: 0 0% 98%;
@@ -54,39 +54,39 @@
   }
 
   .dark {
-    --background: 0 0% 8%;
+    --background: 0 0% 4%;
     --foreground: 0 0% 98%;
 
-    --card: 0 0% 12%;
+    --card: 0 0% 8%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 0 0% 10%;
+    --popover: 0 0% 6%;
     --popover-foreground: 0 0% 98%;
 
     --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 8%;
+    --primary-foreground: 0 0% 4%;
 
-    --secondary: 0 0% 15%;
+    --secondary: 0 0% 10%;
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 65%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 70%;
 
-    --accent: 0 0% 20%;
+    --accent: 0 0% 15%;
     --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
     --border: 0 0% 20%;
-    --input: 0 0% 20%;
+    --input: 0 0% 15%;
     --ring: 0 0% 98%;
 
-    --sidebar-background: 0 0% 8%;
+    --sidebar-background: 0 0% 4%;
     --sidebar-foreground: 0 0% 98%;
     --sidebar-primary: 0 0% 98%;
-    --sidebar-primary-foreground: 0 0% 8%;
-    --sidebar-accent: 0 0% 15%;
+    --sidebar-primary-foreground: 0 0% 4%;
+    --sidebar-accent: 0 0% 12%;
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-border: 0 0% 20%;
     --sidebar-ring: 0 0% 98%;
@@ -98,17 +98,30 @@
     @apply border-border;
   }
 
+  html {
+    background: #0a0a0a;
+    color: #fafafa;
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     font-weight: 200;
     letter-spacing: 0.025em;
-    background: #0a0a0a;
-    color: #fafafa;
+    background: #0a0a0a !important;
+    color: #fafafa !important;
+    min-height: 100vh;
+  }
+
+  #root {
+    background: #0a0a0a !important;
+    color: #fafafa !important;
+    min-height: 100vh;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-thin tracking-wide text-white;
+    @apply font-thin tracking-wide;
+    color: #fafafa !important;
   }
 
   h1 {
@@ -128,7 +141,8 @@
   }
 
   p {
-    @apply font-light leading-relaxed text-white;
+    @apply font-light leading-relaxed;
+    color: #fafafa !important;
   }
 
   .font-bold {
@@ -157,6 +171,12 @@
 
   .font-thin {
     font-weight: 100;
+  }
+
+  /* Ensure all main containers have proper background */
+  .min-h-screen {
+    background: #0a0a0a !important;
+    color: #fafafa !important;
   }
 
   /* Modern glass effects for dark theme */
@@ -224,10 +244,12 @@
   .modern-card {
     @apply bg-black/80 backdrop-blur-md border border-white/10 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-700;
     background: rgba(15, 15, 15, 0.9);
+    color: #fafafa !important;
   }
 
   .premium-card {
     @apply bg-gradient-to-br from-black/90 to-black/70 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-900;
+    color: #fafafa !important;
   }
 
   /* Form Elements */
@@ -250,19 +272,19 @@
 
   /* Text Styles */
   .text-primary {
-    @apply text-white;
+    color: #fafafa !important;
   }
 
   .text-secondary {
-    @apply text-white/80;
+    color: rgba(250, 250, 250, 0.8) !important;
   }
 
   .text-muted {
-    @apply text-white/60;
+    color: rgba(250, 250, 250, 0.6) !important;
   }
 
   .text-muted-foreground {
-    @apply text-white/60;
+    color: rgba(250, 250, 250, 0.6) !important;
   }
 
   .gradient-text {
@@ -298,6 +320,29 @@
   .progress-bar {
     @apply bg-gradient-to-r from-white to-white/80;
   }
+
+  /* Fix color contrast issues */
+  .card {
+    background: rgba(15, 15, 15, 0.9) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #fafafa !important;
+  }
+
+  .pricing-plan {
+    color: #fafafa !important;
+  }
+
+  .price-value {
+    color: #fafafa !important;
+  }
+
+  .pricing-note {
+    color: rgba(255, 255, 255, 0.7) !important;
+  }
+
+  .check-list-item {
+    color: #fafafa !important;
+  }
 }
 
 /* Update existing animations for dark theme */
@@ -315,89 +360,57 @@
   display: none;
 }
 
-/* Custom styles for specific components */
-.card {
-  background: rgba(15, 15, 15, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
-}
-
-.pricing-plan {
-  color: white;
-}
-
-.price-value {
-  color: white;
-}
-
-.pricing-note {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.check-list-item {
-  color: white;
-}
-
 /* Professor search form styles */
 .prof-search-form_area {
-  background-color: rgba(15, 15, 15, 0.95);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 3px 4px 0px 1px rgba(255, 255, 255, 0.1);
+  background-color: rgba(15, 15, 15, 0.95) !important;
+  border: 2px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 3px 4px 0px 1px rgba(255, 255, 255, 0.1) !important;
 }
 
 .prof-search-title {
-  color: white;
+  color: #fafafa !important;
 }
 
 .prof-search-form_style {
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  box-shadow: 3px 4px 0px 1px rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2) !important;
+  background-color: rgba(0, 0, 0, 0.8) !important;
+  color: #fafafa !important;
+  box-shadow: 3px 4px 0px 1px rgba(255, 255, 255, 0.1) !important;
 }
 
 .prof-search-form_style::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.5) !important;
 }
 
 .prof-search-btn {
-  background: white;
-  color: black;
-  box-shadow: 3px 3px 0px 0px rgba(255, 255, 255, 0.2);
+  background: #fafafa !important;
+  color: #0a0a0a !important;
+  box-shadow: 3px 3px 0px 0px rgba(255, 255, 255, 0.2) !important;
 }
 
 .prof-search-link {
-  color: white;
+  color: #fafafa !important;
 }
 
 .primary-button {
-  color: black;
-  background-color: white;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 531.28 200'%3E%3Cdefs%3E%3Cstyle%3E .shape %7B fill: %23ffffff %7D %3C/style%3E%3C/defs%3E%3Cg id='Layer_2' data-name='Layer 2'%3E%3Cg id='Layer_1-2' data-name='Layer 1'%3E%3Cpolygon class='shape' points='415.81 200 0 200 115.47 0 531.28 0 415.81 200' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E%0A");
+  color: #0a0a0a !important;
+  background-color: #fafafa !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 
 .primary-button:hover {
-  border: 1px solid white;
-  color: black;
+  border: 1px solid #fafafa !important;
+  color: #0a0a0a !important;
 }
 
 .primary-button:before {
-  background-color: white;
+  background-color: #fafafa !important;
 }
 
 .primary-button:after {
-  background-color: white;
-}
-
-.button-borders:before {
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.button-borders:after {
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: #fafafa !important;
 }
 
 .shape {
-  fill: white;
+  fill: #fafafa !important;
 }

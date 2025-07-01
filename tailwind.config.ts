@@ -77,7 +77,7 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				college: {
-					primary: '#ffffff',
+					primary: '#fafafa',
 					secondary: '#f5f5f5',
 					gold: '#e5e5e5',
 					burgundy: '#d4d4d4',
@@ -90,6 +90,12 @@ export default {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
+			},
+			backgroundColor: {
+				'black': '#0a0a0a',
+			},
+			textColor: {
+				'white': '#fafafa',
 			},
 			keyframes: {
 				'accordion-down': {
