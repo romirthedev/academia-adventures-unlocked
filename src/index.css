@@ -182,7 +182,7 @@
     box-shadow: 
       0 8px 32px rgba(0, 0, 0, 0.06),
       0 1px 0 rgba(255, 255, 255, 0.8) inset;
-    animation: glassShimmer 6s ease-in-out infinite;
+    /* animation: glassShimmer 6s ease-in-out infinite; */
   }
 
   .glass-card {
@@ -193,192 +193,48 @@
       0 20px 40px -12px rgba(0, 0, 0, 0.12),
       0 8px 16px -8px rgba(0, 0, 0, 0.08),
       0 1px 0 rgba(255, 255, 255, 0.9) inset;
-    animation: cardFloat 4s ease-in-out infinite;
+    /* animation: cardFloat 4s ease-in-out infinite; */
   }
 
   /* Modern Button Styles with Enhanced Animations */
-  .btn-primary {
-    @apply relative inline-flex items-center justify-center px-6 py-3 
-           bg-primary text-black font-medium rounded-lg
-           transition-all duration-300 ease-out overflow-hidden
-           hover:shadow-lg hover:shadow-primary/20
-           active:shadow-md;
-    border: 1px solid rgba(var(--primary), 0.3);
-    animation: borderGlow 3s ease-in-out infinite;
+  .btn-primary, .btn-secondary, .btn-quantum-ripple, .btn-morphing, .hover-lift, .hover-glow, .hover-rotate, .interactive-card, .interactive-button, .modern-card, .premium-card, .badge-pulse {
+    animation: none !important;
+    transition: none !important;
   }
 
-  .btn-primary::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, 
-      transparent 0%,
-      rgba(var(--primary), 0.1) 50%,
-      transparent 100%
-    );
-    background-size: 200% 100%;
-    animation: borderFlow 3s linear infinite;
+  .glass-surface, .glass-card, .modern-card, .premium-card {
+    animation: none !important;
+    transition: none !important;
   }
 
-  .btn-secondary {
-    @apply relative inline-flex items-center justify-center px-6 py-3
-           bg-secondary text-black font-medium rounded-lg border border-border
-           transition-all duration-300 ease-out overflow-hidden
-           hover:bg-muted hover:shadow-lg
-           active:shadow-md;
-    animation: borderGlow 3s ease-in-out infinite;
+  .card-hover, .hover-lift, .hover-glow, .hover-rotate, .interactive-card, .interactive-button {
+    animation: none !important;
+    transition: none !important;
   }
 
-  .btn-secondary::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, 
-      transparent 0%,
-      rgba(var(--primary), 0.1) 50%,
-      transparent 100%
-    );
-    background-size: 200% 100%;
-    animation: borderFlow 3s linear infinite;
+  .btn-primary, .btn-secondary {
+    color: #111 !important;
+    text-shadow: none !important;
+    background: #fff !important;
+    border: 1px solid #ccc !important;
   }
 
-  /* Advanced Button Animations */
-  .btn-quantum-ripple {
-    position: relative;
-    overflow: hidden;
-    animation: quantumPulse 3s ease-in-out infinite;
+  .btn-primary svg, .btn-secondary svg, .btn-primary .icon, .btn-secondary .icon {
+    color: #111 !important;
+    fill: #111 !important;
   }
 
-  .btn-quantum-ripple::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, transparent 70%);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  .badge-modern, .pill {
+    animation: none !important;
+    transition: none !important;
   }
 
-  .btn-quantum-ripple:hover::before {
-    width: 400px;
-    height: 400px;
-  }
-
-  .btn-quantum-ripple:hover {
-    transform: scale(1.15) translateY(-8px) rotateX(15deg);
-    box-shadow: 
-      0 30px 60px rgba(234, 88, 12, 0.5),
-      0 0 120px rgba(234, 88, 12, 0.4);
-  }
-
-  .btn-morphing {
-    @apply transition-all duration-700 ease-out;
-    transform-style: preserve-3d;
-    animation: morphingIdle 4s ease-in-out infinite;
-  }
-
-  .btn-morphing:hover {
-    transform: perspective(1000px) rotateX(15deg) rotateY(-15deg) scale(1.15) translateY(-10px);
-    box-shadow: 
-      0 25px 50px rgba(234, 88, 12, 0.4),
-      0 0 80px rgba(234, 88, 12, 0.3),
-      inset 0 0 20px rgba(255, 255, 255, 0.2);
-    animation: morphingHover 0.7s ease-out forwards;
-  }
-
-  /* Enhanced Hover Effects */
-  .hover-lift {
-    @apply transition-all duration-700 ease-out hover:-translate-y-3 hover:scale-110;
-    animation: idleFloat 6s ease-in-out infinite;
-  }
-
-  .hover-lift:hover {
-    @apply shadow-2xl shadow-black/20;
-    animation: hoverFloat 0.7s ease-out forwards;
-  }
-
-  .hover-glow {
-    @apply transition-all duration-500 hover:shadow-2xl hover:shadow-primary/40;
-    animation: glowPulse 3s ease-in-out infinite;
-  }
-
-  .hover-rotate {
-    @apply transition-transform duration-500 hover:rotate-6 hover:scale-125;
-    animation: rotateIdle 8s ease-in-out infinite;
-  }
-
-  /* Interactive Elements */
-  .interactive-card {
-    @apply transition-all duration-700 hover:scale-110 hover:-translate-y-4 
-           hover:shadow-2xl hover:shadow-primary/30 cursor-pointer
-           active:scale-95 active:translate-y-0;
-    animation: cardIdle 5s ease-in-out infinite;
-  }
-
-  .interactive-button {
-    @apply transition-all duration-500 hover:scale-125 hover:-translate-y-2
-           active:scale-90 active:translate-y-0;
-    animation: buttonIdle 3s ease-in-out infinite;
-  }
-
-  /* Enhanced Animations */
-  .fade-in {
-    animation: fadeInEnhanced 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  }
-
-  .slide-up {
-    animation: slideUpEnhanced 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  }
-
-  .scale-in {
-    animation: scaleInEnhanced 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  }
-
-  .rotate-in {
-    animation: rotateInEnhanced 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  }
-
-  .zoom-in {
-    animation: zoomInEnhanced 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  }
-
-  /* Modern Typography with Animations */
-  .heading-xl {
-    @apply text-5xl md:text-6xl font-bold tracking-tight text-foreground;
-    animation: textGlow 4s ease-in-out infinite;
-  }
-
-  .heading-lg {
-    @apply text-3xl md:text-4xl font-semibold tracking-tight text-foreground;
-    animation: textFloat 6s ease-in-out infinite;
-  }
-
-  .text-muted {
-    @apply text-gray-600;
-    animation: textFade 8s ease-in-out infinite;
-  }
-
-  /* Enhanced Gradients with Animation */
-  .gradient-primary {
-    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(16 100% 60%) 100%);
-    animation: gradientShift 5s ease-in-out infinite;
-  }
-
-  .gradient-text {
-    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(16 100% 60%) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: gradientTextShift 4s ease-in-out infinite;
-  }
-
-  .gradient-glow {
-    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(16 100% 60%) 100%);
-    box-shadow: 0 0 30px rgba(234, 88, 12, 0.3);
-    animation: glowIntensity 3s ease-in-out infinite;
+  .gradient-text, .heading-xl, .heading-lg, .text-muted, .text-primary, .text-secondary, .text-muted-foreground {
+    color: #111 !important;
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    -webkit-text-fill-color: initial !important;
+    text-shadow: none !important;
   }
 
   /* Modern Grid Pattern with Animation */
@@ -399,12 +255,12 @@
   /* Enhanced Cards with Constant Animation */
   .modern-card {
     @apply bg-white/80 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-700;
-    animation: cardBreathe 6s ease-in-out infinite;
+    /* animation: cardBreathe 6s ease-in-out infinite; */
   }
 
   .premium-card {
     @apply bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-xl border border-white/30 rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-900;
-    animation: premiumFloat 8s ease-in-out infinite;
+    /* animation: premiumFloat 8s ease-in-out infinite; */
   }
 
   /* Status Indicators with Animation */
@@ -415,7 +271,7 @@
   .status-online::after {
     content: '';
     @apply absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white;
-    animation: statusPulse 2s ease-in-out infinite;
+    /* animation: statusPulse 2s ease-in-out infinite; */
   }
 
   /* Loading States with Enhanced Animation */
@@ -1429,10 +1285,12 @@
   flex-direction: column;
   background-color: #EDDCD9;
   height: auto;
-  width: auto;
+  width: 100%;
   border: 2px solid #264143;
   border-radius: 20px;
   box-shadow: 3px 4px 0px 1px #E99F4C;
+  min-width: 600px;
+  max-width: 900px;
 }
 
 .prof-search-title {
@@ -1448,6 +1306,7 @@
 }
 
 .prof-search-form_group {
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: baseline;
@@ -1458,7 +1317,7 @@
   outline: none;
   border: 2px solid #264143;
   box-shadow: 3px 4px 0px 1px #E99F4C;
-  width: 290px;
+  width: 100%;
   padding: 12px 10px;
   border-radius: 4px;
   font-size: 15px;
@@ -1472,7 +1331,7 @@
 .prof-search-btn {
   padding: 15px;
   margin: 25px 0px;
-  width: 290px;
+  width: 100%;
   font-size: 15px;
   background: #DE5499;
   border-radius: 10px;
@@ -1491,4 +1350,36 @@
   font-weight: 800;
   color: #264143;
   padding: 5px;
+}
+
+.prof-search-form_area form {
+  width: 100%;
+}
+
+/* Animations */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fade-in 1s cubic-bezier(0.4,0,0.2,1) both;
+}
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.animate-shimmer {
+  background: linear-gradient(90deg, #fff0 0%, #fff4 50%, #fff0 100%);
+  background-size: 400px 100%;
+  animation: shimmer 2.5s infinite linear;
+  background-clip: padding-box;
+}
+
+/* Hide scrollbars for all browsers */
+.no-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }

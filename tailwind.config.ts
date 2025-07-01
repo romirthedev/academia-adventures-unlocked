@@ -153,6 +153,14 @@ export default {
 					'50%': {
 						transform: 'translatey(-10px)'
 					}
+				},
+				'carousel-seamless': {
+					'0%': {
+						transform: 'translateX(0)'
+					},
+					'100%': {
+						transform: 'translateX(-50%)'
+					}
 				}
 			},
 			animation: {
@@ -163,7 +171,8 @@ export default {
 				'scale-in': 'scale-in 0.4s ease-out',
 				'bounce-soft': 'bounce-soft 2s infinite',
 				'pulse-glow': 'pulse-glow 2s infinite',
-				'float': 'float 3s ease-in-out infinite'
+				'float': 'float 3s ease-in-out infinite',
+				'carousel-seamless': 'carousel-seamless 30s linear infinite'
 			},
 			backgroundImage: {
 				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

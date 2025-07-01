@@ -9,10 +9,13 @@ import Index from "./pages/Index";
 import CollegeExplorer from "./pages/CollegeExplorer";
 import CollegeDetails from "./pages/CollegeDetails";
 import FindProfessors from "./pages/FindProfessors";
-import CompareSchools from "./pages/CompareSchools";
+import CollegeComparison from "./pages/CollegeComparison";
+import ApplicationTracker from "./pages/ApplicationTracker";
 import SavedSchools from "./pages/SavedSchools";
+import MockApplication from "./pages/MockApplication";
 import NotFound from "./pages/NotFound";
 import Loader from "@/components/Loader";
+import Recommendations from "./pages/Recommendations";
 
 const queryClient = new QueryClient();
 
@@ -40,8 +43,11 @@ function AppWithLoader() {
           <Route path="/explore" element={<CollegeExplorer />} />
           <Route path="/college/:id" element={<CollegeDetails />} />
           <Route path="/professors" element={<FindProfessors />} />
-          <Route path="/compare" element={<CompareSchools />} />
+          <Route path="/compare" element={<CollegeComparison />} />
+          <Route path="/applications" element={<ApplicationTracker />} />
           <Route path="/saved" element={<SavedSchools />} />
+          <Route path="/mock-application" element={<MockApplication />} />
+          <Route path="/recommendations" element={<Recommendations />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

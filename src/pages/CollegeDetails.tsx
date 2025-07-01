@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, MapPin, Users, DollarSign, GraduationCap, Star, Globe, Phone, Mail, Calendar, BookOpen, Award, TrendingUp, Heart, Share2, MessageSquare } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -11,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { collegeService } from '@/services/collegeService';
 import { useToast } from '@/components/ui/use-toast';
 import AIChat from '@/components/AIChat';
+import { savedSchoolsUtils } from '@/utils/savedSchools';
 
 interface College {
   id: string;
@@ -40,6 +40,7 @@ const CollegeDetails = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCollegeDetails = async () => {
@@ -48,11 +49,17 @@ const CollegeDetails = () => {
       try {
         if (id) {
           const rawCollegeData = await collegeService.getCollegeById(id);
+          
+          // Check if we got valid data
+          if (!rawCollegeData) {
+            throw new Error('College data not found');
+          }
+          
           setCollegeData(rawCollegeData);
           
           // Transform the raw API data into our interface format
           const transformedCollege: College = {
-            id: rawCollegeData.id?.toString() || id,
+            id: (rawCollegeData && rawCollegeData.id) ? rawCollegeData.id.toString() : (id || 'unknown'),
             name: rawCollegeData['school.name'] || 'Unknown College',
             location: `${rawCollegeData['school.city'] || 'Unknown'}, ${rawCollegeData['school.state'] || 'Unknown'}`,
             studentBodySize: rawCollegeData['latest.student.size'] || 0,
@@ -67,7 +74,7 @@ const CollegeDetails = () => {
             phone: rawCollegeData.phone || 'Contact information not available',
             email: rawCollegeData.email || 'Email not available',
             calendar: rawCollegeData['school.academic_year'] || 'Academic calendar not available',
-            description: `${rawCollegeData['school.name']} is a ${rawCollegeData['school.ownership'] === 1 ? 'public' : 'private'} institution located in ${rawCollegeData['school.city']}, ${rawCollegeData['school.state']}.`,
+            description: `${rawCollegeData['school.name'] || 'This institution'} is a ${rawCollegeData['school.ownership'] === 1 ? 'public' : 'private'} institution located in ${rawCollegeData['school.city'] || 'an unknown location'}, ${rawCollegeData['school.state'] || 'unknown state'}.`,
             awards: ['Accredited Institution'], // Mock awards
             trendingScore: Math.floor(Math.random() * 100),
             professorsCount: Math.floor((rawCollegeData['latest.student.size'] || 1000) / 15), // Mock ratio
@@ -92,6 +99,54 @@ const CollegeDetails = () => {
 
     fetchCollegeDetails();
   }, [id, toast]);
+
+  // Add handler for Save to Favorites
+  const handleSaveToFavorites = () => {
+    if (!college) return;
+    const success = savedSchoolsUtils.saveSchool({
+      id: Number(college.id),
+      name: college.name,
+      city: collegeData['school.city'] || '',
+      state: collegeData['school.state'] || ''
+    });
+    if (success) {
+      toast({
+        title: 'School saved!',
+        description: `${college.name} has been added to your saved schools.`
+      });
+    } else {
+      toast({
+        title: 'Already saved',
+        description: `${college.name} is already in your saved schools.`,
+        variant: 'destructive',
+      });
+    }
+  };
+
+  // Add handler for Share College
+  const handleShareCollege = () => {
+    if (!college) return;
+    const url = window.location.origin + `/college/${college.id}`;
+    if (navigator.share) {
+      navigator.share({
+        title: college.name,
+        text: `Check out ${college.name} on CollegeAI!`,
+        url
+      });
+    } else {
+      navigator.clipboard.writeText(url);
+      toast({
+        title: 'Link copied!',
+        description: 'School link has been copied to clipboard.'
+      });
+    }
+  };
+
+  // Add handler for Compare Schools
+  const handleCompareSchools = () => {
+    if (!college) return;
+    navigate(`/compare?add=${college.id}`);
+  };
 
   if (isLoading) {
     return (
@@ -323,15 +378,15 @@ const CollegeDetails = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <Button className="w-full college-gradient text-white">
+                <Button className="w-full college-gradient text-white" onClick={handleSaveToFavorites}>
                   <Heart className="h-4 w-4 mr-2" />
                   Save to Favorites
                 </Button>
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" className="w-full" onClick={handleShareCollege}>
                   <Share2 className="h-4 w-4 mr-2" />
                   Share College
                 </Button>
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" className="w-full" onClick={handleCompareSchools}>
                   <MessageSquare className="h-4 w-4 mr-2" />
                   Compare Schools
                 </Button>

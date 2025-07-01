@@ -116,7 +116,7 @@ const FindProfessors = () => {
       <div className="prof-search-form_area mb-12">
         <p className="prof-search-title">Find Professors</p>
         <form onSubmit={handleSearch} autoComplete="off">
-          <div className="prof-search-form_group">
+          <div className="prof-search-form_group" style={{ maxWidth: 400 }}>
             <label className="prof-search-sub_title" htmlFor="field">Field</label>
             <select
               id="field"
@@ -130,7 +130,7 @@ const FindProfessors = () => {
               ))}
             </select>
           </div>
-          <div className="prof-search-form_group" style={{ position: 'relative' }}>
+          <div className="prof-search-form_group" style={{ position: 'relative', maxWidth: 400 }}>
             <label className="prof-search-sub_title" htmlFor="school">School</label>
             <input
               id="school"
@@ -175,7 +175,7 @@ const FindProfessors = () => {
               </div>
             )}
           </div>
-          <div className="prof-search-form_group">
+          <div className="prof-search-form_group" style={{ maxWidth: 400 }}>
             <label className="prof-search-sub_title" htmlFor="location">Location</label>
             <input
               id="location"
@@ -200,29 +200,41 @@ const FindProfessors = () => {
           <div className="text-gray-500 text-center">No professors found. Try adjusting your search.</div>
         )}
         {isLoading && <div className="text-center text-orange-600">Loading...</div>}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8 mt-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mt-8">
           {professors.map((professor, index) => (
-            <div key={index} className="bg-white rounded-xl shadow-md p-6 flex flex-col gap-2 border border-orange-100">
-              <div className="flex items-center justify-between mb-2">
-                <div>
-                  <div className="font-bold text-lg text-orange-900">{professor.name}</div>
-                  <div className="text-orange-600 text-sm font-semibold">{professor.title}</div>
+            <div key={index} className="professor-card">
+              <div className="professor-card-head">{professor.university}</div>
+              <div className="professor-card-content">
+                <div className="professor-name">{professor.name}</div>
+                <div className="professor-title">{professor.title}</div>
+                <div className="professor-department">{professor.department}</div>
+                <div className="professor-location">{professor.location}</div>
+                <div className="professor-research">
+                  {professor.researchAreas.slice(0, 3).map((area, i) => (
+                    <span key={i} className="research-tag">{area}</span>
+                  ))}
                 </div>
-                <div className="text-xs text-orange-500 font-bold">{professor.university}</div>
+                <div className="professor-actions">
+                  {professor.email && (
+                    <button 
+                      className="professor-button email-btn"
+                      onClick={() => handleEmailCopy(professor.email!)}
+                    >
+                      {copiedEmails.has(professor.email!) ? 'Copied!' : 'Copy Email'}
+                    </button>
+                  )}
+                  {professor.profileUrl && (
+                    <a 
+                      href={professor.profileUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="professor-button profile-btn"
+                    >
+                      View Profile
+                    </a>
+                  )}
+                </div>
               </div>
-              <div className="text-gray-700 text-sm mb-1">{professor.department}</div>
-              <div className="text-gray-500 text-xs mb-1">{professor.location}</div>
-              <div className="flex flex-wrap gap-2 mb-2">
-                {professor.researchAreas.map((area, i) => (
-                  <span key={i} className="bg-orange-50 text-orange-700 px-2 py-1 rounded-full text-xs font-medium border border-orange-200">{area}</span>
-                ))}
-              </div>
-              {professor.email && (
-                <a href={`mailto:${professor.email}`} className="text-blue-600 text-xs underline">{professor.email}</a>
-              )}
-              {professor.profileUrl && (
-                <a href={professor.profileUrl} target="_blank" rel="noopener noreferrer" className="text-orange-500 text-xs underline">Profile</a>
-              )}
             </div>
           ))}
         </div>

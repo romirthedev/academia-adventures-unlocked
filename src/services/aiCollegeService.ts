@@ -362,6 +362,255 @@ ${userExtracurriculars ? `\n\nUser's Current Extracurriculars: ${userExtracurric
       verifiedPrograms
     };
   }
+
+  async evaluateApplication(applicationData: any, university: any): Promise<string> {
+    try {
+      console.log('Evaluating application for:', university?.name || 'Unknown University');
+      console.log('Application data:', applicationData);
+
+      const universityName = university?.name || 'this university';
+      const universityLocation = university?.city && university?.state 
+        ? `${university.city}, ${university.state}` 
+        : 'Unknown location';
+      const admissionRate = university?.admissionRate || 'N/A';
+      const institutionType = university?.type || 'University';
+
+      // Determine strictness level based on university
+      const isTopTier = universityName.toLowerCase().includes('harvard') || 
+                       universityName.toLowerCase().includes('stanford') || 
+                       universityName.toLowerCase().includes('mit') || 
+                       universityName.toLowerCase().includes('yale') || 
+                       universityName.toLowerCase().includes('princeton') ||
+                       universityName.toLowerCase().includes('columbia') ||
+                       universityName.toLowerCase().includes('penn') ||
+                       universityName.toLowerCase().includes('dartmouth') ||
+                       universityName.toLowerCase().includes('brown') ||
+                       universityName.toLowerCase().includes('cornell');
+
+      const strictnessLevel = isTopTier ? 'EXTREMELY STRICT' : 'VERY STRICT';
+
+      const systemPrompt = `You are a senior admissions officer at ${universityName}, a prestigious ${institutionType} located in ${universityLocation}. 
+
+You are ${strictnessLevel} in your evaluation. For ${universityName}, you receive thousands of applications from the most accomplished students in the world. You must be extremely selective and critical.
+
+Evaluation Guidelines:
+1. Be EXTREMELY thorough and critical - assume every applicant has perfect grades and test scores
+2. Look for truly exceptional qualities that set this student apart from other perfect applicants
+3. Be brutally honest about weaknesses and areas that don't meet your standards
+4. Consider that for ${universityName}, even a 4.0 GPA and perfect test scores are the baseline expectation
+5. Focus on intellectual curiosity, leadership impact, and genuine passion
+6. Evaluate essays for authentic voice, depth of thinking, and writing quality
+7. Assess extracurricular activities for meaningful impact and leadership
+8. Be as strict as the most critical admissions officer - don't sugarcoat anything
+9. Remember: ${universityName} rejects 90%+ of applicants with perfect academic records
+
+For Harvard specifically:
+- Perfect grades and test scores are EXPECTED, not impressive
+- Look for Nobel Prize-level potential or revolutionary thinking
+- Evaluate if the student could be a future world leader or groundbreaking researcher
+- Assess if they have the intellectual firepower to contribute meaningfully to Harvard's community
+- Consider if they would thrive in Harvard's intensely competitive environment
+
+Format your response as follows:
+
+**ADMISSION DECISION: [Admit/Waitlist/Deny]**
+
+**OVERALL ASSESSMENT:**
+[2-3 sentences with brutally honest assessment of their chances]
+
+**ACADEMIC EVALUATION:**
+[Critical analysis of academic rigor, course selection, and intellectual preparation]
+
+**EXTRACURRICULAR ASSESSMENT:**
+[Analysis of leadership, impact, and whether activities demonstrate exceptional qualities]
+
+**ESSAY EVALUATION:**
+[Assessment of writing quality, authenticity, depth of thinking, and personal voice]
+
+**STRENGTHS:**
+[Only genuine strengths that truly impress you - be selective]
+
+**CRITICAL WEAKNESSES:**
+[Be brutally honest about what's missing or inadequate]
+
+**AREAS FOR IMPROVEMENT:**
+[Specific, actionable feedback for future applications]
+
+**FINAL RECOMMENDATIONS:**
+[What they should focus on if applying to similar institutions]
+
+Remember: You are evaluating for ${universityName}. Be as critical and selective as the real admissions committee. Don't be impressed by what should be standard for this level of institution.`;
+
+      const applicationSummary = `
+STUDENT APPLICATION SUMMARY:
+
+Personal Information:
+- Name: ${applicationData.personalInfo.firstName} ${applicationData.personalInfo.lastName}
+- High School: ${applicationData.personalInfo.highSchool}
+- GPA: ${applicationData.personalInfo.gpa}
+- SAT Score: ${applicationData.personalInfo.satScore || 'Not provided'}
+- ACT Score: ${applicationData.personalInfo.actScore || 'Not provided'}
+
+Extracurricular Activities (${applicationData.extracurriculars.length} activities):
+${applicationData.extracurriculars.map((ec: any, index: number) => `
+${index + 1}. ${ec.name || 'Unnamed Activity'}
+   Role: ${ec.role || 'Not specified'}
+   Hours: ${ec.hours || 'Not specified'}
+   Description: ${ec.description || 'No description provided'}
+`).join('')}
+
+Academic Record (${applicationData.grades.length} courses):
+${applicationData.grades.map((grade: any, index: number) => `
+${index + 1}. ${grade.subject || 'Unnamed Course'} - ${grade.grade || 'No grade'} (${grade.level || 'Regular'})
+`).join('')}
+
+Essays (${applicationData.essays.length} essays):
+${applicationData.essays.map((essay: any, index: number) => `
+Essay ${index + 1}:
+Prompt: ${essay.prompt || 'No prompt provided'}
+Response: ${essay.response || 'No response provided'}
+`).join('')}
+
+Target University: ${applicationData.targetUniversity}
+`;
+
+      console.log('Sending evaluation request to AI...');
+
+      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": "Bearer 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",
+          "HTTP-Referer": "http://localhost:8080/",
+          "X-Title": "CollegeCompass",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          "model": "deepseek/deepseek-chat-v3-0324:free",
+          "messages": [
+            {
+              "role": "system",
+              "content": systemPrompt
+            },
+            {
+              "role": "user",
+              "content": `Please evaluate this application for ${universityName}:\n\n${applicationSummary}`
+            }
+          ],
+          "max_tokens": 2500
+        })
+      });
+
+      console.log('Evaluation API Response status:', response.status);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Evaluation API failed:', response.status, errorText);
+        throw new Error(`Evaluation API failed: ${response.status} - ${errorText}`);
+      }
+
+      const data = await response.json();
+      console.log('Evaluation API Response:', data);
+
+      const aiResponse = data.choices[0]?.message?.content;
+
+      if (!aiResponse) {
+        throw new Error('No response from AI evaluation');
+      }
+
+      return aiResponse;
+
+    } catch (error) {
+      console.error('Error evaluating application:', error);
+      
+      // Fallback evaluation
+      return this.generateFallbackEvaluation(applicationData, university);
+    }
+  }
+
+  private generateFallbackEvaluation(applicationData: any, university: any): string {
+    const universityName = university?.name || 'this university';
+    const gpa = parseFloat(applicationData.personalInfo.gpa) || 0;
+    const satScore = parseInt(applicationData.personalInfo.satScore) || 0;
+    const actScore = parseInt(applicationData.personalInfo.actScore) || 0;
+    const extracurricularCount = applicationData.extracurriculars.length;
+    const essayCount = applicationData.essays.length;
+
+    // Much stricter criteria for top universities
+    const isTopTier = universityName.toLowerCase().includes('harvard') || 
+                     universityName.toLowerCase().includes('stanford') || 
+                     universityName.toLowerCase().includes('mit') || 
+                     universityName.toLowerCase().includes('yale') || 
+                     universityName.toLowerCase().includes('princeton');
+
+    let decision = 'Deny';
+    let reasoning = '';
+
+    if (isTopTier) {
+      // For top-tier universities, be extremely strict
+      if (gpa >= 3.95 && (satScore >= 1550 || actScore >= 35) && extracurricularCount >= 5) {
+        decision = 'Waitlist';
+        reasoning = 'Strong academic foundation, but may lack the exceptional qualities needed for immediate admission.';
+      } else if (gpa >= 3.9 && (satScore >= 1500 || actScore >= 33) && extracurricularCount >= 4) {
+        decision = 'Deny';
+        reasoning = 'While academically qualified, the application lacks the exceptional qualities and impact expected at this level.';
+      } else {
+        decision = 'Deny';
+        reasoning = 'Academic performance or extracurricular involvement below the extremely competitive standards of this institution.';
+      }
+    } else {
+      // For other universities, use standard criteria
+      if (gpa >= 3.8 && (satScore >= 1400 || actScore >= 30) && extracurricularCount >= 3) {
+        decision = 'Admit';
+        reasoning = 'Strong academic performance combined with meaningful extracurricular involvement.';
+      } else if (gpa >= 3.5 && (satScore >= 1300 || actScore >= 28) && extracurricularCount >= 2) {
+        decision = 'Waitlist';
+        reasoning = 'Solid academic foundation with room for improvement in extracurricular depth.';
+      } else {
+        decision = 'Deny';
+        reasoning = 'Academic performance or extracurricular involvement below our competitive standards.';
+      }
+    }
+
+    return `**ADMISSION DECISION: ${decision}**
+
+**OVERALL ASSESSMENT:**
+${reasoning}
+
+**ACADEMIC EVALUATION:**
+- GPA: ${gpa}/4.0 ${gpa >= 3.9 ? '(Excellent)' : gpa >= 3.7 ? '(Good)' : '(Needs improvement)'}
+- SAT Score: ${satScore || 'Not provided'}
+- ACT Score: ${actScore || 'Not provided'}
+- Course Rigor: ${applicationData.grades.length} courses recorded
+
+**EXTRACURRICULAR ASSESSMENT:**
+- Number of Activities: ${extracurricularCount}
+- Leadership Roles: ${applicationData.extracurriculars.filter((ec: any) => ec.role?.toLowerCase().includes('president') || ec.role?.toLowerCase().includes('captain') || ec.role?.toLowerCase().includes('leader')).length}
+
+**ESSAY EVALUATION:**
+- Number of Essays: ${essayCount}
+- Essay completion: ${essayCount > 0 ? 'Essays submitted' : 'No essays provided'}
+
+**STRENGTHS:**
+- Completed comprehensive application
+- Provided detailed personal information
+- Demonstrated interest through essay responses
+
+**CRITICAL WEAKNESSES:**
+- May lack exceptional qualities needed for top-tier institutions
+- Extracurricular activities may not demonstrate sufficient leadership or impact
+- Academic profile may not stand out among highly competitive applicant pool
+
+**AREAS FOR IMPROVEMENT:**
+- Consider strengthening academic performance further
+- Increase extracurricular involvement with meaningful leadership roles
+- Enhance essay quality and personal voice
+- Develop unique talents or achievements that set you apart
+
+**FINAL RECOMMENDATIONS:**
+Focus on developing exceptional qualities, meaningful leadership experiences, and unique achievements that demonstrate your potential to contribute significantly to the university community.`;
+
+  }
 }
 
 export const aiCollegeService = new AICollegeService();
+export const { analyzeCollegeForApplicants, chatWithAdmissionsAI, evaluateApplication } = aiCollegeService;
