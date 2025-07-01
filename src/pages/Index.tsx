@@ -14,6 +14,7 @@ import { useTheme } from "next-themes";
 import { LineShadowText } from "@/components/magicui/line-shadow-text";
 import TagCarousel from '@/components/TagCarousel';
 import SplashCursor from '@/components/SplashCursor';
+import Carousel from '@/components/Carousel';
 
 const benefits = [
   {
@@ -136,6 +137,121 @@ const quickActions = [
   }
 ];
 
+const applicationHelpItems = [
+  {
+    title: "Essay Guidance",
+    price: "FREE",
+    note: "Craft standout essays",
+    features: [
+      "Personalized prompts",
+      "Sample essays",
+      "Editing tips",
+      "AI feedback"
+    ],
+  },
+  {
+    title: "Timeline Planner",
+    price: "FREE",
+    note: "Stay on track",
+    features: [
+      "Custom deadlines",
+      "Reminders",
+      "Progress tracking",
+      "Export to calendar"
+    ],
+  },
+  {
+    title: "Interview Prep",
+    price: "FREE",
+    note: "Ace your interviews",
+    features: [
+      "Common questions",
+      "Mock interviews",
+      "Feedback",
+      "Tips & tricks"
+    ],
+  },
+  {
+    title: "Document Center",
+    price: "FREE",
+    note: "Organize your files",
+    features: [
+      "Upload resumes",
+      "Store transcripts",
+      "Portfolio support",
+      "Secure storage"
+    ],
+  },
+];
+
+const dataAnalyticsItems = [
+  {
+    title: "Acceptance Stats",
+    price: "FREE",
+    note: "Know your odds",
+    features: [
+      "Historical rates",
+      "Trends by year",
+      "Compare schools",
+      "Visual charts"
+    ],
+  },
+  {
+    title: "Cost Breakdown",
+    price: "FREE",
+    note: "Plan your finances",
+    features: [
+      "Tuition & fees",
+      "Scholarship data",
+      "Net price calc",
+      "Aid estimator"
+    ],
+  },
+  {
+    title: "Student Outcomes",
+    price: "FREE",
+    note: "See the results",
+    features: [
+      "Graduation rates",
+      "Employment stats",
+      "Alumni earnings",
+      "Satisfaction scores"
+    ],
+  },
+  {
+    title: "Campus Life Data",
+    price: "FREE",
+    note: "Beyond academics",
+    features: [
+      "Clubs & orgs",
+      "Housing info",
+      "Diversity stats",
+      "Safety reports"
+    ],
+  },
+];
+
+const benefitIcons = [
+  <span role="img" aria-label="Magnifying Glass">🔍</span>,
+  <span role="img" aria-label="Book">📖</span>,
+  <span role="img" aria-label="Floppy Disk">💾</span>,
+  <span role="img" aria-label="Lightbulb">💡</span>,
+];
+
+const appHelpIcons = [
+  <span role="img" aria-label="Pencil">✏️</span>,
+  <span role="img" aria-label="Calendar">📅</span>,
+  <span role="img" aria-label="Microphone">🎤</span>,
+  <span role="img" aria-label="File Folder">🗂️</span>,
+];
+
+const analyticsIcons = [
+  <span role="img" aria-label="Chart">📊</span>,
+  <span role="img" aria-label="Money Bag">💰</span>,
+  <span role="img" aria-label="Briefcase">💼</span>,
+  <span role="img" aria-label="House">🏠</span>,
+];
+
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isVisible, setIsVisible] = useState(false);
@@ -216,45 +332,7 @@ const Index = () => {
         {/* Add SplashCursor component */}
         <SplashCursor />
         
-        {/* Header with Sidebar Trigger */}
-        <header className="sticky top-0 z-50 bg-black/95 backdrop-blur-md border-b border-white/20 shadow-sm">
-          <div className="flex items-center justify-between px-4 py-3">
-            <SidebarTrigger className="text-white hover:bg-white/10" />
-            
-            {/* Mobile Search Button */}
-            <div className="md:hidden">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowMobileSearch(!showMobileSearch)}
-                className="p-2 text-white hover:bg-white/10"
-              >
-                <Search className="h-5 w-5" />
-              </Button>
-            </div>
-          </div>
-
-          {/* Mobile Search Bar */}
-          {showMobileSearch && (
-            <div className="px-4 pb-4 md:hidden">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                <Input
-                  type="text"
-                  placeholder="Search universities, professors, or programs..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                  className="pl-10 pr-4 py-3 text-base rounded-xl border-0 bg-white/80 backdrop-blur-sm focus:bg-white transition-all duration-300"
-                />
-              </div>
-            </div>
-          )}
-        </header>
-
         <div className="flex min-h-screen w-full">
-          <AppSidebar />
-          
           <main className="flex-1">
             {/* Hero Section */}
             <section className="relative px-4 sm:px-6 lg:px-8 pt-8 lg:pt-20 pb-16 lg:pb-32">
@@ -268,13 +346,13 @@ const Index = () => {
                           <span className="gradient-text">Discover Your</span>
                           <span className="absolute left-0 bottom-0 w-full h-2 pointer-events-none">
                             <svg width="100%" height="8" viewBox="0 0 100 8" preserveAspectRatio="none" className="w-full h-2">
-                              <rect x="0" y="4" width="100" height="4" fill="url(#orangeHighlight)" rx="2">
+                              <rect x="0" y="4" width="100" height="4" fill="url(#whiteHighlight)" rx="2">
                                 <animate attributeName="width" from="0" to="100" dur="1s" fill="freeze" />
                               </rect>
                               <defs>
-                                <linearGradient id="orangeHighlight" x1="0" y1="0" x2="100" y2="0" gradientUnits="userSpaceOnUse">
-                                  <stop stopColor="#f59e42" />
-                                  <stop offset="1" stopColor="#f97316" />
+                                <linearGradient id="whiteHighlight" x1="0" y1="0" x2="100" y2="0" gradientUnits="userSpaceOnUse">
+                                  <stop stopColor="#fff" />
+                                  <stop offset="1" stopColor="#fff" />
                                 </linearGradient>
                               </defs>
                             </svg>
@@ -285,13 +363,13 @@ const Index = () => {
                           <span className="gradient-text">Perfect College</span>
                           <span className="absolute left-0 bottom-0 w-full h-2 pointer-events-none">
                             <svg width="100%" height="8" viewBox="0 0 100 8" preserveAspectRatio="none" className="w-full h-2">
-                              <rect x="0" y="4" width="100" height="4" fill="url(#orangeHighlight2)" rx="2">
+                              <rect x="0" y="4" width="100" height="4" fill="url(#whiteHighlight2)" rx="2">
                                 <animate attributeName="width" from="0" to="100" dur="1s" fill="freeze" />
                               </rect>
                               <defs>
-                                <linearGradient id="orangeHighlight2" x1="0" y1="0" x2="100" y2="0" gradientUnits="userSpaceOnUse">
-                                  <stop stopColor="#f59e42" />
-                                  <stop offset="1" stopColor="#f97316" />
+                                <linearGradient id="whiteHighlight2" x1="0" y1="0" x2="100" y2="0" gradientUnits="userSpaceOnUse">
+                                  <stop stopColor="#fff" />
+                                  <stop offset="1" stopColor="#fff" />
                                 </linearGradient>
                               </defs>
                             </svg>
@@ -355,8 +433,12 @@ const Index = () => {
 
                       {/* Quick Actions */}
                       <ul className="list-disc list-inside text-left text-lg text-gray-700 mb-8 ml-4">
-                        <li>Explore and compare hundreds of universities with real data and insights</li>
-                        <li>Connect with professors and discover your best-fit academic path</li>
+                        <li className="flex items-center gap-3 text-white text-lg font-medium">
+                          Explore and compare hundreds of universities with real data and insights
+                        </li>
+                        <li className="flex items-center gap-3 text-white text-lg font-medium">
+                          Connect with professors and discover your best-fit academic path
+                        </li>
                       </ul>
                     </div>
                   </div>
@@ -468,13 +550,13 @@ const Index = () => {
                     <span className="relative z-10">Everything You Need to Succeed</span>
                     <span className="absolute left-0 bottom-0 w-full h-2 pointer-events-none">
                       <svg width="100%" height="8" viewBox="0 0 100 8" preserveAspectRatio="none" className="w-full h-2">
-                        <rect x="0" y="4" width="100" height="4" fill="url(#orangeHighlightSection)" rx="2">
+                        <rect x="0" y="4" width="100" height="4" fill="url(#whiteHighlightSection)" rx="2">
                           <animate attributeName="width" from="0" to="100" dur="1s" fill="freeze" />
                         </rect>
                         <defs>
-                          <linearGradient id="orangeHighlightSection" x1="0" y1="0" x2="100" y2="0" gradientUnits="userSpaceOnUse">
-                            <stop stopColor="#f59e42" />
-                            <stop offset="1" stopColor="#f97316" />
+                          <linearGradient id="whiteHighlightSection" x1="0" y1="0" x2="100" y2="0" gradientUnits="userSpaceOnUse">
+                            <stop stopColor="#fff" />
+                            <stop offset="1" stopColor="#fff" />
                           </linearGradient>
                         </defs>
                       </svg>
@@ -484,24 +566,10 @@ const Index = () => {
                     Comprehensive tools and insights to guide your college journey from discovery to decision
                   </p>
                 </div>
-                <div className="flex flex-wrap justify-center gap-8">
-                  {benefits.map((benefit, index) => (
-                    <div className="card" key={index}>
-                      <div className="pricing-block-content">
-                        <p className="pricing-plan">{benefit.title}</p>
-                        <div className="price-value" style={{fontWeight: 700, fontSize: '1.8rem', color: '#05060f'}}>FREE</div>
-                        <div className="pricing-note">{benefit.note}</div>
-                        <ul className="check-list" role="list">
-                          {benefit.features.map((feature, i) => (
-                            <li className="check-list-item" key={i}>
-                              <svg version="1.0" preserveAspectRatio="xMidYMid meet" height="16" viewBox="0 0 30 30.000001" zoomAndPan="magnify" width="16" xmlns="http://www.w3.org/2000/svg" style={{color: 'rgb(102, 78, 255)'}}><defs><clipPath id={`id1-${index}-${i}`}><path fill="#664eff" clipRule="nonzero" d="M 2.328125 4.222656 L 27.734375 4.222656 L 27.734375 24.542969 L 2.328125 24.542969 Z M 2.328125 4.222656"></path></clipPath></defs><g clipPath={`url(#id1-${index}-${i})`}><path fillRule="nonzero" fillOpacity="1" d="M 27.5 7.53125 L 24.464844 4.542969 C 24.15625 4.238281 23.65625 4.238281 23.347656 4.542969 L 11.035156 16.667969 L 6.824219 12.523438 C 6.527344 12.230469 6 12.230469 5.703125 12.523438 L 2.640625 15.539062 C 2.332031 15.84375 2.332031 16.335938 2.640625 16.640625 L 10.445312 24.324219 C 10.59375 24.472656 10.796875 24.554688 11.007812 24.554688 C 11.214844 24.554688 11.417969 24.472656 11.566406 24.324219 L 27.5 8.632812 C 27.648438 8.488281 27.734375 8.289062 27.734375 8.082031 C 27.734375 7.875 27.648438 7.679688 27.5 7.53125 Z M 27.5 7.53125" fill="#664eff"></path></g></svg>
-                              {feature}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  ))}
+                <div className="flex flex-col md:flex-row justify-center gap-8 w-full my-12">
+                  <Carousel baseWidth={340} icons={benefitIcons} />
+                  <Carousel baseWidth={340} items={applicationHelpItems} icons={appHelpIcons} />
+                  <Carousel baseWidth={340} items={dataAnalyticsItems} icons={analyticsIcons} />
                 </div>
               </div>
             </section>

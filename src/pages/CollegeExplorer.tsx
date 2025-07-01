@@ -145,7 +145,7 @@ const CollegeExplorer = () => {
         ...filters,
         sort: sortBy,
         page,
-        per_page: 20
+        per_page: 50
       };
       
       const response = await collegeService.searchColleges(params);

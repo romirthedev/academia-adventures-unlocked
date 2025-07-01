@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { GraduationCap, Search, Users, BarChart3, BookmarkCheck, Menu, X, Crown, Award, FileText, Bell, User, Settings, LogOut, Sparkles, TrendingUp, BookOpen, Target, ChevronDown, Sun, Moon, Monitor, ClipboardList, Camera, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -24,12 +23,17 @@ const Navigation = () => {
   const navItems = [
     { path: '/', label: 'Home', icon: GraduationCap, description: 'Discover your academic path' },
     { path: '/explore', label: 'Explore', icon: Search, description: 'Find universities' },
-    { path: '/professors', label: 'Professors', icon: Users, description: 'Connect with researchers' },
-    { path: '/compare', label: 'Compare', icon: BarChart3, description: 'Compare schools' },
-    { path: '/applications', label: 'Applications', icon: ClipboardList, description: 'Track your applications' },
-    { path: '/saved', label: 'Saved', icon: BookmarkCheck, description: 'Your saved schools' },
-    { path: '/mock-application', label: 'Mock App', icon: FileText, description: 'Practice applications' },
-    { path: '/recommendations', label: 'Recommended', icon: Sparkles, description: 'Personalized college matches' },
+    { path: '/features', label: 'Features', icon: Sparkles, description: 'Platform features',
+      dropdown: [
+        { path: '/professors', label: 'Professors', description: 'Connect with researchers' },
+        { path: '/compare', label: 'Compare', description: 'Compare schools' },
+        { path: '/applications', label: 'Applications', description: 'Track your applications' },
+        { path: '/saved', label: 'Saved', description: 'Your saved schools' },
+        { path: '/mock-application', label: 'Mock App', description: 'Practice applications' },
+        { path: '/recommendations', label: 'Recommended', description: 'Personalized college matches' },
+      ]
+    },
+    { path: '/about', label: 'About', icon: Award, description: 'About the platform' },
   ];
 
   const quickActions = [
@@ -92,58 +96,60 @@ const Navigation = () => {
             </Link>
 
             {/* Desktop Navigation with Collapsible */}
-            <div className="hidden md:flex items-center">
-              <Collapsible open={!isNavCollapsed} onOpenChange={setIsNavCollapsed}>
-                <div className="flex items-center space-x-1">
-                  <CollapsibleTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-white hover:bg-white/10 p-2"
+            <div className="hidden md:flex items-center space-x-2">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = isActivePath(item.path);
+                const [showDropdown, setShowDropdown] = React.useState(false);
+                const hoverTimeout = useRef<NodeJS.Timeout | null>(null);
+                return (
+                  <div
+                    key={item.path}
+                    className="relative group"
+                    onMouseEnter={() => {
+                      if (item.dropdown) {
+                        hoverTimeout.current = setTimeout(() => setShowDropdown(true), 350);
+                      }
+                    }}
+                    onMouseLeave={() => {
+                      if (item.dropdown) {
+                        if (hoverTimeout.current) clearTimeout(hoverTimeout.current);
+                        setShowDropdown(false);
+                      }
+                    }}
+                  >
+                    <Link
+                      to={item.path}
+                      className={`relative flex items-center space-x-2 px-4 py-2 rounded-xl text-base font-light transition-all duration-200 group
+                        ${isActive ? 'bg-white/10 text-white shadow-sm' : 'text-white/80 hover:text-white hover:bg-white/5'}`}
                     >
-                      <Menu className="h-4 w-4" />
-                    </Button>
-                  </CollapsibleTrigger>
-                  
-                  <CollapsibleContent className="flex items-center space-x-1">
-                    {navItems.map((item) => {
-                      const Icon = item.icon;
-                      const isActive = isActivePath(item.path);
-                      
-                      return (
-                        <Tooltip key={item.path}>
-                          <TooltipTrigger asChild>
-                            <Link
-                              to={item.path}
-                              className={`
-                                relative flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-light transition-all duration-200 group
-                                ${isActive 
-                                  ? 'bg-white/10 text-white shadow-sm' 
-                                  : 'text-white/80 hover:text-white hover:bg-white/5'
-                                }
-                              `}
-                            >
-                              <Icon className="h-4 w-4" />
-                              <span>{item.label}</span>
-                              
-                              {/* Animated underline */}
-                              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-white to-white/80 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full"></div>
-                              
-                              {/* Active state underline */}
-                              {isActive && (
-                                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-white to-white/80 rounded-full"></div>
-                              )}
-                            </Link>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>{item.description}</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      );
-                    })}
-                  </CollapsibleContent>
-                </div>
-              </Collapsible>
+                      <Icon className="h-5 w-5" />
+                      <span>{item.label}</span>
+                      {/* Animated underline */}
+                      <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-white to-white/80 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full"></div>
+                      {/* Active state underline */}
+                      {isActive && (
+                        <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-white to-white/80 rounded-full"></div>
+                      )}
+                    </Link>
+                    {/* Dropdown for features */}
+                    {item.dropdown && showDropdown && (
+                      <div className="absolute left-0 top-full mt-2 w-56 bg-black/95 border border-white/20 rounded-xl shadow-lg z-50 p-2 animate-fade-in">
+                        {item.dropdown.map((feature) => (
+                          <Link
+                            key={feature.path}
+                            to={feature.path}
+                            className="block px-4 py-2 text-white/80 hover:bg-white/10 rounded-lg transition-colors duration-200"
+                          >
+                            <div className="font-medium">{feature.label}</div>
+                            <div className="text-xs text-white/50">{feature.description}</div>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
             {/* Mobile menu button */}
