@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect } from 'react';
 
   const universities = [
@@ -103,7 +104,7 @@ const UniversityLogosCarousel = () => {
   const logos = [...universities, ...universities];
 
   return (
-    <div className="w-full bg-white/90 backdrop-blur-sm border-b border-orange-200 py-4 overflow-x-hidden">
+    <div className="w-full bg-gray-800 border-b border-gray-700 py-4 overflow-x-hidden">
       <div
         ref={carouselRef}
         className="flex gap-8 px-4 overflow-x-auto no-scrollbar whitespace-nowrap"
@@ -119,7 +120,7 @@ const UniversityLogosCarousel = () => {
                   alt={university.name}
               className="w-16 h-16 object-contain mb-2"
             />
-            <span className="text-xs text-gray-700 font-medium text-center">
+            <span className="text-xs text-white font-medium text-center">
               {university.shortName}
             </span>
             </div>
