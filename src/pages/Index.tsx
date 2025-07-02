@@ -15,6 +15,7 @@ import { LineShadowText } from "@/components/magicui/line-shadow-text";
 import TagCarousel from '@/components/TagCarousel';
 import SplashCursor from '@/components/SplashCursor';
 import Carousel from '@/components/Carousel';
+import Dither from '@/components/Dither';
 
 const benefits = [
   {
@@ -334,9 +335,25 @@ const Index = () => {
         
         <div className="flex min-h-screen w-full">
           <main className="flex-1">
-            {/* Hero Section */}
-            <section className="relative px-4 sm:px-6 lg:px-8 pt-8 lg:pt-20 pb-16 lg:pb-32">
-              <div className="max-w-7xl mx-auto">
+            {/* Hero Section with Dither Background */}
+            <section className="relative px-4 sm:px-6 lg:px-8 pt-8 lg:pt-20 pb-16 lg:pb-32 overflow-hidden">
+              {/* Dither Background */}
+              <div className="absolute inset-0 w-full h-full">
+                <Dither 
+                  waveSpeed={0.02}
+                  waveFrequency={2}
+                  waveAmplitude={0.4}
+                  waveColor={[0.2, 0.3, 0.6]}
+                  colorNum={6}
+                  pixelSize={3}
+                  disableAnimation={false}
+                  enableMouseInteraction={true}
+                  mouseRadius={0.8}
+                />
+              </div>
+              
+              {/* Content overlay */}
+              <div className="relative z-10 max-w-7xl mx-auto">
                 {/* Main Content */}
                 <div className="text-center lg:text-left lg:flex lg:items-center lg:justify-between">
                   <div className="lg:w-1/2 lg:pr-12">
