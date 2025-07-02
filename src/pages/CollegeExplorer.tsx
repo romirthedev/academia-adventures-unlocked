@@ -11,6 +11,7 @@ import { CollegeCard } from '@/components/CollegeCard';
 import { FilterPanel } from '@/components/FilterPanel';
 import { collegeService } from '@/services/collegeService';
 import { useToast } from '@/components/ui/use-toast';
+import Balatro from '@/components/Balatro';
 
 interface College {
   id: number;
@@ -383,470 +384,493 @@ const CollegeExplorer = () => {
 
   return (
     <TooltipProvider>
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
-        {/* Header */}
-        <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-6 py-4">
-            <div className="flex items-center justify-between">
-              <Button
-                variant="ghost"
-                onClick={() => navigate('/')}
-                className="text-college-primary hover:text-college-primary/80"
-              >
-                ← Back to Home
-              </Button>
-              <h1 className="text-2xl font-bold gradient-text">College Explorer</h1>
-              <div className="flex gap-2">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant={comparisonMode ? "default" : "ghost"}
-                      size="sm"
-                      onClick={toggleComparisonMode}
-                      className={comparisonMode ? "bg-college-primary text-white" : ""}
-                    >
-                      <Scale className="h-4 w-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Comparison Mode</TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setShowSavedSearches(!showSavedSearches)}
-                    >
-                      <Bookmark className="h-4 w-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Saved Searches</TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={exportResults}
-                      disabled={colleges.length === 0}
-                    >
-                      <Download className="h-4 w-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Export Results</TooltipContent>
-                </Tooltip>
+      <div className="min-h-screen relative">
+        {/* Balatro Background */}
+        <div className="fixed inset-0 z-0">
+          <Balatro
+            spinRotation={-0.5}
+            spinSpeed={1.5}
+            offset={[0.0, 0.0]}
+            color1="#000000"
+            color2="#4A4A4A"
+            color3="#FFFFFF"
+            contrast={1.5}
+            lighting={0.2}
+            spinAmount={0.05}
+            pixelFilter={300.0}
+            spinEase={0.6}
+            isRotate={true}
+            mouseInteraction={false}
+          />
+        </div>
+
+        {/* Content */}
+        <div className="relative z-10">
+          {/* Header */}
+          <header className="bg-white/90 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
+            <div className="max-w-7xl mx-auto px-6 py-4">
+              <div className="flex items-center justify-between">
+                <Button
+                  variant="ghost"
+                  onClick={() => navigate('/')}
+                  className="text-college-primary hover:text-college-primary/80"
+                >
+                  ← Back to Home
+                </Button>
+                <h1 className="text-2xl font-bold gradient-text">College Explorer</h1>
+                <div className="flex gap-2">
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant={comparisonMode ? "default" : "ghost"}
+                        size="sm"
+                        onClick={toggleComparisonMode}
+                        className={comparisonMode ? "bg-college-primary text-white" : ""}
+                      >
+                        <Scale className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Comparison Mode</TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setShowSavedSearches(!showSavedSearches)}
+                      >
+                        <Bookmark className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Saved Searches</TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={exportResults}
+                        disabled={colleges.length === 0}
+                      >
+                        <Download className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Export Results</TooltipContent>
+                  </Tooltip>
+                </div>
               </div>
             </div>
-          </div>
-        </header>
+          </header>
 
-        <div className="max-w-7xl mx-auto px-6 py-8">
-          {/* Comparison Mode Banner */}
-          {comparisonMode && (
-            <div className="glass-card rounded-2xl p-4 mb-6 bg-gradient-to-r from-blue-100 to-purple-100 border border-blue-200">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Scale className="h-5 w-5 text-blue-600" />
-                  <div>
-                    <h3 className="font-semibold text-blue-800">Comparison Mode Active</h3>
-                    <p className="text-sm text-blue-600">
-                      Select up to 4 colleges to compare side by side
-                    </p>
+          <div className="max-w-7xl mx-auto px-6 py-8">
+            {/* Comparison Mode Banner */}
+            {comparisonMode && (
+              <div className="glass-card rounded-2xl p-4 mb-6 bg-gradient-to-r from-gray-100/90 to-gray-200/90 border border-gray-300 backdrop-blur-sm">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Scale className="h-5 w-5 text-blue-600" />
+                    <div>
+                      <h3 className="font-semibold text-blue-800">Comparison Mode Active</h3>
+                      <p className="text-sm text-blue-600">
+                        Select up to 4 colleges to compare side by side
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    {selectedForComparison.length > 0 && (
+                      <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+                        {selectedForComparison.length}/4 selected
+                      </Badge>
+                    )}
+                    <Button
+                      onClick={startComparison}
+                      disabled={selectedForComparison.length < 2}
+                      className="college-gradient text-white px-4 py-2 rounded-lg hover:scale-105 transition-transform duration-200"
+                    >
+                      Compare Selected
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={clearComparison}
+                      className="text-red-600 hover:text-red-700"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  {selectedForComparison.length > 0 && (
-                    <Badge variant="secondary" className="bg-blue-100 text-blue-800">
-                      {selectedForComparison.length}/4 selected
-                    </Badge>
-                  )}
-                  <Button
-                    onClick={startComparison}
-                    disabled={selectedForComparison.length < 2}
-                    className="college-gradient text-white px-4 py-2 rounded-lg hover:scale-105 transition-transform duration-200"
-                  >
-                    Compare Selected
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={clearComparison}
-                    className="text-red-600 hover:text-red-700"
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Search and Filter Bar */}
-          <div className="glass-card rounded-2xl p-6 mb-8">
-            <div className="flex flex-col lg:flex-row gap-4">
-              <div className="flex-1 relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                <Input
-                  type="text"
-                  placeholder="Search colleges by name, location, or program..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                  className="pl-12 pr-4 py-3 text-lg rounded-xl border-0 bg-white/50 backdrop-blur-sm focus:bg-white/70 transition-all duration-300"
-                />
-              </div>
-              <div className="flex gap-3">
-                <Button
-                  onClick={handleSearch}
-                  className="college-gradient text-white px-8 py-3 rounded-xl hover:scale-105 transition-transform duration-200"
-                >
-                  <Sparkles className="mr-2 h-4 w-4" />
-                  Search
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => setShowTagFilters(!showTagFilters)}
-                  className="px-6 py-3 rounded-xl border-college-primary/30 hover:bg-college-primary hover:text-white transition-all duration-300"
-                >
-                  <Tag className="mr-2 h-5 w-5" />
-                  Tags
-                  <ChevronDown className={`ml-2 h-4 w-4 transition-transform duration-200 ${showTagFilters ? 'rotate-180' : ''}`} />
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => setShowFilters(!showFilters)}
-                  className="px-6 py-3 rounded-xl border-college-primary/30 hover:bg-college-primary hover:text-white transition-all duration-300"
-                >
-                  <Filter className="mr-2 h-5 w-5" />
-                  Filters
-                  <ChevronDown className={`ml-2 h-4 w-4 transition-transform duration-200 ${showFilters ? 'rotate-180' : ''}`} />
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={saveCurrentSearch}
-                  className="px-4 py-3 rounded-xl border-college-primary/30 hover:bg-college-primary hover:text-white transition-all duration-300"
-                >
-                  <Bookmark className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-
-            {/* Selected Tags Display */}
-            {selectedTags.length > 0 && (
-              <div className="mt-4 pt-4 border-t border-gray-200">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-600">Active Filters:</span>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={clearAllTags}
-                    className="text-xs text-red-600 hover:text-red-700"
-                  >
-                    Clear All
-                  </Button>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {selectedTags.map((tag, index) => (
-                    <Badge
-                      key={index}
-                      variant="secondary"
-                      className="px-3 py-1 text-sm cursor-pointer hover:bg-red-100 hover:text-red-700 transition-colors"
-                      onClick={() => handleTagToggle(tag)}
-                    >
-                      {tag.label}
-                      <X className="ml-1 h-3 w-3" />
-                    </Badge>
-                  ))}
-                </div>
               </div>
             )}
 
-            {/* Quick Search Suggestions */}
-            {!searchQuery && (
-              <div className="mt-4">
-                <div className="text-sm font-medium text-gray-600 mb-2">Popular Searches:</div>
-                <div className="flex flex-wrap gap-2">
-                  {popularSearches.map((search, index) => (
+            {/* Search and Filter Bar */}
+            <div className="glass-card rounded-2xl p-6 mb-8 bg-white/90 backdrop-blur-sm">
+              <div className="flex flex-col lg:flex-row gap-4">
+                <div className="flex-1 relative">
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                  <Input
+                    type="text"
+                    placeholder="Search colleges by name, location, or program..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                    className="pl-12 pr-4 py-3 text-lg rounded-xl border-0 bg-white/50 backdrop-blur-sm focus:bg-white/70 transition-all duration-300"
+                  />
+                </div>
+                <div className="flex gap-3">
+                  <Button
+                    onClick={handleSearch}
+                    className="college-gradient text-white px-8 py-3 rounded-xl hover:scale-105 transition-transform duration-200"
+                  >
+                    <Sparkles className="mr-2 h-4 w-4" />
+                    Search
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowTagFilters(!showTagFilters)}
+                    className="px-6 py-3 rounded-xl border-college-primary/30 hover:bg-college-primary hover:text-white transition-all duration-300"
+                  >
+                    <Tag className="mr-2 h-5 w-5" />
+                    Tags
+                    <ChevronDown className={`ml-2 h-4 w-4 transition-transform duration-200 ${showTagFilters ? 'rotate-180' : ''}`} />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowFilters(!showFilters)}
+                    className="px-6 py-3 rounded-xl border-college-primary/30 hover:bg-college-primary hover:text-white transition-all duration-300"
+                  >
+                    <Filter className="mr-2 h-5 w-5" />
+                    Filters
+                    <ChevronDown className={`ml-2 h-4 w-4 transition-transform duration-200 ${showFilters ? 'rotate-180' : ''}`} />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={saveCurrentSearch}
+                    className="px-4 py-3 rounded-xl border-college-primary/30 hover:bg-college-primary hover:text-white transition-all duration-300"
+                  >
+                    <Bookmark className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Selected Tags Display */}
+              {selectedTags.length > 0 && (
+                <div className="mt-4 pt-4 border-t border-gray-200">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-gray-600">Active Filters:</span>
                     <Button
-                      key={index}
                       variant="ghost"
                       size="sm"
-                      onClick={() => {
-                        setSearchQuery(search.query);
-                        handleSearch();
-                      }}
-                      className="text-xs hover:bg-college-primary hover:text-white transition-all"
+                      onClick={clearAllTags}
+                      className="text-xs text-red-600 hover:text-red-700"
                     >
-                      {search.label}
+                      Clear All
                     </Button>
-                  ))}
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedTags.map((tag, index) => (
+                      <Badge
+                        key={index}
+                        variant="secondary"
+                        className="px-3 py-1 text-sm cursor-pointer hover:bg-red-100 hover:text-red-700 transition-colors"
+                        onClick={() => handleTagToggle(tag)}
+                      >
+                        {tag.label}
+                        <X className="ml-1 h-3 w-3" />
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* Recent Searches */}
-            {recentSearches.length > 0 && !searchQuery && (
-              <div className="mt-4">
-                <div className="text-sm font-medium text-gray-600 mb-2">Recent Searches:</div>
-                <div className="flex flex-wrap gap-2">
-                  {recentSearches.map((query, index) => (
-                    <Button
-                      key={index}
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => {
-                        setSearchQuery(query);
-                        handleSearch();
-                      }}
-                      className="text-xs hover:bg-college-primary hover:text-white transition-all"
-                    >
-                      {query}
-                    </Button>
-                  ))}
+              {/* Quick Search Suggestions */}
+              {!searchQuery && (
+                <div className="mt-4">
+                  <div className="text-sm font-medium text-gray-600 mb-2">Popular Searches:</div>
+                  <div className="flex flex-wrap gap-2">
+                    {popularSearches.map((search, index) => (
+                      <Button
+                        key={index}
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          setSearchQuery(search.query);
+                          handleSearch();
+                        }}
+                        className="text-xs hover:bg-college-primary hover:text-white transition-all"
+                      >
+                        {search.label}
+                      </Button>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* Tag Filter Panel */}
-            {showTagFilters && (
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {Object.entries(groupedTags).map(([category, tags]) => (
-                    <div key={category}>
-                      <h3 className="font-semibold text-gray-800 mb-3">{category}</h3>
-                      <div className="space-y-2">
-                        {tags.map((tag) => {
-                          const isSelected = selectedTags.some(t => t.type === tag.type && t.label === tag.label);
-                          return (
-                            <Button
-                              key={`${tag.type}-${tag.label}`}
-                              variant={isSelected ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => handleTagToggle(tag)}
-                              className={`w-full justify-start text-xs ${
-                                isSelected 
-                                  ? 'bg-college-primary text-white' 
-                                  : 'hover:bg-college-primary hover:text-white'
-                              }`}
-                            >
-                              {tag.label}
-                            </Button>
-                          );
-                        })}
+              {/* Recent Searches */}
+              {recentSearches.length > 0 && !searchQuery && (
+                <div className="mt-4">
+                  <div className="text-sm font-medium text-gray-600 mb-2">Recent Searches:</div>
+                  <div className="flex flex-wrap gap-2">
+                    {recentSearches.map((query, index) => (
+                      <Button
+                        key={index}
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          setSearchQuery(query);
+                          handleSearch();
+                        }}
+                        className="text-xs hover:bg-college-primary hover:text-white transition-all"
+                      >
+                        {query}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Tag Filter Panel */}
+              {showTagFilters && (
+                <div className="mt-6 pt-6 border-t border-gray-200">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {Object.entries(groupedTags).map(([category, tags]) => (
+                      <div key={category}>
+                        <h3 className="font-semibold text-gray-800 mb-3">{category}</h3>
+                        <div className="space-y-2">
+                          {tags.map((tag) => {
+                            const isSelected = selectedTags.some(t => t.type === tag.type && t.label === tag.label);
+                            return (
+                              <Button
+                                key={`${tag.type}-${tag.label}`}
+                                variant={isSelected ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => handleTagToggle(tag)}
+                                className={`w-full justify-start text-xs ${
+                                  isSelected 
+                                    ? 'bg-college-primary text-white' 
+                                    : 'hover:bg-college-primary hover:text-white'
+                                }`}
+                              >
+                                {tag.label}
+                              </Button>
+                            );
+                          })}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Filter Panel */}
+              {showFilters && (
+                <div className="mt-6 pt-6 border-t border-gray-200">
+                  <FilterPanel filters={filters} onChange={handleFilterChange} />
+                </div>
+              )}
+            </div>
+
+            {/* Saved Searches Panel */}
+            {showSavedSearches && savedSearches.length > 0 && (
+              <Card className="mb-6 bg-white/90 backdrop-blur-sm">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Bookmark className="h-5 w-5" />
+                    Saved Searches
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {savedSearches.map((search) => (
+                      <div
+                        key={search.id}
+                        className="p-3 border rounded-lg hover:bg-gray-50 cursor-pointer transition-all"
+                        onClick={() => {
+                          setSearchQuery(search.query);
+                          setFilters(search.filters);
+                          if (search.filters.tags) {
+                            setSelectedTags(search.filters.tags);
+                          }
+                          handleSearch();
+                          setShowSavedSearches(false);
+                        }}
+                      >
+                        <div className="font-medium text-sm">{search.name}</div>
+                        <div className="text-xs text-gray-500">{search.query}</div>
+                        <div className="text-xs text-gray-400 mt-1">
+                          {new Date(search.createdAt).toLocaleDateString()}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Results Summary and Controls */}
+            {totalResults > 0 && (
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4 bg-white/80 backdrop-blur-sm rounded-lg p-4">
+                <div>
+                  <p className="text-gray-600">
+                    Found <span className="font-semibold text-college-primary">{totalResults.toLocaleString()}</span> colleges
+                    {searchQuery && (
+                      <span> matching "<span className="font-semibold">{searchQuery}</span>"</span>
+                    )}
+                    {selectedTags.length > 0 && (
+                      <span> with <span className="font-semibold">{selectedTags.length}</span> tag filter{selectedTags.length > 1 ? 's' : ''}</span>
+                    )}
+                  </p>
+                </div>
+                
+                <div className="flex items-center gap-4">
+                  {/* Sort Options */}
+                  <Select value={sortBy} onValueChange={setSortBy}>
+                    <SelectTrigger className="w-48">
+                      <SelectValue placeholder="Sort by..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {sortOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          <div className="flex items-center gap-2">
+                            <option.icon className="h-4 w-4" />
+                            {option.label}
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  {/* View Mode Toggle */}
+                  <div className="flex border rounded-lg">
+                    <Button
+                      variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                      size="sm"
+                      onClick={() => setViewMode('grid')}
+                      className="rounded-r-none"
+                    >
+                      <Grid className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant={viewMode === 'list' ? 'default' : 'ghost'}
+                      size="sm"
+                      onClick={() => setViewMode('list')}
+                      className="rounded-l-none"
+                    >
+                      <List className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
               </div>
             )}
 
-            {/* Filter Panel */}
-            {showFilters && (
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <FilterPanel filters={filters} onChange={handleFilterChange} />
+            {/* Loading State */}
+            {loading && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[...Array(6)].map((_, i) => (
+                  <Card key={i} className="animate-pulse bg-white/80 backdrop-blur-sm">
+                    <CardHeader>
+                      <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                      <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-2">
+                        <div className="h-3 bg-gray-200 rounded"></div>
+                        <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+
+            {/* College Results Grid */}
+            {!loading && colleges.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
+                {colleges.map((college, index) => (
+                  <div key={college.id} className="bg-white/90 backdrop-blur-sm rounded-lg">
+                    <CollegeCard
+                      college={college}
+                      index={index}
+                      onClick={() => navigate(`/college/${college.id}`)}
+                      comparisonMode={comparisonMode}
+                      isSelectedForComparison={selectedForComparison.includes(college.id)}
+                      onComparisonToggle={toggleCollegeForComparison}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* No Results */}
+            {!loading && colleges.length === 0 && (searchQuery || selectedTags.length > 0) && (
+              <div className="text-center py-16 bg-white/80 backdrop-blur-sm rounded-2xl">
+                <div className="mb-6">
+                  <Search className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-gray-600 mb-2">No colleges found</h3>
+                  <p className="text-gray-500">
+                    Try adjusting your search terms, tags, or filters to find more results.
+                  </p>
+                </div>
+                <div className="flex gap-3 justify-center">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setSearchQuery('');
+                      setSelectedTags([]);
+                      setFilters({
+                        state: '',
+                        minSize: '',
+                        maxSize: '',
+                        minAdmissionRate: '',
+                        maxAdmissionRate: '',
+                        maxTuition: '',
+                        type: '',
+                        region: ''
+                      });
+                      setSearchParams({});
+                    }}
+                    className="border-college-primary/30 hover:bg-college-primary hover:text-white transition-all duration-300"
+                  >
+                    Clear all filters
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowTagFilters(true)}
+                    className="border-college-primary/30 hover:bg-college-primary hover:text-white transition-all duration-300"
+                  >
+                    <Tag className="mr-2 h-4 w-4" />
+                    Browse by tags
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {/* Pagination */}
+            {totalResults > 20 && (
+              <div className="flex justify-center mt-12">
+                <div className="flex gap-2 bg-white/80 backdrop-blur-sm rounded-lg p-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => setPage(Math.max(0, page - 1))}
+                    disabled={page === 0}
+                    className="border-college-primary/30 hover:bg-college-primary hover:text-white transition-all duration-300"
+                  >
+                    Previous
+                  </Button>
+                  <div className="flex items-center px-4 py-2 text-sm text-gray-600">
+                    Page {page + 1} of {Math.ceil(totalResults / 20)}
+                  </div>
+                  <Button
+                    variant="outline"
+                    onClick={() => setPage(page + 1)}
+                    disabled={(page + 1) * 20 >= totalResults}
+                    className="border-college-primary/30 hover:bg-college-primary hover:text-white transition-all duration-300"
+                  >
+                    Next
+                  </Button>
+                </div>
               </div>
             )}
           </div>
-
-          {/* Saved Searches Panel */}
-          {showSavedSearches && savedSearches.length > 0 && (
-            <Card className="mb-6">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Bookmark className="h-5 w-5" />
-                  Saved Searches
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {savedSearches.map((search) => (
-                    <div
-                      key={search.id}
-                      className="p-3 border rounded-lg hover:bg-gray-50 cursor-pointer transition-all"
-                      onClick={() => {
-                        setSearchQuery(search.query);
-                        setFilters(search.filters);
-                        if (search.filters.tags) {
-                          setSelectedTags(search.filters.tags);
-                        }
-                        handleSearch();
-                        setShowSavedSearches(false);
-                      }}
-                    >
-                      <div className="font-medium text-sm">{search.name}</div>
-                      <div className="text-xs text-gray-500">{search.query}</div>
-                      <div className="text-xs text-gray-400 mt-1">
-                        {new Date(search.createdAt).toLocaleDateString()}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Results Summary and Controls */}
-          {totalResults > 0 && (
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
-              <div>
-                <p className="text-gray-600">
-                  Found <span className="font-semibold text-college-primary">{totalResults.toLocaleString()}</span> colleges
-                  {searchQuery && (
-                    <span> matching "<span className="font-semibold">{searchQuery}</span>"</span>
-                  )}
-                  {selectedTags.length > 0 && (
-                    <span> with <span className="font-semibold">{selectedTags.length}</span> tag filter{selectedTags.length > 1 ? 's' : ''}</span>
-                  )}
-                </p>
-              </div>
-              
-              <div className="flex items-center gap-4">
-                {/* Sort Options */}
-                <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-48">
-                    <SelectValue placeholder="Sort by..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {sortOptions.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        <div className="flex items-center gap-2">
-                          <option.icon className="h-4 w-4" />
-                          {option.label}
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                {/* View Mode Toggle */}
-                <div className="flex border rounded-lg">
-                  <Button
-                    variant={viewMode === 'grid' ? 'default' : 'ghost'}
-                    size="sm"
-                    onClick={() => setViewMode('grid')}
-                    className="rounded-r-none"
-                  >
-                    <Grid className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant={viewMode === 'list' ? 'default' : 'ghost'}
-                    size="sm"
-                    onClick={() => setViewMode('list')}
-                    className="rounded-l-none"
-                  >
-                    <List className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Loading State */}
-          {loading && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[...Array(6)].map((_, i) => (
-                <Card key={i} className="animate-pulse">
-                  <CardHeader>
-                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                    <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      <div className="h-3 bg-gray-200 rounded"></div>
-                      <div className="h-3 bg-gray-200 rounded w-2/3"></div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-
-          {/* College Results Grid */}
-          {!loading && colleges.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
-              {colleges.map((college, index) => (
-                <CollegeCard
-                  key={college.id}
-                  college={college}
-                  index={index}
-                  onClick={() => navigate(`/college/${college.id}`)}
-                  comparisonMode={comparisonMode}
-                  isSelectedForComparison={selectedForComparison.includes(college.id)}
-                  onComparisonToggle={toggleCollegeForComparison}
-                />
-              ))}
-            </div>
-          )}
-
-          {/* No Results */}
-          {!loading && colleges.length === 0 && (searchQuery || selectedTags.length > 0) && (
-            <div className="text-center py-16">
-              <div className="mb-6">
-                <Search className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-600 mb-2">No colleges found</h3>
-                <p className="text-gray-500">
-                  Try adjusting your search terms, tags, or filters to find more results.
-                </p>
-              </div>
-              <div className="flex gap-3 justify-center">
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setSearchQuery('');
-                    setSelectedTags([]);
-                    setFilters({
-                      state: '',
-                      minSize: '',
-                      maxSize: '',
-                      minAdmissionRate: '',
-                      maxAdmissionRate: '',
-                      maxTuition: '',
-                      type: '',
-                      region: ''
-                    });
-                    setSearchParams({});
-                  }}
-                  className="border-college-primary/30 hover:bg-college-primary hover:text-white transition-all duration-300"
-                >
-                  Clear all filters
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => setShowTagFilters(true)}
-                  className="border-college-primary/30 hover:bg-college-primary hover:text-white transition-all duration-300"
-                >
-                  <Tag className="mr-2 h-4 w-4" />
-                  Browse by tags
-                </Button>
-              </div>
-            </div>
-          )}
-
-          {/* Pagination */}
-          {totalResults > 20 && (
-            <div className="flex justify-center mt-12">
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  onClick={() => setPage(Math.max(0, page - 1))}
-                  disabled={page === 0}
-                  className="border-college-primary/30 hover:bg-college-primary hover:text-white transition-all duration-300"
-                >
-                  Previous
-                </Button>
-                <div className="flex items-center px-4 py-2 text-sm text-gray-600">
-                  Page {page + 1} of {Math.ceil(totalResults / 20)}
-                </div>
-                <Button
-                  variant="outline"
-                  onClick={() => setPage(page + 1)}
-                  disabled={(page + 1) * 20 >= totalResults}
-                  className="border-college-primary/30 hover:bg-college-primary hover:text-white transition-all duration-300"
-                >
-                  Next
-                </Button>
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </TooltipProvider>
