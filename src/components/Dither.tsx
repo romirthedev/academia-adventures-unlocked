@@ -1,8 +1,7 @@
+
 /* eslint-disable react/no-unknown-property */
-import { useRef, useState, useEffect, forwardRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { EffectComposer, wrapEffect } from "@react-three/postprocessing";
-import { Effect } from "postprocessing";
 import * as THREE from "three";
 
 import './Dither.css';
@@ -63,7 +62,7 @@ float cnoise(vec2 P) {
   return 2.3 * mix(n_x.x, n_x.y, fade_xy.y);
 }
 
-const int OCTAVES = 8;
+const int OCTAVES = 4;
 float fbm(vec2 p) {
   float value = 0.0;
   float amp = 1.0;
@@ -98,116 +97,50 @@ void main() {
 }
 `;
 
-const ditherFragmentShader = `
-precision highp float;
-uniform float colorNum;
-uniform float pixelSize;
-const float bayerMatrix8x8[64] = float[64](
-  0.0/64.0, 48.0/64.0, 12.0/64.0, 60.0/64.0,  3.0/64.0, 51.0/64.0, 15.0/64.0, 63.0/64.0,
-  32.0/64.0,16.0/64.0, 44.0/64.0, 28.0/64.0, 35.0/64.0,19.0/64.0, 47.0/64.0, 31.0/64.0,
-  8.0/64.0, 56.0/64.0,  4.0/64.0, 52.0/64.0, 11.0/64.0,59.0/64.0,  7.0/64.0, 55.0/64.0,
-  40.0/64.0,24.0/64.0, 36.0/64.0, 20.0/64.0, 43.0/64.0,27.0/64.0, 39.0/64.0, 23.0/64.0,
-  2.0/64.0, 50.0/64.0, 14.0/64.0, 62.0/64.0,  1.0/64.0,49.0/64.0, 13.0/64.0, 61.0/64.0,
-  34.0/64.0,18.0/64.0, 46.0/64.0, 30.0/64.0, 33.0/64.0,17.0/64.0, 45.0/64.0, 29.0/64.0,
-  10.0/64.0,58.0/64.0,  6.0/64.0, 54.0/64.0,  9.0/64.0,57.0/64.0,  5.0/64.0, 53.0/64.0,
-  42.0/64.0,26.0/64.0, 38.0/64.0, 22.0/64.0, 41.0/64.0,25.0/64.0, 37.0/64.0, 21.0/64.0
-);
-
-vec3 dither(vec2 uv, vec3 color) {
-  vec2 scaledCoord = floor(uv * resolution / pixelSize);
-  int x = int(mod(scaledCoord.x, 8.0));
-  int y = int(mod(scaledCoord.y, 8.0));
-  float threshold = bayerMatrix8x8[y * 8 + x] - 0.25;
-  float step = 1.0 / (colorNum - 1.0);
-  color += threshold * step;
-  float bias = 0.2;
-  color = clamp(color - bias, 0.0, 1.0);
-  return floor(color * (colorNum - 1.0) + 0.5) / (colorNum - 1.0);
-}
-
-void mainImage(in vec4 inputColor, in vec2 uv, out vec4 outputColor) {
-  vec2 normalizedPixelSize = pixelSize / resolution;
-  vec2 uvPixel = normalizedPixelSize * floor(uv / normalizedPixelSize);
-  vec4 color = texture2D(inputBuffer, uvPixel);
-  color.rgb = dither(uv, color.rgb);
-  outputColor = color;
-}
-`;
-
-interface RetroEffectProps {
-  colorNum: number;
-  pixelSize: number;
-}
-
-class RetroEffectImpl extends Effect {
-  constructor() {
-    const uniforms = new Map([
-      ["colorNum", new THREE.Uniform(4.0)],
-      ["pixelSize", new THREE.Uniform(2.0)],
-    ]);
-    super("RetroEffect", ditherFragmentShader, { uniforms });
-  }
-  set colorNum(v) { (this.uniforms as Map<string, any>).get("colorNum").value = v; }
-  get colorNum() { return (this.uniforms as Map<string, any>).get("colorNum").value; }
-  set pixelSize(v) { (this.uniforms as Map<string, any>).get("pixelSize").value = v; }
-  get pixelSize() { return (this.uniforms as Map<string, any>).get("pixelSize").value; }
-}
-
-const WrappedRetro = wrapEffect(RetroEffectImpl);
-
-const RetroEffect = forwardRef<any, RetroEffectProps>(({ colorNum, pixelSize }, ref) => {
-  return <WrappedRetro ref={ref} colorNum={colorNum} pixelSize={pixelSize} />;
-});
-RetroEffect.displayName = "RetroEffect";
-
 function DitheredWaves({
-  waveSpeed,
-  waveFrequency,
-  waveAmplitude,
-  waveColor,
-  colorNum,
-  pixelSize,
-  disableAnimation,
-  enableMouseInteraction,
-  mouseRadius,
+  waveSpeed = 0.05,
+  waveFrequency = 3,
+  waveAmplitude = 0.3,
+  waveColor = [0.5, 0.5, 0.5],
+  enableMouseInteraction = true,
+  mouseRadius = 1,
 }) {
   const mesh = useRef(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const { viewport, size, gl } = useThree();
 
-  const waveUniformsRef = useRef({
-    time: new THREE.Uniform(0),
-    resolution: new THREE.Uniform(new THREE.Vector2(0, 0)),
-    waveSpeed: new THREE.Uniform(waveSpeed),
-    waveFrequency: new THREE.Uniform(waveFrequency),
-    waveAmplitude: new THREE.Uniform(waveAmplitude),
-    waveColor: new THREE.Uniform(new THREE.Color(...waveColor)),
-    mousePos: new THREE.Uniform(new THREE.Vector2(0, 0)),
-    enableMouseInteraction: new THREE.Uniform(enableMouseInteraction ? 1 : 0),
-    mouseRadius: new THREE.Uniform(mouseRadius),
+  // Initialize uniforms with proper default values
+  const waveUniforms = useRef({
+    time: { value: 0 },
+    resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+    waveSpeed: { value: waveSpeed },
+    waveFrequency: { value: waveFrequency },
+    waveAmplitude: { value: waveAmplitude },
+    waveColor: { value: new THREE.Color().setRGB(waveColor[0], waveColor[1], waveColor[2]) },
+    mousePos: { value: new THREE.Vector2(0, 0) },
+    enableMouseInteraction: { value: enableMouseInteraction ? 1 : 0 },
+    mouseRadius: { value: mouseRadius },
   });
 
   useEffect(() => {
     const dpr = gl.getPixelRatio();
-    const w = Math.floor(size.width * dpr),
-      h = Math.floor(size.height * dpr);
-    const res = waveUniformsRef.current.resolution.value;
-    if (res.x !== w || res.y !== h) {
-      res.set(w, h);
-    }
+    const w = Math.floor(size.width * dpr);
+    const h = Math.floor(size.height * dpr);
+    waveUniforms.current.resolution.value.set(w, h);
   }, [size, gl]);
 
   useFrame(({ clock }) => {
-    const u = waveUniformsRef.current;
-    if (!disableAnimation) u.time.value = clock.getElapsedTime();
-    u.waveSpeed.value = waveSpeed;
-    u.waveFrequency.value = waveFrequency;
-    u.waveAmplitude.value = waveAmplitude;
-    u.waveColor.value.set(...waveColor);
-    u.enableMouseInteraction.value = enableMouseInteraction ? 1 : 0;
-    u.mouseRadius.value = mouseRadius;
-    if (enableMouseInteraction) {
-      u.mousePos.value.set(mousePos.x, mousePos.y);
+    if (waveUniforms.current) {
+      waveUniforms.current.time.value = clock.getElapsedTime();
+      waveUniforms.current.waveSpeed.value = waveSpeed;
+      waveUniforms.current.waveFrequency.value = waveFrequency;
+      waveUniforms.current.waveAmplitude.value = waveAmplitude;
+      waveUniforms.current.waveColor.value.setRGB(waveColor[0], waveColor[1], waveColor[2]);
+      waveUniforms.current.enableMouseInteraction.value = enableMouseInteraction ? 1 : 0;
+      waveUniforms.current.mouseRadius.value = mouseRadius;
+      if (enableMouseInteraction) {
+        waveUniforms.current.mousePos.value.set(mousePos.x, mousePos.y);
+      }
     }
   });
 
@@ -228,13 +161,9 @@ function DitheredWaves({
         <shaderMaterial
           vertexShader={waveVertexShader}
           fragmentShader={waveFragmentShader}
-          uniforms={waveUniformsRef.current}
+          uniforms={waveUniforms.current}
         />
       </mesh>
-
-      <EffectComposer>
-        <RetroEffect colorNum={colorNum} pixelSize={pixelSize} />
-      </EffectComposer>
 
       <mesh
         onPointerMove={handlePointerMove}
@@ -254,30 +183,51 @@ export default function Dither({
   waveFrequency = 3,
   waveAmplitude = 0.3,
   waveColor = [0.5, 0.5, 0.5],
-  colorNum = 4,
-  pixelSize = 2,
-  disableAnimation = false,
   enableMouseInteraction = true,
   mouseRadius = 1,
 }) {
+  const [isWebGLSupported, setIsWebGLSupported] = useState(true);
+
+  useEffect(() => {
+    // Check WebGL support
+    try {
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (!gl) {
+        setIsWebGLSupported(false);
+      }
+    } catch (e) {
+      setIsWebGLSupported(false);
+    }
+  }, []);
+
+  if (!isWebGLSupported) {
+    return (
+      <div className="dither-container bg-gradient-to-br from-blue-900 to-purple-900">
+        {/* Fallback gradient background */}
+      </div>
+    );
+  }
+
   return (
     <Canvas
       className="dither-container"
       camera={{ position: [0, 0, 6] }}
-      dpr={window.devicePixelRatio}
-      gl={{ antialias: true, preserveDrawingBuffer: true }}
+      dpr={Math.min(window.devicePixelRatio, 2)}
+      gl={{ 
+        antialias: false,
+        preserveDrawingBuffer: false,
+        powerPreference: "high-performance"
+      }}
     >
       <DitheredWaves
         waveSpeed={waveSpeed}
         waveFrequency={waveFrequency}
         waveAmplitude={waveAmplitude}
         waveColor={waveColor}
-        colorNum={colorNum}
-        pixelSize={pixelSize}
-        disableAnimation={disableAnimation}
         enableMouseInteraction={enableMouseInteraction}
         mouseRadius={mouseRadius}
       />
     </Canvas>
   );
-} 
+}
