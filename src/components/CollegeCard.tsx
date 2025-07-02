@@ -10,6 +10,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { cn } from "@/lib/utils";
 import { savedSchoolsUtils } from "@/utils/savedSchools";
 import { CardDescription } from "@/components/ui/card";
+import './CollegeCard.css';
 
 interface College {
   id: number;
@@ -31,6 +32,8 @@ interface CollegeCardProps {
   comparisonMode?: boolean;
   isSelectedForComparison?: boolean;
   onComparisonToggle?: (collegeId: number) => void;
+  onDetailsClick?: () => void;
+  isLoading?: boolean;
 }
 
 // Tag configuration with icons and colors
@@ -84,7 +87,7 @@ const tagConfig: TagConfigs = {
   }
 };
 
-export const CollegeCard: React.FC<CollegeCardProps> = ({ college, index, onClick, className, comparisonMode, isSelectedForComparison, onComparisonToggle }) => {
+export const CollegeCard: React.FC<CollegeCardProps> = ({ college, index, onClick, className, comparisonMode, isSelectedForComparison, onComparisonToggle, onDetailsClick, isLoading }) => {
   const [isSaved, setIsSaved] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
@@ -289,158 +292,74 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({ college, index, onClic
   const tags = generateTags();
 
   return (
-    <TooltipProvider>
-      <Card 
-        className={cn(
-          "group overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] cursor-pointer relative",
-          "bg-gradient-to-br from-white to-orange-50/30 hover:from-orange-50/50 hover:to-orange-100/50",
-          comparisonMode && isSelectedForComparison && "ring-2 ring-blue-500 ring-offset-2",
-          className
-        )}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        onClick={onClick}
-      >
-        {/* Comparison Selection Overlay */}
-        {comparisonMode && (
-          <div className="absolute top-3 right-3 z-10">
-            <Button
-              variant={isSelectedForComparison ? "default" : "outline"}
-              size="sm"
-              onClick={handleComparisonToggle}
-              className={cn(
-                "h-8 w-8 p-0 rounded-full transition-all duration-200",
-                isSelectedForComparison 
-                  ? "bg-blue-600 text-white hover:bg-blue-700" 
-                  : "bg-white/90 hover:bg-blue-50 hover:border-blue-300"
-              )}
-            >
-              {isSelectedForComparison ? (
-                <Check className="h-4 w-4" />
-              ) : (
-                <Scale className="h-4 w-4" />
-              )}
-            </Button>
+    <div className="card" onClick={onClick}>
+      <div className="card-pattern-grid"></div>
+      <div className="card-overlay-dots"></div>
+      <div className="bold-pattern">
+        <svg viewBox="0 0 100 100">
+          <path strokeDasharray="15 10" strokeWidth="10" stroke="#000" fill="none" d="M0,0 L100,0 L100,100 L0,100 Z" />
+        </svg>
+      </div>
+      <div className="card-title-area">
+        <span>{college['school.name']}</span>
+        <span className="card-tag">{college['school.state']}</span>
+      </div>
+      <div className="card-body">
+        <div className="card-description">
+          {college['school.city']}, {college['school.state']}<br />
+          Admission Rate: {formatPercentage(college['latest.admissions.admission_rate.overall'])}<br />
+          In-State Tuition: {formatCurrency(college['latest.cost.tuition.in_state'])}<br />
+          Out-of-State Tuition: {formatCurrency(college['latest.cost.tuition.out_of_state'])}
+        </div>
+        <div className="feature-grid">
+          <div className="feature-item">
+            <div className="feature-icon"><MapPin size={16} /></div>
+            <span className="feature-text">{city}, {state}</span>
           </div>
-        )}
-
-        {/* Hover overlay */}
-        <div className={cn(
-          "absolute inset-0 bg-gradient-to-br from-orange-500/5 to-amber-500/5 opacity-0 transition-opacity duration-300",
-          isHovered && "opacity-100"
-        )} />
-
-        <CardHeader className="relative pb-4">
-          <CardTitle className="text-xl font-bold text-gray-900 group-hover:text-orange-700 transition-colors">
-            {schoolName}
-          </CardTitle>
-          
-          <CardDescription className="flex items-center text-gray-600 group-hover:text-gray-700 transition-colors">
-            <MapPin className="h-4 w-4 mr-1" />
-            {city}, {state}
-          </CardDescription>
-
-          {/* Tags Section */}
-          <div className="flex flex-wrap gap-1 mt-3">
-            {tags.map((tag, index) => {
-              const tagType = tag.type as keyof TagConfigs;
-              const config = tagConfig[tagType][tag.label];
-              if (!config) return null;
-              
-              const IconComponent = config.icon;
-              return (
-                <Tooltip key={index}>
-                  <TooltipTrigger asChild>
-                    <Badge 
-                      variant="outline" 
-                      className={cn(
-                        "text-xs px-2 py-1 cursor-pointer hover:scale-105 transition-all duration-200",
-                        config.color
-                      )}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        // This could trigger a search by tag
-                        console.log(`Search by tag: ${tag.label}`);
-                      }}
-                    >
-                      <IconComponent className={cn("h-3 w-3 mr-1", config.iconColor)} />
-                      {tag.label}
-                    </Badge>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Click to search for more {tag.label} colleges</p>
-                  </TooltipContent>
-                </Tooltip>
-              );
-            })}
+          <div className="feature-item">
+            <div className="feature-icon"><Users size={16} /></div>
+            <span className="feature-text">{formatNumber(studentSize)} students</span>
           </div>
-        </CardHeader>
-
-        <CardContent className="pb-4">
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <div className="flex items-center gap-3 p-3 bg-white/50 rounded-lg hover:bg-white/80 transition-colors">
-              <div className="p-2 bg-orange-100 rounded-lg">
-                <Users className="h-5 w-5 text-orange-600" />
-              </div>
-              <div>
-                <p className="text-xs text-gray-600 font-medium">Students</p>
-                <p className="font-bold text-gray-900">{formatNumber(studentSize)}</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-3 p-3 bg-white/50 rounded-lg hover:bg-white/80 transition-colors">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <DollarSign className="h-5 w-5 text-green-600" />
-              </div>
-              <div>
-                <p className="text-xs text-gray-600 font-medium">In-State</p>
-                <p className="font-bold text-gray-900">{formatCurrency(inStateTuition)}</p>
-              </div>
-            </div>
+          <div className="feature-item">
+            <div className="feature-icon"><Building size={16} /></div>
+            <span className="feature-text">{schoolType} / {college['school.ownership'] === 1 ? 'Public' : 'Private'}</span>
           </div>
-
-          {/* Additional stats */}
-          <div className="space-y-3">
-            {outOfStateTuition && outOfStateTuition !== inStateTuition && (
-              <div className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
-                <span className="text-xs text-gray-600">Out-of-State</span>
-                <span className="text-sm font-semibold text-gray-700">{formatCurrency(outOfStateTuition)}</span>
-              </div>
-            )}
+          <div className="feature-item">
+            <div className="feature-icon"><Shield size={16} /></div>
+            <span className="feature-text">Admission: {formatPercentage(admissionRate)}</span>
           </div>
-        </CardContent>
-
-        <CardFooter className="pt-0">
-          <div className="flex items-center justify-between w-full gap-2">
-            {schoolUrl && (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleExternalClick}
-                    className="h-10 w-10 p-0 bg-gray-100 hover:bg-gray-200"
-                  >
-                    <ExternalLink className="h-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>Visit official website</TooltipContent>
-              </Tooltip>
-            )}
-            
-            <ValorantButton 
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate(`/college/${college.id}`);
-              }}
-              className="flex-1"
-            >
-              <Eye className="h-4 w-4 mr-2" />
-              View Details
-            </ValorantButton>
-          </div>
-        </CardFooter>
-      </Card>
-    </TooltipProvider>
+        </div>
+        <div className="card-actions">
+          <div style={{flex: 1}}></div>
+          <button className="card-button" onClick={e => { e.stopPropagation(); onDetailsClick && onDetailsClick(); }} disabled={isLoading}>
+            {isLoading ? <span className="spinner" style={{marginRight: 8}}></span> : null}
+            Details
+          </button>
+        </div>
+        <div className="save-icon-bottom-left" style={{position: 'absolute', left: 16, bottom: 16, zIndex: 3}} onClick={handleSaveClick}>
+          <Bookmark size={24} color={isSaved ? 'var(--primary)' : 'var(--text)'} fill={isSaved ? 'var(--primary)' : 'none'} style={{cursor: 'pointer'}} />
+        </div>
+      </div>
+      <div className="dots-pattern">
+        <svg viewBox="0 0 80 40">
+          <circle fill="#000" r="3" cy="10" cx="10"></circle>
+          <circle fill="#000" r="3" cy="10" cx="30"></circle>
+          <circle fill="#000" r="3" cy="10" cx="50"></circle>
+          <circle fill="#000" r="3" cy="10" cx="70"></circle>
+          <circle fill="#000" r="3" cy="20" cx="20"></circle>
+          <circle fill="#000" r="3" cy="20" cx="40"></circle>
+          <circle fill="#000" r="3" cy="20" cx="60"></circle>
+          <circle fill="#000" r="3" cy="30" cx="10"></circle>
+          <circle fill="#000" r="3" cy="30" cx="30"></circle>
+          <circle fill="#000" r="3" cy="30" cx="50"></circle>
+          <circle fill="#000" r="3" cy="30" cx="70"></circle>
+        </svg>
+      </div>
+      <div className="accent-shape"></div>
+      <div className="corner-slice"></div>
+      <div className="stamp">
+        <span className="stamp-text">Approved</span>
+      </div>
+    </div>
   );
 };

@@ -187,50 +187,20 @@ const AIChat: React.FC<AIChatProps> = ({ collegeData }) => {
 
   return (
     <TooltipProvider>
-      <Card className="h-[700px] flex flex-col glass-card border-0 animate-fade-in shadow-xl">
-        <CardHeader className="border-b bg-gradient-to-r from-slate-50 to-orange-50/50">
+      <Card className="h-[700px] flex flex-col glass-card border-0 animate-fade-in shadow-xl bg-[#18181b] text-white">
+        <CardHeader className="border-b bg-black text-white">
           <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center gap-3 text-foreground">
-              <div className="p-2 bg-gradient-to-r from-orange-500 to-amber-500 rounded-lg shadow-lg">
-                <Bot className="h-5 w-5 text-white" />
-              </div>
+            <CardTitle className="flex items-center gap-3 text-white">
+              <Bot className="h-5 w-5 text-white" />
               <div>
                 <div className="font-semibold">AI Admissions Counselor</div>
-                <div className="text-xs text-gray-600 font-normal">Powered by Advanced AI</div>
+                <div className="text-xs text-gray-300 font-normal">Powered by Advanced AI</div>
               </div>
             </CardTitle>
-            <div className="flex gap-2">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={exportChat}
-                    disabled={chatHistory.length === 0}
-                  >
-                    <Download className="h-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>Export Chat</TooltipContent>
-              </Tooltip>
-              <Badge variant="secondary" className="text-xs">
-                <Sparkles className="h-3 w-3 mr-1" />
-                AI Powered
-              </Badge>
-            </div>
-          </div>
-          
-          <div className="mt-3">
-            <Input
-              placeholder="Share your extracurriculars (optional) for personalized advice..."
-              value={userExtracurriculars}
-              onChange={(e) => setUserExtracurriculars(e.target.value)}
-              className="border-border focus:border-orange-500 focus:ring-orange-500/20"
-            />
           </div>
         </CardHeader>
 
-        <CardContent className="flex-1 flex flex-col p-0">
+        <CardContent className="flex-1 flex flex-col p-0 bg-[#18181b] text-white">
           <ScrollArea className="flex-1 p-6">
             <div className="space-y-6">
               {messages.map((message, index) => (
@@ -248,14 +218,14 @@ const AIChat: React.FC<AIChatProps> = ({ collegeData }) => {
                     <div
                       className={`max-w-[85%] p-4 rounded-2xl transition-all duration-200 ${
                         message.role === 'user'
-                          ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white ml-auto shadow-lg'
-                          : 'bg-white text-foreground border border-gray-200 shadow-md hover:shadow-lg'
+                          ? 'bg-gradient-to-r from-orange-600 to-amber-500 text-white ml-auto shadow-lg'
+                          : 'bg-zinc-800 text-white border border-zinc-700 shadow-md hover:shadow-lg'
                       }`}
                     >
                       <p className="text-sm leading-relaxed whitespace-pre-wrap break-words overflow-wrap-anywhere">{message.content}</p>
                       
                       {/* Message timestamp */}
-                      <div className={`text-xs mt-2 ${message.role === 'user' ? 'text-orange-100' : 'text-gray-500'}`}>
+                      <div className={`text-xs mt-2 ${message.role === 'user' ? 'text-orange-100' : 'text-gray-400'}`}>
                         {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </div>
                     </div>
@@ -307,7 +277,7 @@ const AIChat: React.FC<AIChatProps> = ({ collegeData }) => {
                   </div>
 
                   {message.role === 'user' && (
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-gray-400 to-gray-500 flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-gray-600 to-gray-800 flex items-center justify-center flex-shrink-0 shadow-lg">
                       <User className="h-4 w-4 text-white" />
                     </div>
                   )}
@@ -319,7 +289,7 @@ const AIChat: React.FC<AIChatProps> = ({ collegeData }) => {
                   <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 flex items-center justify-center animate-pulse-soft">
                     <Bot className="h-4 w-4 text-white" />
                   </div>
-                  <div className="bg-white border border-gray-200 p-4 rounded-2xl shadow-md">
+                  <div className="bg-zinc-800 border border-zinc-700 p-4 rounded-2xl shadow-md">
                     <div className="flex gap-1">
                       <div className="w-2 h-2 bg-gray-400 rounded-full animate-fade-in"></div>
                       <div className="w-2 h-2 bg-gray-400 rounded-full animate-fade-in" style={{ animationDelay: '0.1s' }}></div>
@@ -334,15 +304,15 @@ const AIChat: React.FC<AIChatProps> = ({ collegeData }) => {
 
           {/* Quick Actions */}
           {showQuickActions && messages.length === 1 && (
-            <div className="p-4 border-t bg-gray-50/50">
-              <div className="text-sm font-medium text-gray-700 mb-3">Quick Actions:</div>
+            <div className="p-4 border-t bg-zinc-900/80">
+              <div className="text-sm font-medium text-gray-300 mb-3">Quick Actions:</div>
               <div className="grid grid-cols-2 gap-2">
                 {quickActions.map((action, index) => (
                   <Button
                     key={index}
                     variant="outline"
                     size="sm"
-                    className="justify-start text-xs h-auto p-2 hover:bg-orange-50 hover:border-orange-300"
+                    className="justify-start text-xs h-auto p-2 hover:bg-orange-900 hover:border-orange-400 bg-zinc-800 text-white border-zinc-700"
                     onClick={() => handleSendMessage(action.prompt)}
                   >
                     <action.icon className="h-3 w-3 mr-2" />
@@ -353,7 +323,7 @@ const AIChat: React.FC<AIChatProps> = ({ collegeData }) => {
             </div>
           )}
 
-          <div className="p-6 border-t bg-gradient-to-r from-slate-50 to-orange-50/50">
+          <div className="p-6 border-t bg-gradient-to-r from-zinc-900 to-zinc-800">
             <div className="flex gap-3">
               <Input
                 ref={inputRef}
@@ -362,12 +332,12 @@ const AIChat: React.FC<AIChatProps> = ({ collegeData }) => {
                 onKeyPress={handleKeyPress}
                 placeholder="Ask about admissions, requirements, or application advice..."
                 disabled={isLoading}
-                className="flex-1 border-border focus:border-orange-500 focus:ring-orange-500/20"
+                className="flex-1 border-zinc-700 focus:border-orange-500 focus:ring-orange-500/20 bg-zinc-800 text-white placeholder-gray-400"
               />
               <Button
                 onClick={() => handleSendMessage()}
                 disabled={!inputValue.trim() || isLoading}
-                className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white shadow-lg hover:shadow-xl transition-all duration-200"
+                className="bg-gradient-to-r from-orange-600 to-amber-500 hover:from-orange-700 hover:to-amber-600 text-white shadow-lg hover:shadow-xl transition-all duration-200"
               >
                 <Send className="h-4 w-4" />
               </Button>

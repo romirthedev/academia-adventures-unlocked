@@ -1189,8 +1189,35 @@ function SplashCursor({
       }
     });
 
+    let isPausedByNavbar = false;
+    
+    // Try multiple selectors to find the navbar
+    const navbar = document.querySelector('nav.sticky') || 
+                   document.querySelector('[data-navbar]') ||
+                   document.querySelector('nav');
+    
+    function handleNavbarEnter() {
+      isPausedByNavbar = true;
+      config.PAUSED = true;
+    }
+    
+    function handleNavbarLeave() {
+      isPausedByNavbar = false;
+      config.PAUSED = false;
+    }
+    
+    if (navbar) {
+      navbar.addEventListener('mouseenter', handleNavbarEnter);
+      navbar.addEventListener('mouseleave', handleNavbarLeave);
+    }
+
     updateFrame();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => {
+      if (navbar) {
+        navbar.removeEventListener('mouseenter', handleNavbarEnter);
+        navbar.removeEventListener('mouseleave', handleNavbarLeave);
+      }
+    };
   }, [
     SIM_RESOLUTION,
     DYE_RESOLUTION,

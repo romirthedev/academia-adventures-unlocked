@@ -526,4 +526,10 @@
   background-color: #ffffff;
   width: 0.2rem;
   height: 0.2rem;
-  top:
+}
+
+@media (min-width: 768px) {
+  .help-icon-desktop {
+    display: block !important;
+  }
+}

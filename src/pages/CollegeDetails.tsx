@@ -352,12 +352,12 @@ const CollegeDetails = () => {
                   </TabsContent>
 
                   <TabsContent value="chat" className="space-y-4">
-                    <div className="bg-blue-50 p-4 rounded-lg">
-                      <h3 className="text-lg font-semibold mb-2 flex items-center gap-2">
-                        <MessageSquare className="h-5 w-5" />
+                    <div className="bg-zinc-900 p-4 rounded-lg">
+                      <h3 className="text-lg font-semibold mb-2 flex items-center gap-2 text-white">
+                        <MessageSquare className="h-5 w-5 text-orange-400" />
                         Chat with AI about {college.name}
                       </h3>
-                      <p className="text-sm text-gray-600 mb-4">
+                      <p className="text-sm text-gray-300 mb-4">
                         Ask questions about admissions, programs, campus life, and more!
                       </p>
                     </div>
