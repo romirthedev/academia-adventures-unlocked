@@ -16,6 +16,7 @@ import TagCarousel from '@/components/TagCarousel';
 import SplashCursor from '@/components/SplashCursor';
 import Carousel from '@/components/Carousel';
 import Dither from '@/components/Dither';
+import Balatro from '@/components/Balatro';
 
 const benefits = [
   {
@@ -335,20 +336,24 @@ const Index = () => {
         
         <div className="flex min-h-screen w-full">
           <main className="flex-1">
-            {/* Hero Section with Dither Background */}
+            {/* Hero Section with Balatro Background */}
             <section className="relative px-4 sm:px-6 lg:px-8 pt-8 lg:pt-20 pb-16 lg:pb-32 overflow-hidden">
-              {/* Dither Background */}
+              {/* Balatro Background */}
               <div className="absolute inset-0 w-full h-full">
-                <Dither 
-                  waveSpeed={0.02}
-                  waveFrequency={2}
-                  waveAmplitude={0.4}
-                  waveColor={[0.2, 0.3, 0.6]}
-                  colorNum={6}
-                  pixelSize={3}
-                  disableAnimation={false}
-                  enableMouseInteraction={true}
-                  mouseRadius={0.8}
+                <Balatro 
+                  spinRotation={-1.0}
+                  spinSpeed={2.5}
+                  offset={[0.0, 0.0]}
+                  color1="#4A90E2"
+                  color2="#357ABD"
+                  color3="#1E3A8A"
+                  contrast={2.2}
+                  lighting={0.25}
+                  spinAmount={0.15}
+                  pixelFilter={600.0}
+                  spinEase={0.6}
+                  isRotate={true}
+                  mouseInteraction={true}
                 />
               </div>
               
