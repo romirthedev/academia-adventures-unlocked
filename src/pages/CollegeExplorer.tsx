@@ -11,6 +11,7 @@ import { CollegeCard } from '@/components/CollegeCard';
 import { FilterPanel } from '@/components/FilterPanel';
 import { collegeService } from '@/services/collegeService';
 import { useToast } from '@/components/ui/use-toast';
+import { aiCollegeService } from '@/services/aiCollegeService';
 
 interface College {
   id: number;
@@ -124,6 +125,7 @@ const CollegeExplorer = () => {
   const [page, setPage] = useState(0);
   const [totalResults, setTotalResults] = useState(0);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [aiLoading, setAiLoading] = useState<number|null>(null);
 
   // Check if we're in comparison mode from URL
   useEffect(() => {
@@ -772,6 +774,19 @@ const CollegeExplorer = () => {
                   comparisonMode={comparisonMode}
                   isSelectedForComparison={selectedForComparison.includes(college.id)}
                   onComparisonToggle={toggleCollegeForComparison}
+                  onDetailsClick={async () => {
+                    setAiLoading(college.id);
+                    try {
+                      const aiData = await aiCollegeService.analyzeCollegeForApplicants(college);
+                      navigate(`/college/${college.id}`, { state: { aiData } });
+                    } catch (err) {
+                      toast({ title: 'AI fetch failed', description: 'Could not fetch latest data for this college.' });
+                      navigate(`/college/${college.id}`);
+                    } finally {
+                      setAiLoading(null);
+                    }
+                  }}
+                  isLoading={aiLoading === college.id}
                 />
               ))}
             </div>
