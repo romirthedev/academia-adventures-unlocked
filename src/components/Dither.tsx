@@ -1,3 +1,4 @@
+
 /* eslint-disable react/no-unknown-property */
 import { useRef, useState, useEffect, forwardRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
@@ -134,11 +135,6 @@ void mainImage(in vec4 inputColor, in vec2 uv, out vec4 outputColor) {
 }
 `;
 
-interface RetroEffectProps {
-  colorNum: number;
-  pixelSize: number;
-}
-
 class RetroEffectImpl extends Effect {
   constructor() {
     const uniforms = new Map([
@@ -146,16 +142,18 @@ class RetroEffectImpl extends Effect {
       ["pixelSize", new THREE.Uniform(2.0)],
     ]);
     super("RetroEffect", ditherFragmentShader, { uniforms });
+    this.uniforms = uniforms;
   }
-  set colorNum(v) { (this.uniforms as Map<string, any>).get("colorNum").value = v; }
-  get colorNum() { return (this.uniforms as Map<string, any>).get("colorNum").value; }
-  set pixelSize(v) { (this.uniforms as Map<string, any>).get("pixelSize").value = v; }
-  get pixelSize() { return (this.uniforms as Map<string, any>).get("pixelSize").value; }
+  set colorNum(v) { this.uniforms.get("colorNum").value = v; }
+  get colorNum() { return this.uniforms.get("colorNum").value; }
+  set pixelSize(v) { this.uniforms.get("pixelSize").value = v; }
+  get pixelSize() { return this.uniforms.get("pixelSize").value; }
 }
 
 const WrappedRetro = wrapEffect(RetroEffectImpl);
 
-const RetroEffect = forwardRef<any, RetroEffectProps>(({ colorNum, pixelSize }, ref) => {
+const RetroEffect = forwardRef((props, ref) => {
+  const { colorNum, pixelSize } = props;
   return <WrappedRetro ref={ref} colorNum={colorNum} pixelSize={pixelSize} />;
 });
 RetroEffect.displayName = "RetroEffect";
@@ -260,12 +258,39 @@ export default function Dither({
   enableMouseInteraction = true,
   mouseRadius = 1,
 }) {
+  const [isWebGLSupported, setIsWebGLSupported] = useState(true);
+
+  useEffect(() => {
+    // Check WebGL support
+    try {
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (!gl) {
+        setIsWebGLSupported(false);
+      }
+    } catch (e) {
+      setIsWebGLSupported(false);
+    }
+  }, []);
+
+  if (!isWebGLSupported) {
+    return (
+      <div className="dither-container bg-gradient-to-br from-blue-900 to-purple-900">
+        {/* Fallback gradient background */}
+      </div>
+    );
+  }
+
   return (
     <Canvas
       className="dither-container"
       camera={{ position: [0, 0, 6] }}
-      dpr={window.devicePixelRatio}
-      gl={{ antialias: true, preserveDrawingBuffer: true }}
+      dpr={Math.min(window.devicePixelRatio, 2)}
+      gl={{ 
+        antialias: false,
+        preserveDrawingBuffer: false,
+        powerPreference: "high-performance"
+      }}
     >
       <DitheredWaves
         waveSpeed={waveSpeed}
@@ -280,4 +305,4 @@ export default function Dither({
       />
     </Canvas>
   );
-} 
+}
