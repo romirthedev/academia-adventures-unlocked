@@ -37,11 +37,6 @@ import React, { useRef, useEffect } from 'react';
       logo: "https://1000logos.net/wp-content/uploads/2019/06/Yale-Logo.png"
     },
     { 
-      name: "Columbia University", 
-      shortName: "Columbia",
-    logo: "https://media.licdn.com/dms/image/v2/D4E22AQF-W1iJO0GIww/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1719211835866?e=2147483647&v=beta&t=iEWr0oou59q5xqfeSTbkcDGAuQKJCurF11OE4sAmSeY"
-    },
-    { 
       name: "University of Chicago", 
       shortName: "UChicago",
       logo: "https://upload.wikimedia.org/wikipedia/en/thumb/7/79/University_of_Chicago_shield.svg/1200px-University_of_Chicago_shield.svg.png"
@@ -54,17 +49,12 @@ import React, { useRef, useEffect } from 'react';
     { 
       name: "University of Pennsylvania", 
       shortName: "UPenn",
-    logo: "https://branding.web-resources.upenn.edu/sites/default/files/styles/card_3x2/public/2022-03/UniversityofPennsylvania_Shield_RGB-2.png?h=3c287ac3&itok=HgG1DNc-"
+      logo: "https://branding.web-resources.upenn.edu/sites/default/files/styles/card_3x2/public/2022-03/UniversityofPennsylvania_Shield_RGB-2.png?h=3c287ac3&itok=HgG1DNc-"
     },
     { 
       name: "Johns Hopkins University", 
       shortName: "Johns Hopkins",
-    logo: "https://logos-world.net/wp-content/uploads/2023/02/Johns-Hopkins-University-Symbol.png"
-    },
-    { 
-      name: "Northwestern University", 
-      shortName: "Northwestern",
-    logo: "https://1000logos.net/wp-content/uploads/2019/12/Northwestern-Wildcats-Logo.jpg"
+      logo: "https://logos-world.net/wp-content/uploads/2023/02/Johns-Hopkins-University-Symbol.png"
     },
     { 
       name: "Duke University", 
@@ -103,7 +93,7 @@ const UniversityLogosCarousel = () => {
   const logos = [...universities, ...universities];
 
   return (
-    <div className="w-full bg-white/90 backdrop-blur-sm border-b border-orange-200 py-4 overflow-x-hidden">
+    <div className="w-full bg-gray-800 border-b border-gray-700 py-4 overflow-x-hidden">
       <div
         ref={carouselRef}
         className="flex gap-8 px-4 overflow-x-auto no-scrollbar whitespace-nowrap"
@@ -112,16 +102,13 @@ const UniversityLogosCarousel = () => {
         {logos.map((university, index) => (
             <div
               key={index}
-            className="flex flex-col items-center justify-center min-w-[80px]"
-          >
-                <img
-                  src={university.logo}
-                  alt={university.name}
-              className="w-16 h-16 object-contain mb-2"
-            />
-            <span className="text-xs text-gray-700 font-medium text-center">
-              {university.shortName}
-            </span>
+              className="flex items-center justify-center min-w-[80px]"
+            >
+              <img
+                src={university.logo}
+                alt={university.name}
+                className="w-16 h-16 object-contain"
+              />
             </div>
           ))}
       </div>
