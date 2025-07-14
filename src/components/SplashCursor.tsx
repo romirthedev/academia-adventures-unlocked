@@ -1,3 +1,4 @@
+
 'use client';
 import { useEffect, useRef } from 'react';
 
@@ -27,7 +28,7 @@ function SplashCursor({
   PRESSURE = 0.1,
   PRESSURE_ITERATIONS = 20,
   CURL = 3,
-  SPLAT_RADIUS = 0.08,
+  SPLAT_RADIUS = 0.2,
   SPLAT_FORCE = 6000,
   SHADING = true,
   COLOR_UPDATE_SPEED = 10,
@@ -1189,35 +1190,8 @@ function SplashCursor({
       }
     });
 
-    let isPausedByNavbar = false;
-    
-    // Try multiple selectors to find the navbar
-    const navbar = document.querySelector('nav.sticky') || 
-                   document.querySelector('[data-navbar]') ||
-                   document.querySelector('nav');
-    
-    function handleNavbarEnter() {
-      isPausedByNavbar = true;
-      config.PAUSED = true;
-    }
-    
-    function handleNavbarLeave() {
-      isPausedByNavbar = false;
-      config.PAUSED = false;
-    }
-    
-    if (navbar) {
-      navbar.addEventListener('mouseenter', handleNavbarEnter);
-      navbar.addEventListener('mouseleave', handleNavbarLeave);
-    }
-
     updateFrame();
-    return () => {
-      if (navbar) {
-        navbar.removeEventListener('mouseenter', handleNavbarEnter);
-        navbar.removeEventListener('mouseleave', handleNavbarLeave);
-      }
-    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     SIM_RESOLUTION,
     DYE_RESOLUTION,

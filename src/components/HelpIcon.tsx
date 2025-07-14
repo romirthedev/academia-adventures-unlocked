@@ -1,24 +1,21 @@
+
 import React, { useState } from 'react';
 import { HelpCircle } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { aiCollegeService } from '@/services/aiCollegeService';
 
 interface HelpIconProps {
-  category?: string;
-  value?: number;
-  collegeData?: any;
-  description?: string;
-  simple?: boolean;
-  message?: string;
+  category: string;
+  value: number;
+  collegeData: any;
+  description: string;
 }
 
 export const HelpIcon: React.FC<HelpIconProps> = ({ 
   category, 
   value, 
   collegeData, 
-  description,
-  simple = false,
-  message = "N/A means we can't find the information now. Click on a college to fetch the latest data"
+  description 
 }) => {
   const [explanation, setExplanation] = useState<string>('');
   const [loading, setLoading] = useState(false);
@@ -29,7 +26,7 @@ export const HelpIcon: React.FC<HelpIconProps> = ({
     
     setLoading(true);
     try {
-      const prompt = `Explain why ${collegeData['school.name']} has a ${value}% ${category?.toLowerCase()} score. 
+      const prompt = `Explain why ${collegeData['school.name']} has a ${value}% ${category.toLowerCase()} score. 
       
       College context:
       - Name: ${collegeData['school.name']}
@@ -55,7 +52,7 @@ export const HelpIcon: React.FC<HelpIconProps> = ({
 
   const handleOpenChange = (newOpen: boolean) => {
     setOpen(newOpen);
-    if (newOpen && !simple) {
+    if (newOpen) {
       getExplanation();
     }
   };
@@ -64,25 +61,21 @@ export const HelpIcon: React.FC<HelpIconProps> = ({
     <Popover open={open} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
         <button className="ml-2 p-1 hover:bg-gray-100 rounded-full transition-colors duration-200">
-          <HelpCircle className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+          <HelpCircle className="h-4 w-4 text-gray-400 hover:text-gray-600" />
         </button>
       </PopoverTrigger>
       <PopoverContent className="w-80 p-4 bg-white border border-gray-200 shadow-lg rounded-lg">
-        {simple ? (
-          <div className="text-sm text-gray-700 leading-relaxed">{message}</div>
-        ) : (
-          <div className="space-y-2">
-            <h4 className="font-semibold text-gray-800">{category} - {value}%</h4>
-            {loading ? (
-              <div className="flex items-center space-x-2">
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-indigo-600"></div>
-                <span className="text-sm text-gray-600">Getting explanation...</span>
-              </div>
-            ) : (
-              <p className="text-sm text-gray-700 leading-relaxed">{explanation}</p>
-            )}
-          </div>
-        )}
+        <div className="space-y-2">
+          <h4 className="font-semibold text-gray-800">{category} - {value}%</h4>
+          {loading ? (
+            <div className="flex items-center space-x-2">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-indigo-600"></div>
+              <span className="text-sm text-gray-600">Getting explanation...</span>
+            </div>
+          ) : (
+            <p className="text-sm text-gray-700 leading-relaxed">{explanation}</p>
+          )}
+        </div>
       </PopoverContent>
     </Popover>
   );

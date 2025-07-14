@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import Navigation from "./components/Navigation";
 import Index from "./pages/Index";
 import CollegeExplorer from "./pages/CollegeExplorer";
 import CollegeDetails from "./pages/CollegeDetails";
@@ -15,8 +16,6 @@ import MockApplication from "./pages/MockApplication";
 import NotFound from "./pages/NotFound";
 import Loader from "@/components/Loader";
 import Recommendations from "./pages/Recommendations";
-import Navigation from "./components/Navigation";
-import { HelpIcon } from './components/HelpIcon';
 
 const queryClient = new QueryClient();
 
@@ -51,10 +50,6 @@ function AppWithLoader() {
           <Route path="/recommendations" element={<Recommendations />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </div>
-      {/* Help icon in bottom right */}
-      <div style={{position: 'fixed', bottom: 24, right: 24, zIndex: 1000, display: 'none'}} className="help-icon-desktop">
-        <HelpIcon simple />
       </div>
     </>
   );
