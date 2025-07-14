@@ -93,22 +93,31 @@ const UniversityLogosCarousel = () => {
   const logos = [...universities, ...universities];
 
   return (
-    <div className="w-full bg-gray-800 border-b border-gray-700 py-4 overflow-x-hidden">
+    <div className="w-full bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-y border-gray-700 py-8 overflow-x-hidden">
+      <div className="text-center mb-6">
+        <h3 className="text-lg font-semibold text-white mb-2">Partnered Universities</h3>
+        <p className="text-gray-400 text-sm">Data from leading institutions worldwide</p>
+      </div>
       <div
         ref={carouselRef}
-        className="flex gap-8 px-4 overflow-x-auto no-scrollbar whitespace-nowrap"
-        style={{ scrollBehavior: 'auto', minHeight: '100px' }}
+        className="flex gap-12 px-6 overflow-x-auto no-scrollbar whitespace-nowrap"
+        style={{ scrollBehavior: 'auto', minHeight: '120px' }}
       >
         {logos.map((university, index) => (
             <div
               key={index}
-              className="flex items-center justify-center min-w-[80px]"
+              className="flex flex-col items-center justify-center min-w-[120px] group"
             >
-              <img
-                src={university.logo}
-                alt={university.name}
-                className="w-16 h-16 object-contain"
-              />
+              <div className="p-4 bg-white/10 backdrop-blur-sm rounded-2xl mb-3 group-hover:bg-white/20 transition-all duration-300 group-hover:scale-110 shadow-lg">
+                <img
+                  src={university.logo}
+                  alt={university.name}
+                  className="w-16 h-16 object-contain filter brightness-0 invert opacity-80 group-hover:opacity-100 transition-opacity duration-300"
+                />
+              </div>
+              <p className="text-white/70 text-xs font-medium text-center group-hover:text-white transition-colors duration-300">
+                {university.shortName}
+              </p>
             </div>
           ))}
       </div>

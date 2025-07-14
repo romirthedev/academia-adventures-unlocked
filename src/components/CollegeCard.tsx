@@ -292,8 +292,9 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({ college, index, onClic
     <TooltipProvider>
       <Card 
         className={cn(
-          "group overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] cursor-pointer relative",
-          "bg-gradient-to-br from-white to-orange-50/30 hover:from-orange-50/50 hover:to-orange-100/50",
+          "group overflow-hidden transition-all duration-500 hover:shadow-2xl hover:scale-[1.03] cursor-pointer relative border-0",
+          "bg-gradient-to-br from-white via-orange-50/20 to-amber-50/40 hover:from-orange-50/60 hover:via-orange-100/40 hover:to-amber-100/60",
+          "shadow-lg hover:shadow-orange-200/20",
           comparisonMode && isSelectedForComparison && "ring-2 ring-blue-500 ring-offset-2",
           className
         )}
@@ -326,17 +327,23 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({ college, index, onClic
 
         {/* Hover overlay */}
         <div className={cn(
-          "absolute inset-0 bg-gradient-to-br from-orange-500/5 to-amber-500/5 opacity-0 transition-opacity duration-300",
+          "absolute inset-0 bg-gradient-to-br from-orange-500/8 to-amber-500/8 opacity-0 transition-opacity duration-500",
           isHovered && "opacity-100"
         )} />
+        
+        {/* Subtle border glow on hover */}
+        <div className={cn(
+          "absolute inset-0 rounded-lg bg-gradient-to-r from-orange-400/20 via-amber-400/20 to-red-400/20 opacity-0 transition-opacity duration-500 blur-sm",
+          isHovered && "opacity-50"
+        )} />
 
-        <CardHeader className="relative pb-4">
-          <CardTitle className="text-xl font-bold text-gray-900 group-hover:text-orange-700 transition-colors">
+        <CardHeader className="relative pb-4 bg-gradient-to-r from-white/60 to-orange-50/40 backdrop-blur-sm">
+          <CardTitle className="text-xl font-bold text-gray-900 group-hover:text-orange-700 transition-colors duration-300">
             {schoolName}
           </CardTitle>
           
-          <CardDescription className="flex items-center text-gray-600 group-hover:text-gray-700 transition-colors">
-            <MapPin className="h-4 w-4 mr-1" />
+          <CardDescription className="flex items-center text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
+            <MapPin className="h-4 w-4 mr-1 text-orange-600" />
             {city}, {state}
           </CardDescription>
 
@@ -378,23 +385,23 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({ college, index, onClic
 
         <CardContent className="pb-4">
           <div className="grid grid-cols-2 gap-4 mb-4">
-            <div className="flex items-center gap-3 p-3 bg-white/50 rounded-lg hover:bg-white/80 transition-colors">
-              <div className="p-2 bg-orange-100 rounded-lg">
-                <Users className="h-5 w-5 text-orange-600" />
+            <div className="flex items-center gap-3 p-4 bg-gradient-to-br from-white/80 to-orange-50/60 rounded-xl hover:from-white/90 hover:to-orange-50/80 transition-all duration-300 shadow-sm hover:shadow-md border border-orange-100/50">
+              <div className="p-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl shadow-lg">
+                <Users className="h-5 w-5 text-white" />
               </div>
               <div>
-                <p className="text-xs text-gray-600 font-medium">Students</p>
-                <p className="font-bold text-gray-900">{formatNumber(studentSize)}</p>
+                <p className="text-xs text-gray-600 font-semibold uppercase tracking-wide">Students</p>
+                <p className="font-bold text-gray-900 text-lg">{formatNumber(studentSize)}</p>
               </div>
             </div>
             
-            <div className="flex items-center gap-3 p-3 bg-white/50 rounded-lg hover:bg-white/80 transition-colors">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <DollarSign className="h-5 w-5 text-green-600" />
+            <div className="flex items-center gap-3 p-4 bg-gradient-to-br from-white/80 to-green-50/60 rounded-xl hover:from-white/90 hover:to-green-50/80 transition-all duration-300 shadow-sm hover:shadow-md border border-green-100/50">
+              <div className="p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg">
+                <DollarSign className="h-5 w-5 text-white" />
               </div>
               <div>
-                <p className="text-xs text-gray-600 font-medium">In-State</p>
-                <p className="font-bold text-gray-900">{formatCurrency(inStateTuition)}</p>
+                <p className="text-xs text-gray-600 font-semibold uppercase tracking-wide">In-State</p>
+                <p className="font-bold text-gray-900 text-lg">{formatCurrency(inStateTuition)}</p>
               </div>
             </div>
           </div>

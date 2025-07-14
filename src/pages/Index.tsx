@@ -344,9 +344,6 @@ const Index = () => {
                   waveFrequency={2}
                   waveAmplitude={0.4}
                   waveColor={[0.2, 0.3, 0.6]}
-                  colorNum={6}
-                  pixelSize={3}
-                  disableAnimation={false}
                   enableMouseInteraction={true}
                   mouseRadius={0.8}
                 />
@@ -414,10 +411,10 @@ const Index = () => {
                           />
                           <Button
                             onClick={handleSearch}
-                            className="absolute right-2 top-1/2 transform -translate-y-1/2 college-gradient text-white px-6 py-2 rounded-xl hover:scale-105 transition-transform duration-200"
+                            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white text-black px-6 py-2 rounded-xl hover:scale-105 transition-transform duration-200 hover:bg-white/90 font-medium"
                           >
                             <Search className="mr-2 h-5 w-5" />
-                            Search
+                            <span className="text-black">Search</span>
                           </Button>
                         </div>
                       </div>
@@ -436,9 +433,9 @@ const Index = () => {
                           />
                           <Button
                             onClick={handleSearch}
-                            className="absolute right-2 top-1/2 transform -translate-y-1/2 college-gradient text-white px-4 py-1.5 rounded-lg hover:scale-105 transition-transform duration-200"
+                            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white text-black px-4 py-1.5 rounded-lg hover:scale-105 transition-transform duration-200 hover:bg-white/90"
                           >
-                            <Search className="h-4 w-4" />
+                            <Search className="h-4 w-4 text-black" />
                           </Button>
                         </div>
                       </div>
@@ -583,10 +580,42 @@ const Index = () => {
                     Comprehensive tools and insights to guide your college journey from discovery to decision
                   </p>
                 </div>
-                <div className="flex flex-col md:flex-row justify-center gap-8 w-full my-12">
-                  <Carousel baseWidth={340} icons={benefitIcons} />
-                  <Carousel baseWidth={340} items={applicationHelpItems} icons={appHelpIcons} />
-                  <Carousel baseWidth={340} items={dataAnalyticsItems} icons={analyticsIcons} />
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+                  {benefits.map((benefit, index) => (
+                    <Card key={index} className="group h-full bg-gradient-to-br from-white to-gray-50/30 hover:from-gray-50/50 hover:to-gray-100/50 transition-all duration-500 hover:shadow-2xl hover:scale-105 border-0 shadow-lg overflow-hidden">
+                      <CardHeader className="relative pb-4">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className={`p-3 rounded-2xl bg-gradient-to-br ${benefit.gradient} shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                            <benefit.icon className="h-8 w-8 text-white" />
+                          </div>
+                          <Badge className="bg-green-100 text-green-800 border-green-200 text-xs font-semibold px-3 py-1">
+                            {benefit.price}
+                          </Badge>
+                        </div>
+                        <CardTitle className="text-xl font-bold text-gray-900 group-hover:text-orange-700 transition-colors">
+                          {benefit.title}
+                        </CardTitle>
+                        <p className="text-sm text-gray-600 group-hover:text-gray-700 transition-colors">
+                          {benefit.note}
+                        </p>
+                      </CardHeader>
+                      <CardContent className="flex-1">
+                        <ul className="space-y-3">
+                          {benefit.features.map((feature, featureIndex) => (
+                            <li key={featureIndex} className="flex items-center gap-3 text-sm text-gray-700">
+                              <div className="w-2 h-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex-shrink-0"></div>
+                              <span>{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                      <div className="px-6 pb-6">
+                        <div className="text-center p-3 bg-gradient-to-r from-orange-50 to-red-50 rounded-xl border border-orange-100">
+                          <span className="text-xs font-medium text-orange-700">{benefit.stats}</span>
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
                 </div>
               </div>
             </section>

@@ -125,11 +125,17 @@ const Navigation = () => {
                     >
                       <Icon className="h-5 w-5" />
                       <span>{item.label}</span>
-                      {/* Animated underline */}
-                      <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-white to-white/80 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full"></div>
-                      {/* Active state underline */}
+                      {/* Animated underline - matches text width */}
+                      <div 
+                        className="absolute bottom-0 left-1/2 transform -translate-x-1/2 h-0.5 bg-gradient-to-r from-white to-white/80 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"
+                        style={{ width: `${item.label.length * 0.6}em` }}
+                      ></div>
+                      {/* Active state underline - matches text width */}
                       {isActive && (
-                        <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-white to-white/80 rounded-full"></div>
+                        <div 
+                          className="absolute bottom-0 left-1/2 transform -translate-x-1/2 h-0.5 bg-gradient-to-r from-white to-white/80 rounded-full"
+                          style={{ width: `${item.label.length * 0.6}em` }}
+                        ></div>
                       )}
                     </Link>
                     {/* Dropdown for features */}
@@ -234,12 +240,18 @@ const Navigation = () => {
                       <Icon className="h-4 w-4" />
                       <span>{item.label}</span>
                       
-                      {/* Animated underline for mobile */}
-                      <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-white to-white/80 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full"></div>
+                      {/* Animated underline for mobile - matches text width */}
+                      <div 
+                        className="absolute bottom-0 left-6 h-0.5 bg-gradient-to-r from-white to-white/80 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full"
+                        style={{ width: `${item.label.length * 0.6}em` }}
+                      ></div>
                       
-                      {/* Active state underline for mobile */}
+                      {/* Active state underline for mobile - matches text width */}
                       {isActive && (
-                        <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-white to-white/80 rounded-full"></div>
+                        <div 
+                          className="absolute bottom-0 left-6 h-0.5 bg-gradient-to-r from-white to-white/80 rounded-full"
+                          style={{ width: `${item.label.length * 0.6}em` }}
+                        ></div>
                       )}
                     </Link>
                   );
