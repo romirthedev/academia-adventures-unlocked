@@ -8,6 +8,23 @@ import * as THREE from "three";
 
 import './Dither.css';
 
+interface RetroEffectProps {
+  colorNum: number;
+  pixelSize: number;
+}
+
+interface DitheredWavesProps {
+  waveSpeed: number;
+  waveFrequency: number;
+  waveAmplitude: number;
+  waveColor: number[];
+  colorNum: number;
+  pixelSize: number;
+  disableAnimation: boolean;
+  enableMouseInteraction: boolean;
+  mouseRadius: number;
+}
+
 const waveVertexShader = `
 precision highp float;
 varying vec2 vUv;
@@ -136,23 +153,25 @@ void mainImage(in vec4 inputColor, in vec2 uv, out vec4 outputColor) {
 `;
 
 class RetroEffectImpl extends Effect {
+  private retroUniforms: Map<string, THREE.Uniform>;
+  
   constructor() {
     const uniforms = new Map([
       ["colorNum", new THREE.Uniform(4.0)],
       ["pixelSize", new THREE.Uniform(2.0)],
     ]);
     super("RetroEffect", ditherFragmentShader, { uniforms });
-    this.uniforms = uniforms;
+    this.retroUniforms = uniforms;
   }
-  set colorNum(v) { this.uniforms.get("colorNum").value = v; }
-  get colorNum() { return this.uniforms.get("colorNum").value; }
-  set pixelSize(v) { this.uniforms.get("pixelSize").value = v; }
-  get pixelSize() { return this.uniforms.get("pixelSize").value; }
+  set colorNum(v: number) { this.retroUniforms.get("colorNum")!.value = v; }
+  get colorNum() { return this.retroUniforms.get("colorNum")!.value; }
+  set pixelSize(v: number) { this.retroUniforms.get("pixelSize")!.value = v; }
+  get pixelSize() { return this.retroUniforms.get("pixelSize")!.value; }
 }
 
 const WrappedRetro = wrapEffect(RetroEffectImpl);
 
-const RetroEffect = forwardRef((props, ref) => {
+const RetroEffect = forwardRef<unknown, RetroEffectProps>((props, ref) => {
   const { colorNum, pixelSize } = props;
   return <WrappedRetro ref={ref} colorNum={colorNum} pixelSize={pixelSize} />;
 });
@@ -168,7 +187,7 @@ function DitheredWaves({
   disableAnimation,
   enableMouseInteraction,
   mouseRadius,
-}) {
+}: DitheredWavesProps) {
   const mesh = useRef(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const { viewport, size, gl } = useThree();
