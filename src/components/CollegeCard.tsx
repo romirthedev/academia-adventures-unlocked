@@ -1,5 +1,3 @@
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ValorantButton } from "@/components/ui/valorant-button";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
@@ -9,7 +7,6 @@ import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { savedSchoolsUtils } from "@/utils/savedSchools";
-import { CardDescription } from "@/components/ui/card";
 
 interface College {
   id: number;
@@ -33,61 +30,9 @@ interface CollegeCardProps {
   onComparisonToggle?: (collegeId: number) => void;
 }
 
-// Tag configuration with icons and colors
-interface TagConfig {
-  icon: React.ComponentType<{ className?: string }>;
-  color: string;
-  iconColor: string;
-}
-
-interface TagConfigs {
-  selectivity: Record<string, TagConfig>;
-  size: Record<string, TagConfig>;
-  focus: Record<string, TagConfig>;
-  special: Record<string, TagConfig>;
-}
-
-const tagConfig: TagConfigs = {
-  selectivity: {
-    'Very Selective': { icon: Shield, color: 'bg-red-100 text-red-800 border-red-200', iconColor: 'text-red-600' },
-    'Highly Selective': { icon: Shield, color: 'bg-orange-100 text-orange-800 border-orange-200', iconColor: 'text-orange-600' },
-    'Selective': { icon: Shield, color: 'bg-yellow-100 text-yellow-800 border-yellow-200', iconColor: 'text-yellow-600' },
-    'Moderately Selective': { icon: Shield, color: 'bg-green-100 text-green-800 border-green-200', iconColor: 'text-green-600' },
-    'Less Selective': { icon: Shield, color: 'bg-blue-100 text-blue-800 border-blue-200', iconColor: 'text-blue-600' }
-  },
-  size: {
-    'Small': { icon: Users, color: 'bg-purple-100 text-purple-800 border-purple-200', iconColor: 'text-purple-600' },
-    'Medium': { icon: Users, color: 'bg-indigo-100 text-indigo-800 border-indigo-200', iconColor: 'text-indigo-600' },
-    'Large': { icon: Users, color: 'bg-cyan-100 text-cyan-800 border-cyan-200', iconColor: 'text-cyan-600' }
-  },
-  focus: {
-    'STEM': { icon: Microscope, color: 'bg-blue-100 text-blue-800 border-blue-200', iconColor: 'text-blue-600' },
-    'Engineering': { icon: Calculator, color: 'bg-indigo-100 text-indigo-800 border-indigo-200', iconColor: 'text-indigo-600' },
-    'Business': { icon: Briefcase, color: 'bg-green-100 text-green-800 border-green-200', iconColor: 'text-green-600' },
-    'Liberal Arts': { icon: BookOpen, color: 'bg-purple-100 text-purple-800 border-purple-200', iconColor: 'text-purple-600' },
-    'Arts': { icon: Palette, color: 'bg-pink-100 text-pink-800 border-pink-200', iconColor: 'text-pink-600' },
-    'Research': { icon: Microscope, color: 'bg-orange-100 text-orange-800 border-orange-200', iconColor: 'text-orange-600' },
-    'Technology': { icon: Rocket, color: 'bg-cyan-100 text-cyan-800 border-cyan-200', iconColor: 'text-cyan-600' },
-    'Medicine': { icon: HeartIcon, color: 'bg-red-100 text-red-800 border-red-200', iconColor: 'text-red-600' },
-    'Humanities': { icon: Brain, color: 'bg-amber-100 text-amber-800 border-amber-200', iconColor: 'text-amber-600' },
-    'Innovation': { icon: Lightbulb, color: 'bg-yellow-100 text-yellow-800 border-yellow-200', iconColor: 'text-yellow-600' }
-  },
-  special: {
-    'Public': { icon: Building, color: 'bg-blue-100 text-blue-800 border-blue-200', iconColor: 'text-blue-600' },
-    'Private': { icon: Building, color: 'bg-gray-100 text-gray-800 border-gray-200', iconColor: 'text-gray-600' },
-    'Ivy League': { icon: Trophy, color: 'bg-yellow-100 text-yellow-800 border-yellow-200', iconColor: 'text-yellow-600' },
-    'Research Intensive': { icon: Microscope, color: 'bg-purple-100 text-purple-800 border-purple-200', iconColor: 'text-purple-600' },
-    'Liberal Arts Focus': { icon: BookOpen, color: 'bg-green-100 text-green-800 border-green-200', iconColor: 'text-green-600' },
-    'Urban Campus': { icon: Building, color: 'bg-orange-100 text-orange-800 border-orange-200', iconColor: 'text-orange-600' },
-    'Suburban Campus': { icon: Leaf, color: 'bg-green-100 text-green-800 border-green-200', iconColor: 'text-green-600' },
-    'Rural Campus': { icon: Leaf, color: 'bg-emerald-100 text-emerald-800 border-emerald-200', iconColor: 'text-emerald-600' }
-  }
-};
-
 export const CollegeCard: React.FC<CollegeCardProps> = ({ college, index, onClick, className, comparisonMode, isSelectedForComparison, onComparisonToggle }) => {
   const [isSaved, setIsSaved] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -102,29 +47,19 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({ college, index, onClic
     return `${Math.round(rate * 100)}%`;
   };
 
-  const formatCurrency = (amount: number) => {
-    if (!amount) return 'N/A';
-    return amount.toLocaleString('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    });
-  };
-
   const formatNumber = (num: number) => {
     if (!num) return 'N/A';
     return num.toLocaleString();
   };
 
   const getAdmissionDifficulty = (rate: number) => {
-    if (!rate) return { label: 'Unknown', color: 'bg-gray-500', textColor: 'text-gray-700' };
+    if (!rate) return { label: 'Unknown' };
     const percentage = rate * 100;
-    if (percentage < 10) return { label: 'Very Selective', color: 'bg-red-500', textColor: 'text-red-700' };
-    if (percentage < 25) return { label: 'Highly Selective', color: 'bg-orange-500', textColor: 'text-orange-700' };
-    if (percentage < 50) return { label: 'Selective', color: 'bg-yellow-500', textColor: 'text-yellow-700' };
-    if (percentage < 75) return { label: 'Moderately Selective', color: 'bg-green-500', textColor: 'text-green-700' };
-    return { label: 'Less Selective', color: 'bg-blue-500', textColor: 'text-blue-700' };
+    if (percentage < 10) return { label: 'Very Selective' };
+    if (percentage < 25) return { label: 'Highly Selective' };
+    if (percentage < 50) return { label: 'Selective' };
+    if (percentage < 75) return { label: 'Moderately Selective' };
+    return { label: 'Less Selective' };
   };
 
   const getSchoolType = (size: number) => {
@@ -132,68 +67,6 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({ college, index, onClic
     if (size < 5000) return 'Small';
     if (size < 15000) return 'Medium';
     return 'Large';
-  };
-
-  // Generate tags based on college data
-  const generateTags = () => {
-    const tags = [];
-    const admissionRate = college['latest.admissions.admission_rate.overall'];
-    const studentSize = college['latest.student.size'];
-    const schoolName = college['school.name'].toLowerCase();
-
-    // Selectivity tag
-    if (admissionRate) {
-      const percentage = admissionRate * 100;
-      if (percentage < 10) tags.push({ type: 'selectivity', label: 'Very Selective' });
-      else if (percentage < 25) tags.push({ type: 'selectivity', label: 'Highly Selective' });
-      else if (percentage < 50) tags.push({ type: 'selectivity', label: 'Selective' });
-      else if (percentage < 75) tags.push({ type: 'selectivity', label: 'Moderately Selective' });
-      else tags.push({ type: 'selectivity', label: 'Less Selective' });
-    }
-
-    // Size tag
-    if (studentSize) {
-      if (studentSize < 5000) tags.push({ type: 'size', label: 'Small' });
-      else if (studentSize < 15000) tags.push({ type: 'size', label: 'Medium' });
-      else tags.push({ type: 'size', label: 'Large' });
-    }
-
-    // Focus area tags based on school name
-    if (schoolName.includes('tech') || schoolName.includes('institute of technology')) {
-      tags.push({ type: 'focus', label: 'Technology' });
-      tags.push({ type: 'focus', label: 'Engineering' });
-    }
-    if (schoolName.includes('business') || schoolName.includes('management')) {
-      tags.push({ type: 'focus', label: 'Business' });
-    }
-    if (schoolName.includes('arts') && !schoolName.includes('liberal')) {
-      tags.push({ type: 'focus', label: 'Arts' });
-    }
-    if (schoolName.includes('liberal') || schoolName.includes('college') && !schoolName.includes('university')) {
-      tags.push({ type: 'focus', label: 'Liberal Arts' });
-    }
-    if (schoolName.includes('medical') || schoolName.includes('health')) {
-      tags.push({ type: 'focus', label: 'Medicine' });
-    }
-
-    // Special tags
-    if (schoolName.includes('harvard') || schoolName.includes('yale') || schoolName.includes('princeton') || 
-        schoolName.includes('columbia') || schoolName.includes('penn') || schoolName.includes('brown') || 
-        schoolName.includes('dartmouth') || schoolName.includes('cornell')) {
-      tags.push({ type: 'special', label: 'Ivy League' });
-    }
-    if (schoolName.includes('university of') && !schoolName.includes('private')) {
-      tags.push({ type: 'special', label: 'Public' });
-    } else {
-      tags.push({ type: 'special', label: 'Private' });
-    }
-
-    // Research intensive (large universities with research focus)
-    if (studentSize && studentSize > 20000) {
-      tags.push({ type: 'special', label: 'Research Intensive' });
-    }
-
-    return tags.slice(0, 6); // Limit to 6 tags to avoid clutter
   };
 
   const handleSaveClick = (e: React.MouseEvent) => {
@@ -229,16 +102,6 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({ college, index, onClic
         });
       }
     }
-  };
-
-  const handleLikeClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsLiked(!isLiked);
-    toast({
-      title: isLiked ? "Removed from favorites" : "Added to favorites",
-      description: `${college['school.name']} has been ${isLiked ? 'removed from' : 'added to'} your favorites.`,
-    });
   };
 
   const handleShareClick = (e: React.MouseEvent) => {
@@ -286,25 +149,33 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({ college, index, onClic
 
   const admissionInfo = getAdmissionDifficulty(admissionRate);
   const schoolType = getSchoolType(studentSize);
-  const tags = generateTags();
 
   return (
     <TooltipProvider>
-      <Card 
+      <div 
         className={cn(
-          "group overflow-hidden transition-all duration-500 hover:shadow-2xl hover:scale-[1.03] cursor-pointer relative border-0",
-          "bg-gradient-to-br from-white via-orange-50/20 to-amber-50/40 hover:from-orange-50/60 hover:via-orange-100/40 hover:to-amber-100/60",
-          "shadow-lg hover:shadow-orange-200/20",
+          "card group cursor-pointer transition-all duration-400 relative",
           comparisonMode && isSelectedForComparison && "ring-2 ring-blue-500 ring-offset-2",
           className
         )}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={onClick}
+        style={{
+          '--primary': '#ff3e00',
+          '--primary-hover': '#ff6d43',
+          '--secondary': '#4d61ff',
+          '--secondary-hover': '#5e70ff',
+          '--accent': '#00e0b0',
+          '--text': '#050505',
+          '--bg': '#ffffff',
+          '--shadow-color': '#000000',
+          '--pattern-color': '#cfcfcf',
+        } as React.CSSProperties}
       >
         {/* Comparison Selection Overlay */}
         {comparisonMode && (
-          <div className="absolute top-3 right-3 z-10">
+          <div className="absolute top-4 right-4 z-30">
             <Button
               variant={isSelectedForComparison ? "default" : "outline"}
               size="sm"
@@ -325,129 +196,171 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({ college, index, onClic
           </div>
         )}
 
-        {/* Hover overlay */}
-        <div className={cn(
-          "absolute inset-0 bg-gradient-to-br from-orange-500/8 to-amber-500/8 opacity-0 transition-opacity duration-500",
-          isHovered && "opacity-100"
-        )} />
-        
-        {/* Subtle border glow on hover */}
-        <div className={cn(
-          "absolute inset-0 rounded-lg bg-gradient-to-r from-orange-400/20 via-amber-400/20 to-red-400/20 opacity-0 transition-opacity duration-500 blur-sm",
-          isHovered && "opacity-50"
-        )} />
+        {/* Pattern overlays */}
+        <div className="card-pattern-grid"></div>
+        <div className="card-overlay-dots"></div>
 
-        <CardHeader className="relative pb-4 bg-gradient-to-r from-white/60 to-orange-50/40 backdrop-blur-sm">
-          <CardTitle className="text-xl font-bold text-gray-900 group-hover:text-orange-700 transition-colors duration-300">
-            {schoolName}
-          </CardTitle>
-          
-          <CardDescription className="flex items-center text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
-            <MapPin className="h-4 w-4 mr-1 text-orange-600" />
-            {city}, {state}
-          </CardDescription>
+        {/* Bold pattern decoration */}
+        <div className="bold-pattern">
+          <svg viewBox="0 0 100 100">
+            <path
+              strokeDasharray="15 10"
+              strokeWidth="10"
+              stroke="#000"
+              fill="none"
+              d="M0,0 L100,0 L100,100 L0,100 Z"
+            />
+          </svg>
+        </div>
 
-          {/* Tags Section */}
-          <div className="flex flex-wrap gap-1 mt-3">
-            {tags.map((tag, index) => {
-              const tagType = tag.type as keyof TagConfigs;
-              const config = tagConfig[tagType][tag.label];
-              if (!config) return null;
-              
-              const IconComponent = config.icon;
-              return (
-                <Tooltip key={index}>
-                  <TooltipTrigger asChild>
-                    <Badge 
-                      variant="outline" 
-                      className={cn(
-                        "text-xs px-2 py-1 cursor-pointer hover:scale-105 transition-all duration-200",
-                        config.color
-                      )}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        // This could trigger a search by tag
-                        console.log(`Search by tag: ${tag.label}`);
-                      }}
-                    >
-                      <IconComponent className={cn("h-3 w-3 mr-1", config.iconColor)} />
-                      {tag.label}
-                    </Badge>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Click to search for more {tag.label} colleges</p>
-                  </TooltipContent>
-                </Tooltip>
-              );
-            })}
-          </div>
-        </CardHeader>
+        {/* Title area */}
+        <div className="card-title-area">
+          <span className="text-sm font-bold truncate pr-2">{schoolName}</span>
+          <span className="card-tag text-xs">{admissionInfo.label}</span>
+        </div>
 
-        <CardContent className="pb-4">
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <div className="flex items-center gap-3 p-4 bg-gradient-to-br from-white/80 to-orange-50/60 rounded-xl hover:from-white/90 hover:to-orange-50/80 transition-all duration-300 shadow-sm hover:shadow-md border border-orange-100/50">
-              <div className="p-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl shadow-lg">
-                <Users className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <p className="text-xs text-gray-600 font-semibold uppercase tracking-wide">Students</p>
-                <p className="font-bold text-gray-900 text-lg">{formatNumber(studentSize)}</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-3 p-4 bg-gradient-to-br from-white/80 to-green-50/60 rounded-xl hover:from-white/90 hover:to-green-50/80 transition-all duration-300 shadow-sm hover:shadow-md border border-green-100/50">
-              <div className="p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg">
-                <DollarSign className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <p className="text-xs text-gray-600 font-semibold uppercase tracking-wide">In-State</p>
-                <p className="font-bold text-gray-900 text-lg">{formatCurrency(inStateTuition)}</p>
-              </div>
+        {/* Card body */}
+        <div className="card-body">
+          {/* Location */}
+          <div className="card-description">
+            <div className="flex items-center gap-1 text-sm">
+              <MapPin className="h-3 w-3" />
+              {city}, {state}
             </div>
           </div>
 
-          {/* Additional stats */}
-          <div className="space-y-3">
-            {outOfStateTuition && outOfStateTuition !== inStateTuition && (
-              <div className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
-                <span className="text-xs text-gray-600">Out-of-State</span>
-                <span className="text-sm font-semibold text-gray-700">{formatCurrency(outOfStateTuition)}</span>
+          {/* Feature grid */}
+          <div className="feature-grid">
+            <div className="feature-item">
+              <div className="feature-icon">
+                <Users className="w-4 h-4 text-white" />
               </div>
-            )}
-          </div>
-        </CardContent>
+              <span className="feature-text">{formatNumber(studentSize)}</span>
+            </div>
 
-        <CardFooter className="pt-0">
-          <div className="flex items-center justify-between w-full gap-2">
-            {schoolUrl && (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleExternalClick}
-                    className="h-10 w-10 p-0 bg-gray-100 hover:bg-gray-200"
-                  >
-                    <ExternalLink className="h-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>Visit official website</TooltipContent>
-              </Tooltip>
-            )}
-            
-            <ValorantButton 
+            <div className="feature-item">
+              <div className="feature-icon">
+                <TrendingUp className="w-4 h-4 text-white" />
+              </div>
+              <span className="feature-text">{formatPercentage(admissionRate)}</span>
+            </div>
+
+            <div className="feature-item">
+              <div className="feature-icon">
+                <DollarSign className="w-4 h-4 text-white" />
+              </div>
+              <span className="feature-text">In-State</span>
+            </div>
+
+            <div className="feature-item">
+              <div className="feature-icon">
+                <Award className="w-4 h-4 text-white" />
+              </div>
+              <span className="feature-text">{schoolType}</span>
+            </div>
+          </div>
+
+          {/* Card actions */}
+          <div className="card-actions">
+            <div className="price">
+              <span className="price-currency">$</span>
+              {inStateTuition ? Math.round(inStateTuition / 1000) : 'N/A'}
+              <span className="price-period">K/year</span>
+            </div>
+
+            <button 
+              className="card-button"
               onClick={(e) => {
                 e.stopPropagation();
-                navigate(`/college/${college.id}`);
+                onClick();
               }}
-              className="flex-1"
             >
-              <Eye className="h-4 w-4 mr-2" />
-              View Details
-            </ValorantButton>
+              Learn More
+            </button>
           </div>
-        </CardFooter>
-      </Card>
+        </div>
+
+        {/* Decorative elements */}
+        <div className="dots-pattern">
+          <svg viewBox="0 0 80 40">
+            <circle fill="#000" r="3" cy="10" cx="10"></circle>
+            <circle fill="#000" r="3" cy="10" cx="30"></circle>
+            <circle fill="#000" r="3" cy="10" cx="50"></circle>
+            <circle fill="#000" r="3" cy="10" cx="70"></circle>
+            <circle fill="#000" r="3" cy="20" cx="20"></circle>
+            <circle fill="#000" r="3" cy="20" cx="40"></circle>
+            <circle fill="#000" r="3" cy="20" cx="60"></circle>
+            <circle fill="#000" r="3" cy="30" cx="10"></circle>
+            <circle fill="#000" r="3" cy="30" cx="50"></circle>
+            <circle fill="#000" r="3" cy="30" cx="70"></circle>
+          </svg>
+        </div>
+
+        <div className="accent-shape"></div>
+        <div className="corner-slice"></div>
+
+        <div className="stamp">
+          <span className="stamp-text">Verified</span>
+        </div>
+
+        {/* Action buttons overlay */}
+        <div className="absolute bottom-3 left-3 flex gap-1 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleSaveClick}
+                className={cn(
+                  "h-7 w-7 p-0 rounded-full transition-all duration-200 bg-white/90 shadow-sm",
+                  isSaved 
+                    ? "text-blue-600 hover:text-blue-700" 
+                    : "text-gray-600 hover:text-blue-600"
+                )}
+              >
+                <Bookmark className={cn("h-3 w-3", isSaved && "fill-current")} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{isSaved ? 'Remove from saved' : 'Save school'}</p>
+            </TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleShareClick}
+                className="h-7 w-7 p-0 rounded-full transition-all duration-200 bg-white/90 shadow-sm text-gray-600 hover:text-blue-600"
+              >
+                <Share2 className="h-3 w-3" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Share school</p>
+            </TooltipContent>
+          </Tooltip>
+
+          {schoolUrl && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleExternalClick}
+                  className="h-7 w-7 p-0 rounded-full transition-all duration-200 bg-white/90 shadow-sm text-gray-600 hover:text-green-600"
+                >
+                  <ExternalLink className="h-3 w-3" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Visit website</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
+        </div>
+      </div>
     </TooltipProvider>
   );
 };
