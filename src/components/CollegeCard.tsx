@@ -162,15 +162,15 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({ college, index, onClic
         onMouseLeave={() => setIsHovered(false)}
         onClick={onClick}
         style={{
-          '--primary': '#ff3e00',
-          '--primary-hover': '#ff6d43',
-          '--secondary': '#4d61ff',
-          '--secondary-hover': '#5e70ff',
-          '--accent': '#00e0b0',
-          '--text': '#050505',
+          '--primary': '#000000',
+          '--primary-hover': '#333333',
+          '--secondary': '#ffffff',
+          '--secondary-hover': '#f0f0f0',
+          '--accent': '#666666',
+          '--text': '#000000',
           '--bg': '#ffffff',
           '--shadow-color': '#000000',
-          '--pattern-color': '#cfcfcf',
+          '--pattern-color': '#d0d0d0',
         } as React.CSSProperties}
       >
         {/* Comparison Selection Overlay */}
@@ -233,28 +233,28 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({ college, index, onClic
           <div className="feature-grid">
             <div className="feature-item">
               <div className="feature-icon">
-                <Users className="w-4 h-4 text-white" />
+                <Users className="w-4 h-4 text-black" />
               </div>
               <span className="feature-text">{formatNumber(studentSize)}</span>
             </div>
 
             <div className="feature-item">
               <div className="feature-icon">
-                <TrendingUp className="w-4 h-4 text-white" />
+                <TrendingUp className="w-4 h-4 text-black" />
               </div>
               <span className="feature-text">{formatPercentage(admissionRate)}</span>
             </div>
 
             <div className="feature-item">
               <div className="feature-icon">
-                <DollarSign className="w-4 h-4 text-white" />
+                <DollarSign className="w-4 h-4 text-black" />
               </div>
               <span className="feature-text">In-State</span>
             </div>
 
             <div className="feature-item">
               <div className="feature-icon">
-                <Award className="w-4 h-4 text-white" />
+                <Award className="w-4 h-4 text-black" />
               </div>
               <span className="feature-text">{schoolType}</span>
             </div>

@@ -6,15 +6,15 @@
 
 /* College Card Styles */
 .card {
-  --primary: #ff3e00;
-  --primary-hover: #ff6d43;
-  --secondary: #4d61ff;
-  --secondary-hover: #5e70ff;
-  --accent: #00e0b0;
-  --text: #050505;
+  --primary: #000000;
+  --primary-hover: #333333;
+  --secondary: #ffffff;
+  --secondary-hover: #f0f0f0;
+  --accent: #666666;
+  --text: #000000;
   --bg: #ffffff;
   --shadow-color: #000000;
-  --pattern-color: #cfcfcf;
+  --pattern-color: #d0d0d0;
 
   position: relative;
   width: 20em;
@@ -215,7 +215,7 @@
 .feature-icon svg {
   width: 0.9em;
   height: 0.9em;
-  fill: var(--bg);
+  fill: var(--text);
 }
 
 .feature-text {
@@ -235,11 +235,11 @@
 }
 
 .card-actions::before {
-  content: "✂";
+  content: "";
   position: absolute;
   top: -0.8em;
   left: 50%;
-  transform: translateX(-50%) rotate(90deg);
+  transform: translateX(-50%);
   background: var(--bg);
   padding: 0 0.5em;
   font-size: 1em;
@@ -284,7 +284,7 @@
 .card-button {
   position: relative;
   background: var(--secondary);
-  color: var(--bg);
+  color: var(--text);
   font-size: 0.9em;
   font-weight: 700;
   padding: 0.7em 1.2em;
